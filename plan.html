@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+
+<html class="preload-all" lang="ru">
+<head>
+  <script>document.documentElement.classList.add("is-loading");</script>
+  <style>
+/* Critical loader: shows instantly, prevents "фон → потом UI" */
+#appLoader{position:fixed;inset:0;display:grid;place-items:center;background:#0b0c10;z-index:9999;opacity:1;visibility:visible;transition:opacity .22s ease}
+#appLoader .app-loader__inner{display:grid;place-items:center;gap:12px;padding:28px 22px}
+#appLoader .app-loader__logo{display:grid;place-items:center;padding:16px 18px;border-radius:18px;background:rgba(255,255,255,.06);box-shadow:0 18px 60px rgba(0,0,0,.45)}
+#appLoader img{display:block;height:36px;width:auto}
+#appLoader .app-loader__dots{display:flex;gap:8px;opacity:.75}
+#appLoader .app-loader__dots span{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.75);animation:npDot 1s infinite}
+#appLoader .app-loader__dots span:nth-child(2){animation-delay:.14s}
+#appLoader .app-loader__dots span:nth-child(3){animation-delay:.28s}
+@keyframes npDot{0%,80%,100%{transform:translateY(0);opacity:.45}40%{transform:translateY(-6px);opacity:1}}
+@media (prefers-reduced-motion: reduce){#appLoader .app-loader__dots span{animation:none}}
+/* Light theme */
+html[data-theme="light"] #appLoader{background:#f6f7fb}
+html[data-theme="light"] #appLoader img{filter:invert(1)}
+html[data-theme="light"] #appLoader .app-loader__logo{background:rgba(0,0,0,.06);box-shadow:0 18px 60px rgba(0,0,0,.18)}
+html[data-theme="light"] #appLoader .app-loader__dots span{background:rgba(0,0,0,.55)}
+/* Hide when ready */
+html:not(.is-loading) #appLoader{opacity:0;pointer-events:none}
+html.is-loading body{overflow:hidden}
+html.is-loading body > :not(#appLoader){opacity:0;pointer-events:none}
+</style>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Manrope:wght@400;600;700;800&amp;display=swap" rel="stylesheet"/>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport"/><script>(() => {
+  try {
+    const saved = localStorage.getItem("npmaps_theme") || localStorage.getItem("theme");
+    const t = (saved === "light" || saved === "dark") ? saved : "dark";
+    document.documentElement.dataset.theme = t;
+  } catch (e) {
+    document.documentElement.dataset.theme = "dark";
+  }
+})();</script>
+<meta content="#0b0c10" name="theme-color"/>
+<meta content="light dark" name="color-scheme"/>
+<meta content="strict-origin-when-cross-origin" name="referrer"/>
+<meta content="api/lead.php" name="np-lead-endpoint"/>
+<meta content="1200" name="np-lead-timeout"/>
+<link href="favicon.ico?v=109" rel="icon" sizes="any"/>
+<link href="img/icons/favicon-32x32.png?v=109" rel="icon" sizes="32x32" type="image/png"/>
+<link href="img/icons/favicon-16x16.png?v=109" rel="icon" sizes="16x16" type="image/png"/>
+<link href="img/icons/icon.svg?v=109" rel="icon" type="image/svg+xml"/>
+<link href="img/icons/apple-touch-icon.png?v=109" rel="apple-touch-icon"/>
+<link href="manifest.webmanifest?v=109" rel="manifest"/>
+<meta content="yes" name="apple-mobile-web-app-capable"/>
+<meta content="default" name="apple-mobile-web-app-status-bar-style"/>
+<meta content="NP.Maps" name="apple-mobile-web-app-title"/>
+<meta content="Пошаговый план на 90 дней: сначала упаковка, потом доверие (отзывы/контент), затем ритм и масштабирование по географии." name="description"/><meta content="Николай Панин" name="author"/><meta content="Николай Панин" property="article:author"/><meta content="2026-02-14T00:00:00+01:00" property="article:published_time"/><meta content="2026-02-14T00:00:00+01:00" property="article:modified_time"/><meta content="2026-02-14T00:00:00+01:00" property="og:updated_time"/>
+<title>План 30/60/90: фундамент → доверие → масштаб — NP.Maps</title>
+<link href="https://np-maps.ru/plan.html" rel="canonical"/>
+<meta content="План 30/60/90: фундамент → доверие → масштаб — NP.Maps" property="og:title"/>
+<meta content="Пошаговый план на 90 дней: сначала упаковка, потом доверие (отзывы/контент), затем ритм и масштабирование по географии." property="og:description"/>
+<meta content="https://np-maps.ru/img/icons/icon-512.png" property="og:image"/>
+<meta content="NP.Maps — геоперфоманс на картах" property="og:image:alt"/>
+<meta content="https://np-maps.ru/plan.html" property="og:url"/>
+<meta content="website" property="og:type"/>
+<meta content="NP.Maps" property="og:site_name"/>
+<meta content="summary_large_image" name="twitter:card"/>
+<meta content="План 30/60/90: фундамент → доверие → масштаб — NP.Maps" name="twitter:title"/>
+<meta content="Пошаговый план на 90 дней: сначала упаковка, потом доверие (отзывы/контент), затем ритм и масштабирование по географии." name="twitter:description"/>
+<meta content="https://np-maps.ru/img/icons/icon-512.png" name="twitter:image"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+
+<link href="css/styles.css?v=109" rel="stylesheet"/>
+<link href="sitemap.xml" rel="sitemap" type="application/xml"/>
+<link href="https://mc.yandex.ru" rel="preconnect"/>
+<link href="//mc.yandex.ru" rel="dns-prefetch"/>
+<script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Николай Панин",
+      "url": "https://np-maps.ru/",
+      "sameAs": ["https://t.me/np_maps", "https://t.me/np_maps"],
+      "jobTitle": "Геоперфоманс‑агент (локальный маркетинг)",
+      "knowsAbout": ["Геоперфоманс", "Яндекс", "Google Ads", "2ГИС", "локальный маркетинг", "реклама", "дизайн", "работа с отзывами", "контент"]
+    }
+  </script>
+<script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "NP.Maps — геоперфоманс на картах",
+      "url": "https://np-maps.ru/"
+    }
+  </script>
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    "name": "NP.Maps",
+    "url": "https://np-maps.ru/",
+    "telephone": "+7 963 318 1816",
+    "areaServed": "RU",
+    "serviceType": ["Геоперфоманс", "Оптимизация репутации", "Упаковка карточки", "Работа с отзывами", "Ответы на негатив", "SEO и контент", "Запуск рекламы", "Дизайн и визуалы", "Консалтинг и поддержка"],
+    "founder": {
+      "@type": "Person",
+      "name": "Николай Панин"
+    },
+    "sameAs": ["https://t.me/np_maps", "https://t.me/np_maps"]
+  }
+</script>
+<meta content="ru_RU" property="og:locale"/><meta content="image/png" property="og:image:type"/><meta content="1200" property="og:image:width"/><meta content="630" property="og:image:height"/><script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "NP.Maps",
+  "url": "https://np-maps.ru/",
+  "logo": "https://np-maps.ru/img/icons/icon-512.png",
+  "sameAs": [
+    "https://t.me/np_maps",
+    "https://t.me/np_maps"
+  ],
+  "contactPoint": [
+    {
+      "@type": "ContactPoint",
+      "telephone": "+7 963 318 1816",
+      "contactType": "sales",
+      "availableLanguage": [
+        "ru"
+      ]
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "NP.Maps", "item": "https://np-maps.ru/"}, {"@type": "ListItem", "position": 2, "name": "План 30/60/90", "item": "https://np-maps.ru/plan"}]}</script><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "План 30/60/90: фундамент → доверие → масштаб — NP.Maps",
+  "description": "Пошаговый план на 90 дней: сначала упаковка, потом доверие (отзывы/контент), затем ритм и масштабирование по географии.",
+  "author": {
+    "@type": "Person",
+    "name": "Николай Панин",
+    "url": "https://np-maps.ru/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "NP.Maps",
+    "url": "https://np-maps.ru/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://np-maps.ru/img/icons/icon-512.png"
+    }
+  },
+  "datePublished": "2026-02-14",
+  "dateModified": "2026-02-14",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://np-maps.ru/plan.html"
+  }
+}</script><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "План 30/60/90: фундамент → доверие → масштаб — NP.Maps",
+  "url": "https://np-maps.ru/plan.html",
+  "speakable": {
+    "@type": "SpeakableSpecification",
+    "cssSelector": [
+      ".hero-head h1",
+      ".hero-head .lead",
+      ".hero-bullets",
+      ".mini-list.hero-mini"
+    ]
+  },
+  "datePublished": "2026-02-14",
+  "dateModified": "2026-02-14"
+}</script></head>
+<body class="page has-chat-dock">
+<div class="app-loader" id="appLoader" role="status" aria-label="Загрузка">
+  <div class="app-loader__inner">
+    <div class="app-loader__logo">
+      <img alt="NP.Maps" decoding="async" fetchpriority="high" height="36" loading="eager" src="img/icons/np-logo-light.webp" width="89"/>
+    </div>
+    <div class="app-loader__dots" aria-hidden="true"><span></span><span></span><span></span></div>
+  </div>
+</div>
+
+<script type="text/javascript">
+  window.YM_ID = 106357495;
+  (function(w,d,s,u,i){
+    w[i]=w[i]||function(){(w[i].a=w[i].a||[]).push(arguments)};
+    w[i].l=1*new Date();
+    var loaded=false;
+    function load(){
+      if(loaded) return;
+      loaded=true;
+      var js=d.createElement(s), f=d.getElementsByTagName(s)[0];
+      js.async=1; js.src=u;
+      f.parentNode.insertBefore(js,f);
+    }
+    // Load on first interaction (fast conversions)…
+    function scheduleLoad(){
+      if (w.requestIdleCallback) w.requestIdleCallback(load, { timeout: 2000 });
+      else setTimeout(load, 150);
+    }
+    ['click','touchstart','keydown','pointerdown'].forEach(function(ev){
+      d.addEventListener(ev, scheduleLoad, { passive:true, once:true });
+    });
+    // …or after a delay (keeps first paint light)
+    w.addEventListener('load', function(){
+      if (w.requestIdleCallback) w.requestIdleCallback(load, { timeout: 4000 }); else setTimeout(load, 1500);
+    });
+  })(window, document, 'script', 'https://mc.yandex.ru/metrika/tag.js?id=106357495', 'ym');
+
+  ym(106357495, 'init', {ssr:true, webvisor:false, clickmap:true, ecommerce:"dataLayer", referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
+</script>
+<a class="skip-link" href="#main-content">Пропустить к контенту</a>
+<header class="site-header">
+<div class="container header-inner">
+<div class="brand">
+<button aria-label="Сменить тему" class="btn btn-outline theme-toggle" data-theme-toggle="1" id="themeToggle" title="Светлая/тёмная тема" type="button"><svg aria-hidden="true" class="icon-sun" viewbox="0 0 24 24"><circle cx="12" cy="12" fill="none" r="4" stroke="currentColor" stroke-width="2"></circle><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"></path></svg><svg aria-hidden="true" class="icon-moon" viewbox="0 0 24 24"><path d="M21 13.2A7.5 7.5 0 1 1 10.8 3a6 6 0 0 0 10.2 10.2Z" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="2"></path></svg></button>
+<div class="logo">
+<a class="logo-link" href="index.html">
+<img alt="NP.Maps logo" class="logo-image" data-src-dark="img/icons/np-logo-dark.webp" data-src-light="img/icons/np-logo-light.webp" decoding="async" fetchpriority="high" height="36" loading="eager" src="img/icons/np-logo-light.webp" width="89"/>
+</a>
+</div>
+</div>
+</div>
+<button aria-controls="siteNav" aria-expanded="false" aria-label="Меню" class="btn btn-ghost nav-toggle" id="navToggle" type="button"><span aria-hidden="true" class="nav-toggle__icon"><span></span><span></span><span></span></span><span class="nav-toggle__label">Меню</span></button>
+<nav aria-label="Навигация" class="nav" id="siteNav">
+<div class="nav-group">
+<div aria-level="2" class="nav-label" role="heading">Основное</div>
+<a data-ico="home" href="index.html"><img alt="" aria-hidden="true" class="nav-ico" src="img/icons/nav/01-home.svg?v=109"/>Главная</a>
+<a data-ico="pricing" href="pricing.html"><img alt="" aria-hidden="true" class="nav-ico" src="img/icons/nav/04-list.svg?v=109"/>Форматы</a>
+<a data-ico="result" href="result.html"><img alt="" aria-hidden="true" class="nav-ico" src="img/icons/nav/14-chart.svg?v=109"/>Результат</a>
+<a data-ico="faq" href="faq.html"><img alt="" aria-hidden="true" class="nav-ico" src="img/icons/nav/11-help.svg?v=109"/>FAQ</a>
+<a data-ico="about" href="about.html"><img alt="" aria-hidden="true" class="nav-ico" src="img/icons/nav/10-user.svg?v=109"/>Обо мне</a>
+</div>
+<div class="nav-group">
+<div aria-level="2" class="nav-label" role="heading">Ещё</div>
+<a data-ico="honesty" href="honesty.html"><img alt="" aria-hidden="true" class="nav-ico" src="img/icons/nav/09-shield-check.svg?v=109"/>Честно</a>
+<a data-ico="plan" href="plan.html"><img alt="" aria-hidden="true" class="nav-ico" src="img/icons/nav/06-calendar.svg?v=109"/>План 30/60/90</a>
+<a data-ico="losses" href="losses.html"><img alt="" aria-hidden="true" class="nav-ico" src="img/icons/nav/02-warning.svg?v=109"/>Потери</a>
+<a data-ico="why" href="why-yandex.html"><img alt="" aria-hidden="true" class="nav-ico" src="img/icons/nav/03-sparkles.svg?v=109"/>Почему Яндекс</a>
+</div>
+<div aria-label="Связаться" class="nav-bottom">
+<a class="nav-cta btn btn-primary" data-ico="lead" data-track="cta_free_sidebar" href="#cta">Получить 3–5 точек роста</a>
+<a class="nav-contact" data-copy="+7 963 318 1816" data-ico="phone" data-track="phone_click" href="tel:+79633181816">+7 963 318 1816</a>
+<a class="nav-link" data-ico="tg" data-track="tg_contact_click" href="https://t.me/np_maps" rel="noopener noreferrer" target="_blank">Написать в Telegram</a>
+</div>
+</nav></header><div class="nav-backdrop" hidden="" id="navBackdrop"></div>
+<main id="main-content" tabindex="-1">
+<section class="section hero" id="hero">
+<div class="container">
+<div class="hero-top">
+<div class="hero-head">
+<h1>План 30/60/90</h1>
+<p class="hero-kicker">Фундамент • доверие • масштаб</p>
+<p class="lead">Пошаговый план на 90 дней: сначала делаем карточку понятной, затем наращиваем доверие, потом закрепляем систему.</p>
+<p class="muted">Без хаоса: 1 гипотеза за цикл → внедрение → 7–14 дней на данные → вывод. Начинаем с витрины и услуг, затем усиливаем доверие (отзывы/контент).</p>
+<div class="hero-actions">
+<a class="btn btn-outline" data-track="cta_cases_hero" href="result.html">Смотреть результат</a>
+</div>
+<ul class="mini-list hero-mini">
+<li>0–30: упаковка и витрина (категории, услуги, цены, первый экран).</li>
+<li>31–60: доверие (отзывы, ответы, фото, вопросы).</li>
+<li>61–90: закрепляем ритм и масштабируем (контент‑план, отчётность, гипотезы).</li>
+</ul>
+<div class="page-links"><a class="pill-link" href="#plan">Этапы</a>
+<a class="pill-link" href="#pages">Другие разделы</a>
+<a class="pill-link" href="#cta">Получить 3–5 точек роста</a></div>
+<p class="hero-format">Работаем под ключ или вместе с вашей командой — без накрутки.</p>
+<p class="muted">Для разбора достаточно ссылки на карточку (или «название + адрес»).</p>
+</div><div aria-hidden="true" class="hero-visual">
+<div class="hero-art">
+<img alt="" decoding="async" fetchpriority="high" height="900" loading="eager" src="img/hero-map.svg" width="900"/>
+</div>
+</div>
+</div>
+</div>
+</section><section class="section plan" id="plan">
+<div class="container">
+<div class="section-head"><h2>План 30/60/90: фундамент → доверие → масштаб без хаоса</h2><p class="muted">Это не «поменяем всё сразу». Идём по этапам и меряем эффект — без обещаний клиентов, с фокусом на выбор вас и конверсию карточки.</p></div>
+<div class="plan-grid">
+<article class="card">
+<h3>0–30 дней: приводим в порядок</h3>
+<ul class="mini-list plan-highlights"><li>Аудит и «точка А» + приоритеты (2–5 конкурентов)</li><li>Упаковка карточки и витрина услуг/цен</li><li>Регламент ответов + старт отзывов/контента</li></ul>
+<details class="fold-item fold-item--plan">
+<summary class="fold-summary">Показать чек‑лист (6 шагов)</summary>
+<div class="fold-content">
+<ul class="fold-list">
+<li>фиксируем точку А: показы / открытия / действия</li>
+<li>диагностика карточки + 2–5 конкурентов (по вашим запросам и гео)</li>
+<li>правки фундамента: категории, контакты, адрес, «первый экран»</li>
+<li>витрина услуг/цен: структура + формулировки под спрос</li>
+<li>регламент ответов (включая негатив) + шаблоны</li>
+<li>старт системы отзывов и контента (без резких всплесков)</li>
+</ul>
+</div>
+</details>
+<p class="result">Итог: карточка понятна за 10 секунд, без «дыр» в данных и хаоса.</p>
+</article>
+<article class="card">
+<h3>31–60 дней: наращиваем доверие</h3>
+<ul class="mini-list plan-highlights"><li>Отзывы по страхам клиентов (ровный темп)</li><li>Контент/фото по структуре: вход → процесс → результат</li><li>Дорабатываем витрину и закрываем слабые метрики</li></ul>
+<details class="fold-item fold-item--plan">
+<summary class="fold-summary">Показать чек‑лист (6 шагов)</summary>
+<div class="fold-content">
+<ul class="fold-list">
+<li>добор отзывов по ключевым страхам (ровный темп)</li>
+<li>отработка негатива по регламенту, без споров и оправданий</li>
+<li>усиливаем фото/контент по структуре: вход → процесс → результат</li>
+<li>усиливаем витрину услуг (15–20 позиций с ценой «от» и фото, где это уместно)</li>
+<li>закрываем слабое место по аналитике: CTR / удержание / конверсия</li>
+<li>мониторинг правок, вопросов и модерации</li>
+</ul>
+</div>
+</details>
+<p class="result">Итог: доверие растёт, а негатив перестаёт ломать конверсию.</p>
+</article>
+<article class="card">
+<h3>61–90 дней: закрепляем и масштабируем</h3>
+<ul class="mini-list plan-highlights"><li>Ритм и роли: кто/когда отвечает и обновляет</li><li>Отчётность: что сделали → что изменилось → что дальше</li><li>3–5 гипотез улучшений с замером, без хаоса</li></ul>
+<details class="fold-item fold-item--plan">
+<summary class="fold-summary">Показать чек‑лист (5 шагов)</summary>
+<div class="fold-content">
+<ul class="fold-list">
+<li>делаем процесс привычкой: кто и когда отвечает/обновляет/публикует</li>
+<li>контент-план на 4 недели вперёд (без контента ради контента)</li>
+<li>отчётность: что сделали → что изменилось в цифрах → что дальше</li>
+<li>3–5 гипотез улучшений с замером (не всё сразу)</li>
+<li>план поддержки на 3 месяца: ритм отзывов, ответы, контент, проверки</li>
+</ul>
+</div>
+</details>
+<p class="result">Итог: система работает стабильно и предсказуемо, без «качелей».</p>
+</article>
+</div>
+</div>
+</section>
+<section class="section cta" id="cta">
+<div class="container">
+<div class="cta-top">
+<div aria-hidden="true" class="free-audit-anchor" id="free-audit"></div>
+<h2>Получите план 30/60/90 под вашу точку — за 1 минуту</h2>
+<p class="muted">Пришлите ссылку на карточку (или «название + адрес») — в ответ пришлю <strong>3–5 приоритетов</strong>, первый шаг на 7 дней и куда это положить в план 30/60/90.</p>
+</div>
+<div class="cta-inner">
+<div class="cta-card card cta-card--large">
+<div class="card-head">
+  <h3>Получить 3–5 точек роста</h3>
+</div>
+<form autocomplete="on" class="cta-form cta-form--mini" data-form="mini" id="tgForm">
+  <label>
+    <span>Ссылка на карточку или название</span>
+    <input autocomplete="url" enterkeyhint="done" inputmode="url" name="card" placeholder="Ссылка на Яндекс/2ГИС/Google или “Название, адрес”" required type="text"/>
+  </label>
+  <div class="form-status" aria-live="polite"></div>
+  <div class="cta-form__actions">
+    <button class="btn btn-primary btn-block" data-placement="cta" data-tg-send="1" data-track="tg_submit_cta" type="submit">Получить разбор</button>
+  </div>
+  <p class="form-legal muted">Отправляя заявку, вы соглашаетесь с <a href="privacy.html">Политикой конфиденциальности</a> и <a href="offer.html">Офертой</a>.</p>
+</form>
+</div>
+</div>
+</div>
+</section>
+</main>
+<footer class="site-footer">
+<div class="container">
+<p>© 2026 Николай Панин. NP.Maps — геоперфоманс на картах.</p>
+<div class="footer-contacts">
+<p>Telegram: <a data-copy="https://t.me/np_maps" href="https://t.me/np_maps" rel="noopener noreferrer" target="_blank">@np_maps</a></p>
+<p>Телефон: <a data-copy="+7 963 318 1816" data-track="phone_click" href="tel:+79633181816">+7 963 318 1816</a></p>
+<p>Канал с кейсами: <a data-track="tg_channel_click" href="https://t.me/np_maps" rel="noopener noreferrer" target="_blank">t.me/np_maps</a></p>
+<p><a class="footer-link" data-track="privacy_open" href="privacy.html">Политика конфиденциальности</a></p>
+<p><a class="footer-link" data-track="offer_open" href="offer.html">Оферта</a></p>
+</div>
+</div>
+</footer>
+<script defer="" src="js/core.js?v=109"></script>
+<script defer="" src="js/doc.js?v=109"></script>
+<div class="chat-compose chat-dock" id="ctaDock">
+<form autocomplete="on" class="chat-form" data-placement="chat">
+<div aria-label="Способ связи" class="dock-modes" role="tablist">
+<button class="dock-mode is-active" data-dock-mode="tg" type="button">Заявка</button>
+<button class="dock-mode" data-dock-mode="call" type="button">Звонок</button>
+<button class="dock-mode" data-dock-mode="copy" type="button">Скопировать</button>
+</div>
+<input name="pain" type="hidden" value=""/>
+<input name="recommendation" type="hidden" value=""/>
+<div class="chat-form__row">
+<input aria-label="Ссылка на карточку или название" autocomplete="url" inputmode="url" name="card" placeholder="Вставьте ссылку на карточку (или “название, адрес”)" required="" type="text"/>
+<button class="btn btn-primary chat-dock__btn" data-dock-action="tg" data-placement="chat" data-tg-send="1" data-track="dock_submit_tg" type="submit">Получить 3–5 точек роста</button>
+<a class="btn btn-primary chat-dock__btn" data-dock-action="call" data-track="dock_call" hidden="" href="tel:+79633181816">Позвонить</a>
+<button class="btn btn-primary chat-dock__btn" data-copy-lead="1" data-dock-action="copy" data-placement="chat" data-track="dock_copy" hidden="" type="button">Скопировать заявку</button>
+</div>
+<details class="chat-mini-quiz">
+<summary>Быстрый выбор по ситуации (30 секунд)</summary>
+<div class="chat-mini-quiz__body">
+<div aria-label="Проблемная зона" class="dock-quiz">
+<button class="chip pain-chip" data-pain="Открывают карточку, но не звонят" data-rec="Старт (разово)" type="button">Открывают, но не звонят</button>
+<button class="chip pain-chip" data-pain="Мало отзывов / висит негатив" data-rec="Рост (сопровождение)" type="button">Отзывы / негатив</button>
+<button class="chip pain-chip" data-pain="Нужны обращения быстро (без слива бюджета)" data-rec="Рост (сопровождение)" type="button">Нужны заявки быстро</button>
+<button class="chip pain-chip" data-pain="Хочу понять, где теряются обращения" data-rec="Разбор" type="button">Где теряются</button>
+</div>
+<div class="chat-mini-grid">
+<label class="field">
+<span class="field__label">Сколько точек</span>
+<select name="points">
+<option selected="" value="">—</option>
+<option>1 точка</option>
+<option>2–5 точек</option>
+<option>6–15 точек</option>
+<option>Сеть 15+ точек</option>
+</select>
+</label>
+<label class="field">
+<span class="field__label">Город/район</span>
+<input name="city" placeholder="Например: Москва, СВАО" type="text"/>
+</label>
+<label class="field">
+<span class="field__label">Цель</span>
+<select name="goal">
+<option selected="" value="">—</option>
+<option>Больше звонков/заявок</option>
+<option>Убрать негатив и поднять доверие</option>
+<option>Поднять конверсию карточки</option>
+<option>Запустить/прибрать рекламу</option>
+</select>
+</label>
+<label class="field">
+<span class="field__label">Ниша (необязательно)</span>
+<input name="topic" placeholder="Например: стоматология / автосервис" type="text"/>
+</label>
+</div>
+<p class="muted">Обещание: чек‑лист + 3–5 точек роста и первый шаг.</p>
+</div>
+</details>
+<details class="dock-more">
+<summary>Контакт (если ответ не в Telegram)</summary>
+<div class="dock-more__body">
+<input autocomplete="name" enterkeyhint="next" inputmode="text" name="name" placeholder="Имя (например: Николай)" type="text"/>
+<input autocomplete="tel" enterkeyhint="done" inputmode="text" name="contact" placeholder="Контакт для ответа (необязательно): телефон, email или @telegram" type="text"/>
+<label class="dock-check"><input checked="" name="allow_tg" type="checkbox"/> Можно ответить в Telegram (если удобно)</label>
+<p class="muted">Контакт нужен только если хотите ответ не в Telegram. Можно оставить телефон/email или @telegram.</p>
+</div>
+</details>
+<p aria-live="polite" class="form-status chat-note"></p>
+</form>
+<p class="muted chat-note"></p>
+</div>
+</body>
+</html>

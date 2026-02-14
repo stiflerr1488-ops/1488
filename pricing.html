@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+
+<html class="preload-all" lang="ru">
+<head>
+  <script>document.documentElement.classList.add("is-loading");</script>
+  <style>
+/* Critical loader: shows instantly, prevents "фон → потом UI" */
+#appLoader{position:fixed;inset:0;display:grid;place-items:center;background:#0b0c10;z-index:9999;opacity:1;visibility:visible;transition:opacity .22s ease}
+#appLoader .app-loader__inner{display:grid;place-items:center;gap:12px;padding:28px 22px}
+#appLoader .app-loader__logo{display:grid;place-items:center;padding:16px 18px;border-radius:18px;background:rgba(255,255,255,.06);box-shadow:0 18px 60px rgba(0,0,0,.45)}
+#appLoader img{display:block;height:36px;width:auto}
+#appLoader .app-loader__dots{display:flex;gap:8px;opacity:.75}
+#appLoader .app-loader__dots span{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.75);animation:npDot 1s infinite}
+#appLoader .app-loader__dots span:nth-child(2){animation-delay:.14s}
+#appLoader .app-loader__dots span:nth-child(3){animation-delay:.28s}
+@keyframes npDot{0%,80%,100%{transform:translateY(0);opacity:.45}40%{transform:translateY(-6px);opacity:1}}
+@media (prefers-reduced-motion: reduce){#appLoader .app-loader__dots span{animation:none}}
+/* Light theme */
+html[data-theme="light"] #appLoader{background:#f6f7fb}
+html[data-theme="light"] #appLoader img{filter:invert(1)}
+html[data-theme="light"] #appLoader .app-loader__logo{background:rgba(0,0,0,.06);box-shadow:0 18px 60px rgba(0,0,0,.18)}
+html[data-theme="light"] #appLoader .app-loader__dots span{background:rgba(0,0,0,.55)}
+/* Hide when ready */
+html:not(.is-loading) #appLoader{opacity:0;pointer-events:none}
+html.is-loading body{overflow:hidden}
+html.is-loading body > :not(#appLoader){opacity:0;pointer-events:none}
+</style>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Manrope:wght@400;600;700;800&amp;display=swap" rel="stylesheet"/>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport"/><script>(() => {
+  try {
+    const saved = localStorage.getItem("npmaps_theme") || localStorage.getItem("theme");
+    const t = (saved === "light" || saved === "dark") ? saved : "dark";
+    document.documentElement.dataset.theme = t;
+  } catch (e) {
+    document.documentElement.dataset.theme = "dark";
+  }
+})();</script>
+<meta content="#0b0c10" name="theme-color"/>
+<meta content="light dark" name="color-scheme"/>
+<meta content="strict-origin-when-cross-origin" name="referrer"/>
+<meta content="api/lead.php" name="np-lead-endpoint"/>
+<meta content="1200" name="np-lead-timeout"/>
+<link href="favicon.ico?v=109" rel="icon" sizes="any"/>
+<link href="img/icons/favicon-32x32.png?v=109" rel="icon" sizes="32x32" type="image/png"/>
+<link href="img/icons/favicon-16x16.png?v=109" rel="icon" sizes="16x16" type="image/png"/>
+<link href="img/icons/icon.svg?v=109" rel="icon" type="image/svg+xml"/>
+<link href="img/icons/apple-touch-icon.png?v=109" rel="apple-touch-icon"/>
+<link href="manifest.webmanifest?v=109" rel="manifest"/>
+<meta content="yes" name="apple-mobile-web-app-capable"/>
+<meta content="default" name="apple-mobile-web-app-status-bar-style"/>
+<meta content="NP.Maps" name="apple-mobile-web-app-title"/>
+<meta content="Три формата работы (разбор, внедрение, сопровождение) + дополнительные усиления — без агрессивных обещаний и «инфобиз-стиля»." name="description"/><meta content="Николай Панин" name="author"/><meta content="Николай Панин" property="article:author"/><meta content="2026-02-14T00:00:00+01:00" property="article:published_time"/><meta content="2026-02-14T00:00:00+01:00" property="article:modified_time"/><meta content="2026-02-14T00:00:00+01:00" property="og:updated_time"/>
+<title>Форматы работы — Яндекс.Карты и 2ГИС | Николай Панин</title>
+<link href="https://np-maps.ru/pricing.html" rel="canonical"/>
+<meta content="Тарифы: разбор, разово, сопровождение — NP.Maps" property="og:title"/>
+<meta content="3 формата работы: бесплатный разбор, разовый «порядок» и сопровождение. Понятно что входит, что измеряем и как стартуем." property="og:description"/>
+<meta content="https://np-maps.ru/img/icons/icon-512.png" property="og:image"/>
+<meta content="NP.Maps — геоперфоманс на картах" property="og:image:alt"/>
+<meta content="https://np-maps.ru/pricing.html" property="og:url"/>
+<meta content="website" property="og:type"/>
+<meta content="NP.Maps" property="og:site_name"/>
+<meta content="summary_large_image" name="twitter:card"/>
+<meta content="Тарифы: разбор, разово, сопровождение — NP.Maps" name="twitter:title"/>
+<meta content="3 формата работы: бесплатный разбор, разовый «порядок» и сопровождение. Понятно что входит, что измеряем и как стартуем." name="twitter:description"/>
+<meta content="https://np-maps.ru/img/icons/icon-512.png" name="twitter:image"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+
+<link href="css/styles.css?v=109" rel="stylesheet"/>
+<link href="sitemap.xml" rel="sitemap" type="application/xml"/>
+<link href="https://mc.yandex.ru" rel="preconnect"/>
+<link href="//mc.yandex.ru" rel="dns-prefetch"/>
+<script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Николай Панин",
+      "url": "https://np-maps.ru/",
+      "sameAs": ["https://t.me/np_maps", "https://t.me/np_maps"],
+      "jobTitle": "Геоперфоманс‑агент (локальный маркетинг)",
+      "knowsAbout": ["Геоперфоманс", "Яндекс", "Google Ads", "2ГИС", "локальный маркетинг", "реклама", "дизайн", "работа с отзывами", "контент"]
+    }
+  </script>
+<script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "NP.Maps — геоперфоманс на картах",
+      "url": "https://np-maps.ru/"
+    }
+  </script>
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    "name": "NP.Maps",
+    "url": "https://np-maps.ru/",
+    "telephone": "+7 963 318 1816",
+    "areaServed": "RU",
+    "serviceType": ["Геоперфоманс", "Оптимизация репутации", "Упаковка карточки", "Работа с отзывами", "Ответы на негатив", "SEO и контент", "Запуск рекламы", "Дизайн и визуалы", "Консалтинг и поддержка"],
+    "founder": {
+      "@type": "Person",
+      "name": "Николай Панин"
+    },
+    "sameAs": ["https://t.me/np_maps", "https://t.me/np_maps"]
+  }
+</script>
+<meta content="ru_RU" property="og:locale"/><meta content="image/png" property="og:image:type"/><meta content="1200" property="og:image:width"/><meta content="630" property="og:image:height"/><script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "NP.Maps",
+  "url": "https://np-maps.ru/",
+  "logo": "https://np-maps.ru/img/icons/icon-512.png",
+  "sameAs": [
+    "https://t.me/np_maps",
+    "https://t.me/np_maps"
+  ],
+  "contactPoint": [
+    {
+      "@type": "ContactPoint",
+      "telephone": "+7 963 318 1816",
+      "contactType": "sales",
+      "availableLanguage": [
+        "ru"
+      ]
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "NP.Maps", "item": "https://np-maps.ru/"}, {"@type": "ListItem", "position": 2, "name": "Тарифы", "item": "https://np-maps.ru/pricing"}]}</script>
+<script id="offers-schema" type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "OfferCatalog",
+  "name": "Тарифы NP.Maps",
+  "url": "https://np-maps.ru/pricing.html",
+  "itemListElement": [
+    {
+      "@type": "Offer",
+      "name": "Бесплатный разбор карточки",
+      "price": "0",
+      "priceCurrency": "RUB",
+      "availability": "https://schema.org/InStock",
+      "url": "https://np-maps.ru/pricing.html#tariffs",
+      "description": "15–20 минут → 3–7 приоритетных правок + план на 30 дней."
+    },
+    {
+      "@type": "AggregateOffer",
+      "name": "Старт (разово)",
+      "lowPrice": "25000",
+      "priceCurrency": "RUB",
+      "availability": "https://schema.org/InStock",
+      "url": "https://np-maps.ru/pricing.html#tariffs",
+      "description": "Упаковка карточки, услуги/цены «от», контент, базовая стратегия отзывов и порядок в витрине."
+    },
+    {
+      "@type": "AggregateOffer",
+      "name": "Рост (сопровождение)",
+      "lowPrice": "45000",
+      "priceCurrency": "RUB",
+      "availability": "https://schema.org/InStock",
+      "url": "https://np-maps.ru/pricing.html#tariffs",
+      "description": "Регулярные циклы 7–14 дней: отзывы/ответы, контент, контроль метрик и отчётность. По задаче — геореклама."
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Тарифы: разбор, разово, сопровождение — NP.Maps",
+  "url": "https://np-maps.ru/pricing.html",
+  "speakable": {
+    "@type": "SpeakableSpecification",
+    "cssSelector": [
+      ".hero-head h1",
+      ".hero-head .lead",
+      ".hero-bullets",
+      ".mini-list.hero-mini"
+    ]
+  },
+  "datePublished": "2026-02-14",
+  "dateModified": "2026-02-14"
+}</script></head>
+<body class="page has-chat-dock">
+<div class="app-loader" id="appLoader" role="status" aria-label="Загрузка">
+  <div class="app-loader__inner">
+    <div class="app-loader__logo">
+      <img alt="NP.Maps" decoding="async" fetchpriority="high" height="36" loading="eager" src="img/icons/np-logo-light.webp" width="89"/>
+    </div>
+    <div class="app-loader__dots" aria-hidden="true"><span></span><span></span><span></span></div>
+  </div>
+</div>
+
+<script type="text/javascript">
+  window.YM_ID = 106357495;
+  (function(w,d,s,u,i){
+    w[i]=w[i]||function(){(w[i].a=w[i].a||[]).push(arguments)};
+    w[i].l=1*new Date();
+    var loaded=false;
+    function load(){
+      if(loaded) return;
+      loaded=true;
+      var js=d.createElement(s), f=d.getElementsByTagName(s)[0];
+      js.async=1; js.src=u;
+      f.parentNode.insertBefore(js,f);
+    }
+    // Load on first interaction (fast conversions)…
+    function scheduleLoad(){
+      if (w.requestIdleCallback) w.requestIdleCallback(load, { timeout: 2000 });
+      else setTimeout(load, 150);
+    }
+    ['click','touchstart','keydown','pointerdown'].forEach(function(ev){
+      d.addEventListener(ev, scheduleLoad, { passive:true, once:true });
+    });
+    // …or after a delay (keeps first paint light)
+    w.addEventListener('load', function(){
+      if (w.requestIdleCallback) w.requestIdleCallback(load, { timeout: 4000 }); else setTimeout(load, 1500);
+    });
+  })(window, document, 'script', 'https://mc.yandex.ru/metrika/tag.js?id=106357495', 'ym');
+
+  ym(106357495, 'init', {ssr:true, webvisor:false, clickmap:true, ecommerce:"dataLayer", referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
+</script>
+<a class="skip-link" href="#main-content">Пропустить к контенту</a>
+<header class="site-header">
+<div class="container header-inner">
+<div class="brand">
+<button aria-label="Сменить тему" class="btn btn-outline theme-toggle" data-theme-toggle="1" id="themeToggle" title="Светлая/тёмная тема" type="button"><svg aria-hidden="true" class="icon-sun" viewbox="0 0 24 24"><circle cx="12" cy="12" fill="none" r="4" stroke="currentColor" stroke-width="2"></circle><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"></path></svg><svg aria-hidden="true" class="icon-moon" viewbox="0 0 24 24"><path d="M21 13.2A7.5 7.5 0 1 1 10.8 3a6 6 0 0 0 10.2 10.2Z" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="2"></path></svg></button>
+<div class="logo">
+<a class="logo-link" href="index.html">
+<img alt="NP.Maps logo" class="logo-image" data-src-dark="img/icons/np-logo-dark.webp" data-src-light="img/icons/np-logo-light.webp" decoding="async" fetchpriority="high" height="36" loading="eager" src="img/icons/np-logo-light.webp" width="89"/>
+</a>
+</div>
+</div>
+</div>
+<button aria-controls="siteNav" aria-expanded="false" aria-label="Меню" class="btn btn-ghost nav-toggle" id="navToggle" type="button"><span aria-hidden="true" class="nav-toggle__icon"><span></span><span></span><span></span></span><span class="nav-toggle__label">Меню</span></button>
+<nav aria-label="Навигация" class="nav" id="siteNav">
+<div class="nav-group">
+<div aria-level="2" class="nav-label" role="heading">Основное</div>
+<a data-ico="home" href="index.html"><img alt="" aria-hidden="true" class="nav-ico" src="img/icons/nav/01-home.svg?v=109"/>Главная</a>
+<a data-ico="pricing" href="pricing.html"><img alt="" aria-hidden="true" class="nav-ico" src="img/icons/nav/04-list.svg?v=109"/>Форматы</a>
+<a data-ico="result" href="result.html"><img alt="" aria-hidden="true" class="nav-ico" src="img/icons/nav/14-chart.svg?v=109"/>Результат</a>
+<a data-ico="faq" href="faq.html"><img alt="" aria-hidden="true" class="nav-ico" src="img/icons/nav/11-help.svg?v=109"/>FAQ</a>
+<a data-ico="about" href="about.html"><img alt="" aria-hidden="true" class="nav-ico" src="img/icons/nav/10-user.svg?v=109"/>Обо мне</a>
+</div>
+<div class="nav-group">
+<div aria-level="2" class="nav-label" role="heading">Ещё</div>
+<a data-ico="honesty" href="honesty.html"><img alt="" aria-hidden="true" class="nav-ico" src="img/icons/nav/09-shield-check.svg?v=109"/>Честно</a>
+<a data-ico="plan" href="plan.html"><img alt="" aria-hidden="true" class="nav-ico" src="img/icons/nav/06-calendar.svg?v=109"/>План 30/60/90</a>
+<a data-ico="losses" href="losses.html"><img alt="" aria-hidden="true" class="nav-ico" src="img/icons/nav/02-warning.svg?v=109"/>Потери</a>
+<a data-ico="why" href="why-yandex.html"><img alt="" aria-hidden="true" class="nav-ico" src="img/icons/nav/03-sparkles.svg?v=109"/>Почему Яндекс</a>
+</div>
+<div aria-label="Связаться" class="nav-bottom">
+<a class="nav-cta btn btn-primary" data-ico="lead" data-track="cta_free_sidebar" href="#cta">Получить 3–5 точек роста</a>
+<a class="nav-contact" data-copy="+7 963 318 1816" data-ico="phone" data-track="phone_click" href="tel:+79633181816">+7 963 318 1816</a>
+<a class="nav-link" data-ico="tg" data-track="tg_contact_click" href="https://t.me/np_maps" rel="noopener noreferrer" target="_blank">Написать в Telegram</a>
+</div>
+</nav></header><div class="nav-backdrop" hidden="" id="navBackdrop"></div>
+<main id="main-content" tabindex="-1">
+<section class="section hero" id="hero">
+<div class="container">
+<div class="hero-top">
+<div class="hero-head">
+<h1>Форматы работы и усиления</h1>
+<p class="hero-kicker">Разбор • Формат • Ведение</p>
+<p class="lead">Сначала — бесплатный разбор. Потом выбираем формат. Я беру на себя карточку, отзывы и рекламу — чтобы вы не держали в голове, что править и в каком порядке.</p>
+<p class="muted">Делаю только то, что влияет на выбор и видно в метриках карточки: открытия, звонки, маршруты, записи.</p>
+<div class="hero-actions">
+<a class="btn btn-primary" data-track="cta_free_hero" href="#cta">Получить разбор</a>
+<a class="btn btn-outline" data-track="cta_cases_hero" href="result.html">Смотреть результат</a>
+</div>
+<ul class="mini-list hero-mini">
+<li>Сначала разбор, потом формат и стоимость. Без покупки «вслепую».</li>
+<li>Работаем на метрики карточки: открытия, звонки, маршруты, записи.</li>
+</ul>
+<div class="page-links"><a class="pill-link" href="#pricing">Форматы</a>
+<a class="pill-link" href="#scope">Что входит</a>
+<a class="pill-link" href="#terms">Условия</a>
+<a class="pill-link" href="#process">Процесс</a>
+<a class="pill-link" href="#amplifiers">Усиления</a>
+<a class="pill-link" href="#cta">Разбор</a></div>
+<p class="hero-format">Работаем под ключ или вместе с вашей командой.</p>
+</div><div aria-hidden="true" class="hero-visual">
+<div class="hero-art">
+<img alt="" decoding="async" fetchpriority="high" height="900" loading="eager" src="img/hero-map.svg" width="900"/>
+</div>
+</div>
+</div>
+</div>
+</section><section class="section pricing" id="pricing">
+<div class="container">
+<div class="bundle-head">
+<h2>Понимаете, за что платите — и что будет на выходе</h2>
+<p class="muted">Сначала — короткий разбор. Потом — предлагаю формат и стоимость. Так честнее и точнее.</p>
+</div>
+<div class="bundle-subhead" id="tariffs">
+<h3>3 формата работы</h3>
+<p class="muted">Начать можно с разбора: вы сразу поймёте, где ломается выбор. Дальше — либо разовая работа «Старт», либо ежемесячное сопровождение.</p>
+</div>
+<div aria-label="Сравнение форматов" class="compare-mini compare-mini--tariffs">
+<p class="compare-mini__title"><strong>Сравнение 3 форматов</strong> <span>за 15 секунд</span></p>
+<div class="compare-grid">
+<div class="compare-row"><span class="compare-k">Разбор (0 ₽)</span><span class="compare-v">15–20 минут → 3–7 правок + план на 30 дней. Чтобы понять, что чинить первым.</span></div>
+<div class="compare-row"><span class="compare-k">Старт (разово)</span><span class="compare-v">Фундамент карточки + витрина + регламент ответов. Быстро убираем «хаос» и делаем понятно за 10 секунд.</span></div>
+<div class="compare-row"><span class="compare-k">Рост (/мес)</span><span class="compare-v">Отзывы, ответы, контент и контроль в циклах. Для устойчивого роста без «качелей».</span></div>
+</div>
+</div>
+<div class="tariffs-grid bundle-grid">
+<article class="card tariff-card tariff-card--recommended col-4 card--glow">
+<div aria-hidden="true" class="tariff-badge">Рекомендуем</div>
+<div class="tariff-meta">
+<span class="pill"><span class="pill-dot"></span>Начать здесь</span>
+</div>
+<h3>Разбор</h3>
+<div aria-label="Стоимость" class="price-block">
+<div class="price">0 ₽ <small>бесплатно</small></div>
+<div class="price-meta">15–20 минут • 3–7 правок + план на 30 дней</div>
+</div>
+<p class="muted">15–20 минут: карточка + конкуренты + список правок с приоритетом.</p>
+<ul>
+<li>где ломается выбор (первый экран / фото / отзывы / шаг к действию)</li>
+<li>3–7 правок с максимальным эффектом на доверие и конверсию</li>
+<li>план на 30 дней: что правим первым шагом</li>
+</ul>
+<div class="tariff-actions">
+<a class="btn btn-primary btn-block" data-track="tariff_free" href="#cta">Получить разбор</a>
+</div>
+<p class="tag">Бесплатно. Чтобы не покупать «вслепую».</p>
+</article>
+<article class="card tariff-card col-4">
+<div class="tariff-meta">
+<span class="pill"><span class="pill-dot"></span>Разовая работа</span>
+</div>
+<h3>Старт</h3>
+<div aria-label="Ориентир по стоимости" class="price-block">
+<div class="price">от 25 000 ₽ <small>разово</small></div>
+<div class="price-meta">1 точка • фундамент + витрина + регламент ответов</div>
+</div>
+<p class="muted">Делаем карточку понятной и конкурентной: фундамент + витрина + правила.</p>
+<ul>
+<li>категории/атрибуты/контакты/график — без дыр</li>
+<li>описание, услуги, структура — «что вы делаете» за 5 секунд</li>
+<li>регламент ответов (позитив/негатив/вопросы)</li>
+<li>первые правки по контенту (что снять/что добавить)</li>
+</ul>
+<div class="tariff-actions">
+<a class="btn btn-primary btn-block" data-tariff="poryadok" data-track="tariff_order" href="#cta">Обсудить формат</a>
+</div>
+<p class="tag">Подходит: «хочу быстро перестать проигрывать»</p>
+</article>
+<article class="card tariff-card col-4">
+<div class="tariff-meta">
+<span class="pill"><span class="pill-dot"></span>Ежемесячно</span>
+</div>
+<h3>Рост</h3>
+<div aria-label="Ориентир по стоимости" class="price-block">
+<div class="price">от 35 000 ₽ <small>/мес</small></div>
+<div class="price-meta">1 точка • минимум 2 месяца • отчёт и план в каждом цикле</div>
+</div>
+<p class="muted">Система, которая держит доверие и конверсию: отзывы, ответы, контент, контроль.</p>
+<ul>
+<li>стратегия отзывов + материалы для команды</li>
+<li>контроль качества ответов и скорости реакции</li>
+<li>контент‑план для карточки (фото/видео/кейсы)</li>
+<li>отчёт: сделано → изменилось → план</li>
+</ul>
+<p class="muted"><a class="link-more" data-track="monthly_more" href="#monthly">Как устроено ведение →</a></p>
+<div class="tariff-actions">
+<a class="btn btn-primary btn-block" data-tariff="support" data-track="tariff_support" href="#cta">Обсудить сопровождение</a>
+</div>
+<p class="tag">Подходит: «хочу устойчивый рост без качелей»</p>
+</article>
+<article class="card tariff-standards col-12">
+<h3>Как это выглядит по‑взрослому</h3>
+<p class="muted">Без накрутки, без «пачек одинаковых отзывов», без схем, которые потом прилетают банами. Мы строим доверие так, чтобы оно держалось.</p>
+<ul class="standards-list">
+<li>сначала диагноз → потом план → потом действия</li>
+<li>1 гипотеза за цикл → 7+ дней на данные → вывод</li>
+<li>отчёт: что сделали / что поменялось / что делаем дальше</li>
+</ul>
+</article>
+<article class="card addons col-12" id="addons">
+<h3>Опции (когда нужно ускорить)</h3>
+<div class="addons-grid">
+<div class="addon">
+<h4>Приоритет</h4>
+<p class="muted">Больше итераций и проверок, быстрее реакция, больше контроля деталей.</p>
+</div>
+<div class="addon">
+<h4>Реклама / геоперфоманс</h4>
+<p class="muted">Если нужно быстрее: продвижение в Картах/Директе + разбивка по районам/городам.</p>
+</div>
+<div class="addon">
+<h4>2ГИС / Google</h4>
+<p class="muted">Держим «минимум», чтобы не проигрывать на сравнении.</p>
+</div>
+<div class="addon">
+<h4>360°‑тур</h4>
+<p class="muted">Делаю только в Санкт‑Петербурге (если актуально).</p>
+</div>
+</div>
+</article>
+</div>
+<p class="pricing-note"><strong>Цены — ориентиры.</strong> Точную стоимость и формат называю после бесплатного разбора (потому что города, конкуренция и исходное состояние сильно отличаются). Для сети/нескольких точек считаю отдельно; рекламный бюджет всегда оплачивается отдельно.</p>
+</div>
+</section>
+<section class="section" id="terms">
+<div class="container">
+<div class="section-head">
+<h2>Условия: оплата, сроки, минимальный горизонт</h2>
+<p class="muted">Коротко: разбор — бесплатно. Дальше фиксируем объём, ритм и артефакты, чтобы работа была предсказуемой.</p>
+</div>
+<div class="terms-grid">
+<article class="card">
+<h3>Как стартуем</h3>
+<ul class="mini-list">
+<li>Вы присылаете ссылку на карточку (или «название + адрес»).</li>
+<li>Я делаю разбор и показываю 3–5 точек роста + первый шаг.</li>
+<li>Если идём дальше — согласуем формат, доступы и план на ближайший цикл.</li>
+</ul>
+<p class="muted small">Никаких «пакетов в слепую»: сначала диагноз, потом решение.</p>
+</article>
+<article class="card">
+<h3>Оплата</h3>
+<ul class="mini-list">
+<li><strong>Разбор</strong> — бесплатно.</li>
+<li><strong>Разовая работа</strong> — фиксируем состав и срок этапа; оплата за этап.</li>
+<li><strong>Рост</strong> — помесячно; каждые 2–4 недели — отчёт и следующий план.</li>
+</ul>
+<p class="muted small">Если нужна скорость «как у внутренней команды» — подключается «Приоритет».</p>
+</article>
+<article class="card">
+<h3>Сроки и минимальный горизонт</h3>
+<ul class="mini-list">
+<li>Быстрые правки карточки дают эффект быстрее, но устойчивость даёт регулярная работа.</li>
+<li>Оценивать изменения честнее на горизонте <strong>нескольких циклов</strong> (а не «за пару дней»).</li>
+<li>Если подключаем рекламу — результат зависит от спроса, бюджета и географии.</li>
+</ul>
+<p class="muted small">На разборе скажу, что именно можно ждать в вашей нише и где ограничение не в карточке.</p>
+</article>
+</div>
+<details class="notice notice-warn card">
+<summary class="faq-summary">Важно про ожидания и риски</summary>
+<div class="faq-content"><ul class="mini-list">
+<li>Я не даю гарантии по точному количеству обращений — на спрос влияют сезон, цена, конкуренты и сервис.</li>
+<li>Удаляется не «всё», а только то, что нарушает правила площадок.</li>
+<li>Если у точки слабый сервис/нет ответственного — мы увидим это быстро: карточка не спасёт операционку.</li>
+</ul>
+<p class="muted small">Цель — управляемость: вы понимаете, что сделано, что изменилось и что делаем дальше.</p></div>
+</details>
+</div>
+</section>
+<section class="section" id="scope">
+<div class="container">
+<div aria-hidden="true" class="free-audit-anchor" id="included"></div>
+<div class="section-head">
+<h2>Что входит и что не входит — чтобы не было сюрпризов</h2>
+<p class="muted">Я отвечаю за карточку, доверие и контроль. Продажи, касса и качество сервиса — на вашей стороне. Я помогу настроить, но не заменяю операционку.</p>
+</div>
+<div class="scope-grid">
+<article class="card scope-card">
+<h3>Входит</h3>
+<ul class="scope-list is-plus">
+<li><strong>Карточка:</strong> оформление, атрибуты, витрина, структура, контент‑план</li>
+<li><strong>Отзывы:</strong> система сбора у реальных клиентов + материалы для команды</li>
+<li><strong>Ответы:</strong> регламент, контроль скорости и качества реакции</li>
+<li><strong>Негатив:</strong> ответы по схеме, оспаривание нарушений (если реально возможно)</li>
+<li><strong>Отчётность:</strong> сделано → изменилось → следующий шаг</li>
+</ul>
+<p class="muted small">Все действия — в рамках правил площадок. Без накруток и «серых» схем.</p>
+<p class="muted"><a class="link-more" href="result.html#report">Посмотреть пример отчёта →</a></p>
+</article>
+<article class="card scope-card">
+<h3>Не входит</h3>
+<ul class="scope-list is-minus">
+<li>гарантия по точному количеству обращений (зависит от спроса, цены, сезона, конкурентов)</li>
+<li>«удаление всего негатива» (удаляется только то, что нарушает правила)</li>
+<li>управление персоналом, скрипты обработки обращений и качество сервиса (это ваша зона)</li>
+<li>рекламный бюджет (оплачивается отдельно)</li>
+<li>дизайн «ради красоты» — делаю только то, что влияет на выбор</li>
+</ul>
+<p class="muted"><a class="link-more" href="honesty.html">Честно про ожидания и ограничения →</a></p>
+</article>
+</div>
+<details class="card sla-card">
+<summary class="faq-summary">SLA и коммуникация</summary>
+<div class="faq-content"><div class="table-wrap">
+<table class="sla-table">
+<thead>
+<tr><th>Что</th><th>Срок</th><th>Комментарий</th></tr>
+</thead>
+<tbody>
+<tr><td>Ответ на сообщение</td><td>до 24 часов</td><td>в рабочие дни</td></tr>
+<tr><td>Ответ на негатив</td><td>в день поступления</td><td>при включённых уведомлениях/доступах</td></tr>
+<tr><td>Итерации по карточке</td><td>1–2 раза в неделю</td><td>в зависимости от формата</td></tr>
+<tr><td>Отчёт</td><td>раз в 2 недели / месяц</td><td>по выбранному формату</td></tr>
+</tbody>
+</table></div>
+</div></details>
+<p class="muted small">Если нужна скорость «как у внутренней команды» — подключается опция «Приоритет».</p>
+</div>
+</section>
+<section class="section" id="choose">
+<div class="container">
+<div class="section-head">
+<h2>За 30 секунд поймёте, какой формат даст самый быстрый сдвиг</h2>
+<p class="muted">Если коротко — выбираем не «подешевле», а по цели и по тому, сколько времени вы готовы держать это в голове.</p>
+</div>
+<div class="choose-grid">
+<article class="card choose-card">
+<h3>Нужно понять, что чинить</h3>
+<p class="muted">Берите <strong>Разбор</strong>. Я покажу 3–5 точек роста и первый шаг — без покупки «вслепую».</p>
+</article>
+<article class="card choose-card">
+<h3>Нужно быстро «перестать проигрывать»</h3>
+<p class="muted">Берите <strong>Старт</strong>. Соберём фундамент карточки и правила, чтобы конверсия не утекала.</p>
+</article>
+<article class="card choose-card">
+<h3>Нужны обращения и рост</h3>
+<p class="muted">Берите <strong>Рост</strong>. Репутация + реклама + контроль — чтобы пошли обращения из «своей» географии.</p>
+</article>
+<article class="card choose-card">
+<h3>Хочу вообще не думать об этом</h3>
+<p class="muted">Берите <strong>Под ключ</strong>. Вы отдаёте процесс — я держу систему и отчётность.</p>
+</article>
+</div>
+<details class="card factors" id="factors">
+<summary class="faq-summary">От чего зависит стоимость</summary>
+<div class="faq-content"><ul class="mini-list">
+<li><strong>География и конкуренция:</strong> города/районы сильно отличаются по цене и «жёсткости» выдачи.</li>
+<li><strong>Сколько точек:</strong> одна точка ≠ сеть. На сеть нужен отдельный контур контроля.</li>
+<li><strong>Исходное состояние:</strong> есть ли контент, отзывы, порядок в услугах и атрибутах.</li>
+<li><strong>Нужна ли реклама:</strong> бюджет, цели, аналитика и разбивка по географии.</li>
+</ul>
+<p class="muted">Поэтому сначала разбор: я говорю, что даст эффект именно у вас, и предлагаю формат/стоимость.</p>
+<p><a class="btn btn-outline" data-track="cta_report_open" href="result.html#report">Как выглядит отчёт →</a></p></div>
+</details>
+</div>
+</section>
+<section class="section monthly" id="monthly">
+<div class="container">
+<div class="monthly-head">
+<h2>Снимаете контроль с головы: отзывы, правки, реклама и отчёт</h2>
+<p class="lead">Карточка на картах — это не «заполнили один раз и забыли».</p>
+<p class="muted">Репутация — это обслуживание: отзывы, ответы, контент. Я беру это на себя и держу ритм.</p>
+</div>
+<div class="monthly-grid">
+<article class="card monthly-card">
+<h3>Что вы получаете</h3>
+<ol class="monthly-list">
+<li><strong>Спокойствие.</strong> Вам не нужно думать «что там в отзывах».</li>
+<li><strong>Старт.</strong> Карточка всегда актуальна и выглядит живой.</li>
+<li><strong>Защиту доверия.</strong> Негатив не остаётся без реакции и не разрастается.</li>
+<li><strong>Систему.</strong> Понятный план работ и отчётность без воды.</li>
+</ol>
+</article>
+<article class="card monthly-card monthly-card--steps">
+<h3>Как работает ведение (по делу)</h3>
+<div class="monthly-steps">
+<details class="card monthly-step">
+<summary class="monthly-summary">1) Реакция и защита репутации</summary>
+<div class="monthly-content">
+<p>Я мониторю отзывы и вопросы. Реагирую быстро: без эмоций, без конфликтов, с правильной позицией.</p>
+<ul class="mini-list">
+<li>негатив — фиксируем решение и возвращаем доверие</li>
+<li>если отзыв нарушает правила — готовлю аргументацию и запускаю оспаривание</li>
+<li>никаких «серых» схем — не рискуем карточкой</li>
+</ul>
+</div>
+</details>
+<details class="card monthly-step">
+<summary class="monthly-summary">2) Карточка как «витрина», а не «справочник»</summary>
+<div class="monthly-content">
+<p>Держу в порядке ключевое: категории, описание, услуги, контакты, график, точку на карте.</p>
+<p class="muted">Упаковываю так, чтобы человеку было понятно за 10 секунд: кто вы / что вы делаете / почему вам доверять / как записаться.</p>
+</div>
+</details>
+<details class="card monthly-step">
+<summary class="monthly-summary">3) Контент, который продаёт доверие</summary>
+<div class="monthly-content">
+<p>Регулярно обновляю фото/видео (процесс, команда, результат, детали сервиса). Убираю «мёртвую» картинку и делаю визуально понятный профиль.</p>
+<p class="muted">Чтобы у клиента не было ощущения «сейчас приеду и разочаруюсь».</p>
+</div>
+</details>
+<details class="card monthly-step">
+<summary class="monthly-summary">4) Рост через аналитику, а не через гадание</summary>
+<div class="monthly-content">
+<ul class="mini-list">
+<li>разбираю отзывы как данные: что хвалят, где сомневаются, что раздражает</li>
+<li>даю конкретные правки по сервису/коммуникации, которые уменьшают негатив</li>
+<li>смотрю конкурентов: что у них работает и где их можно обойти</li>
+</ul>
+</div>
+</details>
+<details class="card monthly-step">
+<summary class="monthly-summary">5) Отчётность и план</summary>
+<div class="monthly-content">
+<p>Раз в месяц даю короткий отчёт: что сделано → почему → что изменилось → что делаем дальше.</p>
+<p class="muted">Вы всегда понимаете, за что идёт работа и куда я веду процесс.</p>
+</div>
+</details>
+</div>
+</article>
+<article class="card monthly-card">
+<h3>Что нужно от вас</h3>
+<p class="muted">Минимум:</p>
+<ul class="mini-list">
+<li>доступы/права</li>
+<li>10–15 минут на согласование приоритетов</li>
+<li>иногда — материалы (фото/видео). Если их нет — скажу, что именно снять</li>
+</ul>
+</article>
+<article class="card monthly-card">
+<h3>Кому подходит</h3>
+<ul class="mini-list">
+<li>если вы не хотите тратить время на карточку и отзывы</li>
+<li>если клиенты есть, но доверие в карточке «не дожато»</li>
+<li>если вы понимаете: репутация — это процесс, а не разовая настройка</li>
+</ul>
+</article>
+</div>
+<div class="monthly-cta card">
+<h3>Нужен контроль под ключ?</h3>
+<p class="muted">Напишите «Ведение» — скажу, что проверить в вашей карточке в первую очередь и как начнём.</p>
+<a class="btn btn-outline" data-track="monthly_to_pricing" href="#monthly">Что входит в сопровождение →</a>
+<p class="muted small">Можно без звонков: достаточно города/ниши и ссылки на карточку (если есть).</p>
+</div>
+</div>
+</section>
+<section class="section" id="process">
+<div class="container">
+<div class="section-head">
+<h2>Как работаем: цикл 7–14 дней</h2>
+<p class="muted">Без «магии»: правка → замер → вывод. Вы понимаете, <strong>что</strong> сделали, <strong>что</strong> изменилось и <strong>что</strong> делаем дальше.</p>
+</div>
+<div class="fit-grid">
+<article class="card">
+<h3>1) Разбор и приоритеты</h3>
+<ul class="mini-list">
+<li>смотрю карточку + выдачу рядом</li>
+<li>сравниваю с 2–5 конкурентами</li>
+<li>даю 3–5 точек роста и порядок правок</li>
+</ul>
+</article>
+<article class="card">
+<h3>2) Фундамент карточки</h3>
+<ul class="mini-list">
+<li>упаковка: фото/тексты/категории/услуги</li>
+<li>конверсия: CTA, записи, маршруты, доверие</li>
+<li>ошибки, которые режут обращения — убираем</li>
+</ul>
+</article>
+<article class="card">
+<h3>3) Итерации и отчёт</h3>
+<ul class="mini-list">
+<li>правки → замер → вывод</li>
+<li>отзывы и ответы — по регламенту</li>
+<li>отчёт: «что сделали → что изменилось → что дальше»</li>
+</ul>
+</article>
+</div>
+<div class="callout" style="margin-top:14px;">
+<p><strong>От вас:</strong> ссылка на карточку (или «название + адрес»), доступы/права (если уже есть), 10–15 минут на согласование приоритетов. Остальное — беру на себя.</p>
+</div>
+<p class="muted small">Если нужно «глубже»: есть отдельные страницы <a href="honesty.html">Честно</a> и <a href="plan.html">План 30/60/90</a>.</p>
+</div>
+</section>
+<section class="section services" id="services">
+<div class="container">
+<div aria-hidden="true" class="free-audit-anchor" id="amplifiers"></div>
+<div class="section-head">
+<h2>Усиления: подключаем по ситуации</h2>
+<p class="muted">Чтобы не превращать тарифы в «полотно», собрал ускорители в одном месте. Включаем их <strong>после</strong> базовых правок карточки — тогда они дают максимальный эффект.</p>
+</div>
+<div class="fit-grid">
+<article class="card">
+<h3>Геореклама (Карты / Директ)</h3>
+<p class="muted">Когда карточка уже нормально конвертит, и нужно добрать спрос.</p>
+<ul class="mini-list">
+<li>настройка под обращения (где возможно)</li>
+<li>минус-слова и гео, чтобы не сливать бюджет</li>
+<li>контроль: что даёт звонки/маршруты</li>
+</ul>
+<p class="muted small"><a data-track="amplifiers_geo_cta" href="#cta">Нужен разбор →</a></p>
+</article>
+<article class="card">
+<h3>Отзывы без фейков</h3>
+<p class="muted">Когда отзывов мало или доверие «не дожато».</p>
+<ul class="mini-list">
+<li>регламент запроса отзывов</li>
+<li>скрипты и контроль качества</li>
+<li>рост рейтинга без риска банов</li>
+</ul>
+<p class="muted small"><a href="result.html#reviews">Как измеряем отзывы →</a></p>
+</article>
+<article class="card">
+<h3>Ответы на отзывы</h3>
+<p class="muted">Когда есть негатив или нужно поднять доверие в ленте.</p>
+<ul class="mini-list">
+<li>шаблоны под вашу нишу</li>
+<li>тональность + аргументы</li>
+<li>сценарии «сложно / конфликт»</li>
+</ul>
+<p class="muted small"><a download="" href="downloads/reply-regulation.txt">Скачать регламент →</a></p>
+</article>
+<article class="card">
+<h3>2ГИС / Google</h3>
+<p class="muted">Когда нужен рост не только в Яндексе.</p>
+<ul class="mini-list">
+<li>упаковка и базовые факторы</li>
+<li>ошибки карточек и дубли</li>
+<li>единый стиль и данные</li>
+</ul>
+<p class="muted small"><a data-track="amplifiers_platforms_cta" href="#cta">Спросить по площадкам →</a></p>
+</article>
+<article class="card">
+<h3>Оспаривание фейков</h3>
+<p class="muted">Когда «висит» несправедливый негатив или фейковые отзывы.</p>
+<ul class="mini-list">
+<li>план действий и доказательства</li>
+<li>шаблоны обращения</li>
+<li>параллельно — усиление доверия</li>
+</ul>
+<p class="muted small"><a href="honesty.html">Границы и честные ожидания →</a></p>
+</article>
+<article class="card">
+<h3>Контент: фото/посты/витрина</h3>
+<p class="muted">Когда карточка «живая», а не просто визитка.</p>
+<ul class="mini-list">
+<li>что снимать и как подписывать</li>
+<li>частота и формат</li>
+<li>связка с услугами и CTA</li>
+</ul>
+<p class="muted small"><a data-track="amplifiers_content_cta" href="#cta">Подскажи, что снять →</a></p>
+</article>
+</div>
+<div class="callout" style="margin-top:14px;">
+<p><strong>Важно:</strong> не все усиления нужны всем. На разборе обычно хватает 1–2 шагов: что сделать первым и что можно не делать вообще.</p>
+</div>
+</div>
+</section>
+<section class="section" id="trust">
+<div class="container">
+<div class="section-head">
+<h2>Доверие без «магии»</h2>
+<p class="muted">Чтобы решение было спокойным: показываю, <strong>как</strong> ведём работу и <strong>чем</strong> подтверждаем прогресс.</p>
+</div>
+<div class="fit-grid">
+<article class="card">
+<h3>Пример отчёта</h3>
+<p class="muted">Шаблон на 1 страницу. Никаких «нарисованных» процентов — только структура и метрики.</p>
+<a class="btn btn-outline" data-track="cta_report_open" href="result.html#report">Открыть</a>
+</article>
+<article class="card">
+<h3>Материалы: регламенты</h3>
+<p class="muted">Скрипт запроса отзывов, регламент ответов, чек‑лист упаковки карточки.</p>
+<a class="btn btn-outline" data-track="cta_cases_section" href="result.html#proof">Скачать</a>
+</article>
+<article class="card">
+<h3>Как считаем результат</h3>
+<p class="muted">Показы/просмотры → действия (звонки/маршруты/записи) → конверсия. Реклама — по обращениям, где возможно.</p>
+<a class="btn btn-outline" data-track="cta_cases_section" href="result.html#how">Посмотреть метрики</a>
+</article>
+</div>
+<div class="callout" style="margin-top:14px;">
+<p><strong>Важно:</strong> стоимость рекламы (бюджет) обычно считается отдельно от ведения. Я отвечаю за прозрачность: что сделали, что изменилось и что делаем дальше.</p>
+</div>
+</div>
+</section>
+<section class="section cta" id="cta">
+<div class="container">
+<div class="cta-top">
+<div aria-hidden="true" class="free-audit-anchor" id="free-audit"></div>
+<h2>Подберу формат: Старт / Рост / Под ключ — за 1 минуту</h2>
+<p class="muted">Пришлите ссылку на карточку (или «название + адрес») — в ответ дам <strong>3–5 точек роста</strong> и рекомендацию формата по цели и бюджету: Старт (разово) / Рост (сопровождение) / Под ключ.</p>
+</div>
+<div class="cta-inner">
+<div class="cta-card card cta-card--large">
+<div class="card-head">
+<h3>Связь со мной</h3>
+</div>
+<ul class="mini-list cta-mini"><li>Смотрю карточку и конкурентов рядом</li><li>Даю приоритеты на 7 дней</li><li>Рекомендую формат и следующий шаг</li></ul>
+<form autocomplete="on" class="cta-form cta-form--large cta-form--lite" data-form="lite" id="tgForm">
+<label>
+<span>Ссылка на карточку или название</span>
+<input autocomplete="url" enterkeyhint="next" id="tgCardLite" inputmode="url" name="card" placeholder="Ссылка на Яндекс/2ГИС/Google или “Название, адрес”" required="" type="text"/>
+</label>
+<label>
+<span>Контакт для ответа (если Telegram нельзя)</span>
+<input autocomplete="tel" enterkeyhint="done" id="tgContact" inputmode="text" name="contact" placeholder="Телефон / email / @telegram — если ответ не в Telegram" type="text"/>
+</label>
+<label class="check">
+<input checked="" id="tgAllowTg" name="allow_tg" type="checkbox"/>
+<span>Можно ответить в Telegram (если удобно)</span>
+</label>
+<div class="cta-form__actions">
+<button class="btn btn-primary btn-block" data-placement="cta" data-tg-send="1" data-track="tg_submit_cta" type="submit">Получить 3–5 точек роста</button>
+<button class="btn btn-outline btn-block" data-copy-lead="1" data-placement="cta" data-track="lead_copy_cta" type="button">Скопировать заявку</button>
+<a class="btn btn-outline btn-block" data-track="cta_call" href="tel:+79633181816">Позвонить</a>
+</div>
+<p class="form-legal muted">Отправляя заявку, вы соглашаетесь с <a href="privacy.html">Политикой конфиденциальности</a> и <a href="offer.html">Офертой</a>.</p>
+<p class="form-hint">Если хотите точнее — укажите город/нишу и сколько точек. Можно и без этого.</p>
+</form>
+</div>
+</div>
+</div>
+</section>
+</main>
+<footer class="site-footer">
+<div class="container">
+<p>© 2026 Николай Панин. NP.Maps — геоперфоманс на картах.</p>
+<div class="footer-contacts">
+<p>Telegram: <a data-copy="https://t.me/np_maps" href="https://t.me/np_maps" rel="noopener noreferrer" target="_blank">@np_maps</a></p>
+<p>Телефон: <a data-copy="+7 963 318 1816" data-track="phone_click" href="tel:+79633181816">+7 963 318 1816</a></p>
+<p>Канал с кейсами: <a data-track="tg_channel_click" href="https://t.me/np_maps" rel="noopener noreferrer" target="_blank">t.me/np_maps</a></p>
+<p><a class="footer-link" data-track="privacy_open" href="privacy.html">Политика конфиденциальности</a></p>
+<p><a class="footer-link" data-track="offer_open" href="offer.html">Оферта</a></p>
+</div>
+</div>
+</footer>
+<script defer="" src="js/core.js?v=109"></script>
+<script defer="" src="js/doc.js?v=109"></script>
+<div class="chat-compose chat-dock" id="ctaDock">
+<form autocomplete="on" class="chat-form" data-placement="chat">
+<div aria-label="Способ связи" class="dock-modes" role="tablist">
+<button class="dock-mode is-active" data-dock-mode="tg" type="button">Заявка</button>
+<button class="dock-mode" data-dock-mode="call" type="button">Звонок</button>
+<button class="dock-mode" data-dock-mode="copy" type="button">Скопировать</button>
+</div>
+<input name="pain" type="hidden" value=""/>
+<input name="recommendation" type="hidden" value=""/>
+<div class="chat-form__row">
+<input aria-label="Ссылка на карточку или название" autocomplete="url" inputmode="url" name="card" placeholder="Вставьте ссылку на карточку (или “название, адрес”)" required="" type="text"/>
+<button class="btn btn-primary chat-dock__btn" data-dock-action="tg" data-placement="chat" data-tg-send="1" data-track="dock_submit_tg" type="submit">Получить 3–5 точек роста</button>
+<a class="btn btn-primary chat-dock__btn" data-dock-action="call" data-track="dock_call" hidden="" href="tel:+79633181816">Позвонить</a>
+<button class="btn btn-primary chat-dock__btn" data-copy-lead="1" data-dock-action="copy" data-placement="chat" data-track="dock_copy" hidden="" type="button">Скопировать заявку</button>
+</div>
+<details class="chat-mini-quiz">
+<summary>Быстрый выбор по ситуации (30 секунд)</summary>
+<div class="chat-mini-quiz__body">
+<div aria-label="Проблемная зона" class="dock-quiz">
+<button class="chip pain-chip" data-pain="Открывают карточку, но не звонят" data-rec="Старт (разово)" type="button">Открывают, но не звонят</button>
+<button class="chip pain-chip" data-pain="Мало отзывов / висит негатив" data-rec="Рост (сопровождение)" type="button">Отзывы / негатив</button>
+<button class="chip pain-chip" data-pain="Нужны обращения быстро (без слива бюджета)" data-rec="Рост (сопровождение)" type="button">Нужны заявки быстро</button>
+<button class="chip pain-chip" data-pain="Хочу понять, где теряются обращения" data-rec="Разбор" type="button">Где теряются</button>
+</div>
+<div class="chat-mini-grid">
+<label class="field">
+<span class="field__label">Сколько точек</span>
+<select name="points">
+<option selected="" value="">—</option>
+<option>1 точка</option>
+<option>2–5 точек</option>
+<option>6–15 точек</option>
+<option>Сеть 15+ точек</option>
+</select>
+</label>
+<label class="field">
+<span class="field__label">Город/район</span>
+<input name="city" placeholder="Например: Москва, СВАО" type="text"/>
+</label>
+<label class="field">
+<span class="field__label">Цель</span>
+<select name="goal">
+<option selected="" value="">—</option>
+<option>Больше звонков/заявок</option>
+<option>Убрать негатив и поднять доверие</option>
+<option>Поднять конверсию карточки</option>
+<option>Запустить/прибрать рекламу</option>
+</select>
+</label>
+<label class="field">
+<span class="field__label">Ниша (необязательно)</span>
+<input name="topic" placeholder="Например: стоматология / автосервис" type="text"/>
+</label>
+</div>
+<p class="muted">Обещание: чек‑лист + 3–5 точек роста и первый шаг.</p>
+</div>
+</details>
+<details class="dock-more">
+<summary>Контакт (если ответ не в Telegram)</summary>
+<div class="dock-more__body">
+<input autocomplete="name" enterkeyhint="next" inputmode="text" name="name" placeholder="Имя (например: Николай)" type="text"/>
+<input autocomplete="tel" enterkeyhint="done" inputmode="text" name="contact" placeholder="Контакт для ответа (необязательно): телефон, email или @telegram" type="text"/>
+<label class="dock-check"><input checked="" name="allow_tg" type="checkbox"/> Можно ответить в Telegram (если удобно)</label>
+<p class="muted">Контакт нужен только если хотите ответ не в Telegram. Можно оставить телефон/email или @telegram.</p>
+</div>
+</details>
+<p aria-live="polite" class="form-status chat-note"></p>
+</form>
+<p class="muted chat-note"></p>
+</div>
+</body>
+</html>

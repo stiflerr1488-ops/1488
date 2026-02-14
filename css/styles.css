@@ -1,0 +1,5164 @@
+/* NP.Maps — ultra-light UI kit (v6: Clean light A) */
+:root{
+  /* B2B-like dark theme (default) */
+  --bg:#0b0c10;
+  --bg2:#12131a;
+  --card:rgba(255,255,255,.06);
+  --card2:rgba(255,255,255,.085);
+  --text:#f3f5f7;
+  --muted:rgba(243,245,247,.80);
+  --border:rgba(255,255,255,.14);
+
+  --shadow-sm:0 10px 26px rgba(0,0,0,.28);
+  --shadow:0 16px 44px rgba(0,0,0,.36);
+  --shadow-md:0 26px 72px rgba(0,0,0,.44);
+
+  --accent:#ffb000;   /* warm yellow */
+  --accent2: var(--accent);  /* unified accent */
+  --radius:22px;
+  --container:1180px;
+  --gutter: clamp(22px, 4.2vw, 72px);
+  --ring:0 0 0 3px rgba(255,176,0,.22);
+  color-scheme:dark;
+}
+
+[data-theme="light"]{
+  /* Light theme (fallback / optional) */
+  --bg:#faf5ed;
+  --bg2:#f2e9dd;
+  --card:#fffdf8;
+  --card2:#ffffff;
+  --text:#0f172a;
+  --muted:#556070;
+  --border:rgba(15,23,42,.10);
+
+  --shadow-sm:0 6px 14px rgba(15,23,42,.06);
+  --shadow:0 10px 24px rgba(15,23,42,.08);
+  --shadow-md:0 16px 38px rgba(15,23,42,.12);
+
+  --accent:#d97706;
+  --accent2:#2563eb;
+  --ring:0 0 0 3px rgba(217,119,6,.22);
+  color-scheme:light;
+}
+
+*{box-sizing:border-box}
+html,body{
+  font-synthesis: none;
+
+  margin:0;
+  font:16px/1.6 "Inter", system-ui,-apple-system,Segoe UI,Roboto,Arial,Helvetica,sans-serif;
+  color:var(--text);
+  background:
+    radial-gradient(1000px 560px at 12% -8%, rgba(255,176,0,.14), transparent 62%),
+    radial-gradient(820px 520px at 88% 6%, rgba(255,106,0,.10), transparent 60%),
+    radial-gradient(920px 720px at 50% 112%, rgba(91,33,182,.16), transparent 60%),
+    linear-gradient(180deg, rgba(255,255,255,.02), transparent 42%),
+    var(--bg);
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+  text-align:left;
+}
+body{
+  margin:0;
+  font:16px/1.55 "Inter", system-ui,-apple-system,Segoe UI,Roboto,Arial,Helvetica,sans-serif;
+  color:var(--text);
+  /*
+    Зачем шум (noise):
+    На тёмных градиентах многие мониторы/браузеры дают banding —
+    видимые «полосы» из-за 8‑битной глубины и сжатия в градиентах.
+    Лёгкий повторяющийся шум (20КБ) «разбивает» полосы и делает фон ровнее,
+    при этом почти не влияет на вес/скорость.
+  */
+  background: var(--bg);
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+  /* Центрируем текст по всему сайту (по запросу) */
+  text-align:left;
+}
+img{max-width:100%;height:auto;display:block}
+
+/* Anti-flicker: hide until fonts + JS enhancements applied */
+
+a{color:inherit;text-decoration:none}
+a:hover{text-decoration:underline}
+a:focus-visible:not(.btn){outline:2px solid var(--accent); outline-offset:3px; border-radius:10px}
+p{margin:0 0 14px}
+/* Списки: без левого отступа и с аккуратным маркером (чтобы центр не «плыл») */
+ul{margin:0 0 12px; padding-left:0; list-style:none}
+ul li{margin:8px 0}
+ul li::before{
+  content:"•";
+  display:inline-block;
+  margin-right:10px;
+  color:var(--accent);
+  font-weight:800;
+}
+ol{margin:0 0 12px; padding-left:0; list-style-position:inside}
+ol li{margin:8px 0}
+h1,h2,h3{margin:0 0 10px; line-height:1.12; font-family:"Manrope","Inter",system-ui,-apple-system,Segoe UI,Roboto,Arial,Helvetica,sans-serif}
+h1{font-size:clamp(38px, 4.6vw, 64px); letter-spacing:-.03em}
+h2{font-size:clamp(26px, 3.2vw, 40px); letter-spacing:-.02em}
+h3{font-size:18px}
+small{font-size:13px}
+hr{border:0;border-top:1px solid var(--border); margin:18px 0}
+
+.container{max-width:var(--container); margin:0 auto; padding:0 var(--gutter)}
+.section{padding:clamp(34px, 4.4vw, 66px) 0}
+main section[id]{scroll-margin-top:96px}
+
+.section.tight{padding:24px 0}
+.muted{color:var(--muted)}
+.lead{font-size:clamp(18px, 1.6vw, 22px)}
+.kicker, .hero-kicker{color:var(--muted); font-weight:600; letter-spacing:.02em}
+.accent{color:var(--accent)}
+.badge{
+  display:inline-flex; align-items:center; gap:8px;
+  padding:6px 10px; border:1px solid var(--border);
+  background:color-mix(in srgb, var(--card) 78%, var(--bg2) 22%); border-radius:999px; font-size:13px;
+}
+
+/* Small pill label (used in service cards, etc.) */
+.pill{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:6px 10px;
+  border-radius:999px;
+  border:1px solid var(--border);
+  background:color-mix(in srgb, var(--bg2) 80%, var(--card) 20%);
+  font-weight:800;
+  font-size:13px;
+  color:color-mix(in srgb, var(--text) 82%, var(--muted) 18%);
+}
+.pill-dot{
+  width:8px;
+  height:8px;
+  border-radius:999px;
+  background:var(--accent);
+  box-shadow:0 0 0 2px color-mix(in srgb, var(--accent) 18%, transparent 82%);
+}
+.service-pill{margin-bottom:10px}
+
+.card{
+  background: linear-gradient(180deg, color-mix(in srgb, var(--card2) 92%, transparent 8%), var(--card));
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  box-shadow: 0 0 0 rgba(0,0,0,0);
+  padding:18px;
+  backdrop-filter: blur(10px) saturate(140%);
+}
+.card.soft{background:color-mix(in srgb, var(--card) 85%, var(--bg2) 15%)}
+.card--glow{box-shadow:var(--shadow)}
+.card:hover{box-shadow:var(--shadow); transform: translateY(-2px)}
+@media (prefers-reduced-motion: reduce){ .card:hover{box-shadow:none} }
+
+.btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:8px;
+  padding:12px 18px;
+  border-radius:999px;
+  border:1px solid transparent;
+  font-weight:700;
+  cursor:pointer;
+  user-select:none;
+  white-space:nowrap;
+  transition:transform .12s ease, box-shadow .12s ease, background-color .12s ease, border-color .12s ease;
+}
+.btn:active{transform:translateY(1px)}
+.btn:focus{outline:none}
+.btn:focus-visible{box-shadow:var(--ring)}
+.btn-primary{
+  background: linear-gradient(180deg, #ffd76a, var(--accent));
+  color:#111;
+  box-shadow: 0 14px 34px rgba(255,176,0,.22);
+  border-color: rgba(255,255,255,.10);
+}
+.btn-primary:hover{
+  filter: brightness(1.02);
+  box-shadow: 0 18px 46px rgba(255,176,0,.14);
+}
+.btn-outline{background:rgba(255,255,255,.04); border-color:var(--border)}
+.btn-outline:hover{background:rgba(255,255,255,.07); text-decoration:none}
+.btn-ghost{background:transparent}
+.btn-block{width:100%}
+.btn svg, .btn img{flex:0 0 auto}
+
+.site-header{
+  position:sticky; top:0; z-index:30;
+  background:
+    linear-gradient(180deg, rgba(10,10,14,.82), rgba(10,10,14,.56));
+  backdrop-filter:saturate(120%) blur(10px);
+  border-bottom:1px solid var(--border);
+}
+@supports not (backdrop-filter: blur(2px)){
+  .site-header{background:rgba(10,10,14,.92)}
+}
+.header-inner{
+  display:flex; align-items:center; justify-content:space-between;
+  gap:12px; padding:10px 0;
+}
+.brand{display:flex; align-items:center; gap:12px}
+.logo-image{height:34px; width:auto}
+.header-actions{display:flex; align-items:center; gap:10px}
+.contacts{display:flex; align-items:center; gap:10px}
+.contact-link{display:inline-flex; align-items:center; gap:8px; font-weight:700}
+.contact-link img{opacity:.9}
+
+.nav{
+  display:flex; flex-wrap:wrap; gap:10px;
+  padding:12px var(--gutter) 14px;
+  max-width:var(--container); margin:0 auto;
+  justify-content:center;
+}
+.nav a:not(.btn){
+  padding:8px 10px; border-radius:999px;
+  border:1px solid transparent;
+  color:var(--muted); font-weight:700; font-size:13.2px;
+}
+.nav a:hover:not(.btn){border-color:var(--border); text-decoration:none; color:var(--text)}
+.nav a[aria-current="page"]:not(.btn),
+.nav a[aria-current="location"]:not(.btn),
+.nav a[aria-current="true"]:not(.btn){background:var(--bg2); border-color:var(--border); color:var(--text)}
+
+.menu-btn{display:none}
+@media (max-width: 980px){
+  .nav{display:none}
+  .menu-btn{display:inline-flex}
+  .header-actions .header-cta{display:none}
+}
+
+/* ================================
+   v68 — Sidebar nav grouping
+   - adds section labels without breaking layout
+   - enables scrolling in the fixed sidebar when content grows
+   ================================ */
+
+@media (min-width: 981px){
+  /* allow scroll (labels add height) */
+  #siteNav{ overflow:auto !important; }
+
+  /* compact labels for narrow sidebar */
+  #siteNav .nav-label{
+    padding: 10px 8px 4px;
+    font-size: 10px;
+    letter-spacing: .10em;
+  }
+
+  /* extra breathing room between groups */
+  #siteNav .nav-group + .nav-group{ margin-top: 6px; }
+}
+.mobile-menu{
+  position:fixed; inset:74px var(--gutter) auto;
+  background:var(--card); border:1px solid var(--border);
+  border-radius:18px; box-shadow:var(--shadow);
+  padding:12px; max-height:calc(100vh - 92px); overflow:auto;
+  transform:translateY(-8px); opacity:0; pointer-events:none;
+}
+.mobile-menu.is-open{transform:translateY(0); opacity:1; pointer-events:auto}
+.mobile-menu a{display:block; padding:12px 12px; border-radius:14px; font-weight:800}
+.mobile-menu a:hover{text-decoration:none; background:var(--bg2)}
+.mobile-menu a:focus{outline:none}
+.mobile-menu a:focus-visible{box-shadow:var(--ring)}
+.mobile-menu .menu-cta{margin:10px 0 4px}
+
+.hero{padding-top:42px}
+.hero{padding-top:64px}
+.hero-top{
+  display:grid;
+  gap:34px;
+  grid-template-columns: 1.12fr .88fr;
+  align-items:center;
+}
+@media (max-width: 960px){
+  .hero{padding-top:44px}
+  .hero-top{grid-template-columns:1fr; gap:18px}
+}
+.hero .hero-head h1{
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:-.02em;
+}
+.hero-actions{display:flex; gap:12px; flex-wrap:wrap; margin-top:18px}
+.hero-mini{margin-top:14px}
+.hero-format{margin-top:12px; color:var(--muted)}
+.hero-visual{display:block}
+.hero-art{
+  position:relative;
+  border-radius:28px;
+  border:1px solid rgba(255,255,255,.14);
+  background:
+    radial-gradient(520px 340px at 30% 18%, rgba(255,176,0,.14), transparent 62%),
+    radial-gradient(520px 340px at 78% 24%, rgba(255,106,0,.10), transparent 62%),
+    linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+  box-shadow: var(--shadow-md);
+  overflow:hidden;
+  aspect-ratio: 4 / 3;
+}
+.hero-art img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  opacity:.92;
+  transform: scale(1.03);
+  filter: drop-shadow(0 30px 80px rgba(0,0,0,.45));
+}
+.theme-art{
+  border-radius:24px;
+  border:1px solid var(--border);
+  background:rgba(255,255,255,.04);
+}
+
+/* Universal grids used across pages */
+[class*="-grid"]{
+  display:grid;
+  gap:14px;
+  grid-template-columns:repeat(auto-fit, minmax(300px, 1fr));
+}
+@media (max-width: 520px){
+  [class*="-grid"]{grid-template-columns:1fr}
+}
+
+/* Section head with illustration (fixes “гигантские картинки”) */
+.section-head{
+  display:flex; align-items:flex-start; justify-content:space-between;
+  gap:14px; flex-wrap:wrap;
+}
+.section-illus-wrap{
+  flex:0 1 360px;
+  margin-left:auto;
+}
+.section-illus-img{
+  width:100%;
+  max-height:240px;
+  height:auto;
+  object-fit:contain;
+  display:block;
+}
+@media (max-width: 820px){
+  .section-illus-wrap{flex-basis:100%; max-width:520px}
+}
+
+/* Pills / page links */
+.page-links{display:flex; flex-wrap:wrap; gap:10px; margin-top:14px; justify-content:center}
+.pill-link{
+  display:inline-flex; align-items:center; gap:8px;
+  padding:10px 12px; border-radius:999px;
+  border:1px solid var(--border); background:var(--bg2);
+  font-weight:800; font-size:14px;
+}
+.pill-link:hover{text-decoration:none; filter:brightness(0.98)}
+
+/* Lists */
+.mini-list{list-style:none; padding-left:0}
+.mini-list li{margin:8px 0}
+/* Переопределяем общий маркер списка на «точку» (центрируется вместе с текстом) */
+.mini-list li::before{
+  content:"";
+  display:inline-block;
+  width:8px; height:8px;
+  border-radius:999px;
+  margin-right:10px;
+  background:color-mix(in srgb, var(--accent) 55%, var(--accent2) 45%);
+  transform:translateY(-1px);
+}
+
+/* Accordion */
+details.mini-accordion{
+  border:1px solid var(--border);
+  border-radius:16px;
+  background:var(--bg2);
+  padding:10px 12px;
+  margin-top:14px;
+}
+details.mini-accordion > summary{
+  cursor:pointer;
+  list-style:none;
+  font-weight:800;
+}
+details.mini-accordion > summary::-webkit-details-marker{display:none}
+.mini-accordion__content{padding-top:10px}
+
+/* Forms */
+.cta-form{
+  display:grid; gap:12px;
+}
+.cta-form label{display:grid; gap:6px}
+.cta-form label > span{font-weight:800; font-size:14px}
+.cta-form input, .cta-form textarea{
+  width:100%;
+  padding:12px 12px;
+  border-radius:999px;
+  border:1px solid var(--border);
+  background:var(--card);
+  color:var(--text);
+  outline:none;
+  text-align:left;
+}
+.cta-form input:focus, .cta-form textarea:focus{box-shadow:var(--ring); border-color:transparent}
+.cta-form .check{
+  display:flex; align-items:center; gap:10px;
+  padding:10px 12px;
+  border:1px solid var(--border);
+  border-radius:999px;
+  background:var(--bg2);
+}
+.cta-form .check input{width:18px;height:18px}
+.cta-form__actions{display:flex; gap:10px; flex-wrap:wrap}
+.form-hint{color:var(--muted); font-size:13px}
+.form-status{font-weight:800; font-size:14px}
+
+
+/* Mini CTA form (secondary pages) */
+.cta-form--mini{ gap:10px; }
+.cta-form--mini .cta-form__actions{ flex-wrap:nowrap; }
+.cta-form--mini .form-legal{ margin-top:2px; }
+
+/* Hero mini-form (first screen) */
+.hero-form{margin-top:12px}
+.hero-form__row{display:flex; gap:10px; align-items:center; flex-wrap:wrap}
+.hero-form input{
+  flex:1 1 260px;
+  width:100%;
+  padding:12px 12px;
+  border-radius:999px;
+  border:1px solid var(--border);
+  background:var(--card);
+  color:var(--text);
+  outline:none;
+  text-align:left;
+}
+.hero-form input:focus{box-shadow:var(--ring); border-color:transparent}
+@media (max-width: 560px){
+  .hero-form__row{gap:8px}
+  .hero-form button{width:100%}
+}
+
+
+/* =========================
+   HERO: stronger 1st screen (proof + compact form)
+   ========================= */
+.hero-kicker{font-weight:800}
+.hero-head .lead{max-width:58ch}
+.hero-art--proof img{
+  object-fit:contain;
+  opacity:1;
+  transform:none;
+  filter:none;
+  padding:18px;
+}
+@media (max-width: 960px){
+  .hero-art--proof{aspect-ratio: 16 / 11}
+}
+
+/* Make the hero form feel "one action", not another section */
+.hero-form .form-status{margin-top:6px}
+.hero-form .muted.small{margin-top:6px}
+
+
+/* Footer */
+.site-footer{
+  padding:28px 0 40px;
+  border-top:1px solid var(--border);
+  color:var(--muted);
+}
+.footer-links{display:flex; flex-wrap:wrap; gap:10px; margin-top:10px}
+.footer-links a{color:var(--muted); font-weight:700}
+.footer-links a:hover{color:var(--text); text-decoration:none}
+
+/* Helpers */
+.skip-link{
+  position:absolute; left:-999px; top:auto; width:1px; height:1px; overflow:hidden;
+}
+.skip-link:focus,
+.skip-link:focus-visible{
+  left:18px; top:18px; width:auto; height:auto;
+  padding:10px 12px; background:var(--card);
+  border:1px solid var(--border); border-radius:12px;
+  z-index:999;
+}
+/* v3 fixes: nav + theme toggle sizing */
+.icon-sun,.icon-moon{width:18px;height:18px;display:block}
+:root[data-theme="light"] .icon-sun{display:none}
+:root:not([data-theme="light"]) .icon-moon{display:none}
+
+
+.theme-toggle{
+  width:40px; height:40px; padding:0;
+  border-radius:999px;
+
+  color:var(--text);
+}
+
+.theme-toggle:active{transform:translateY(1px)}
+.theme-toggle svg{width:18px;height:18px}
+
+.nav a:not(.btn){
+  display:inline-flex; align-items:center; justify-content:center;
+  padding:10px 12px; border-radius:12px;
+  font-weight:700; color:var(--muted);
+  text-decoration:none;
+}
+.nav a:hover:not(.btn){background:rgba(255,255,255,.06); color:var(--text)}
+.nav a:focus-visible{outline:none; box-shadow:var(--ring)}
+
+
+/* Grouped nav labels */
+.nav-group{display:flex; flex-direction:column; gap:6px}
+.nav-label{
+  padding:10px 12px 4px;
+  font-size:12px;
+  font-weight:800;
+  color:var(--muted);
+  text-transform:uppercase;
+  letter-spacing:.08em;
+}
+.nav-bottom{
+  margin-top:10px;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+.nav a.nav-contact{
+    font-size: 12.3px !important;justify-content:flex-start}
+
+.nav-cta{display:inline-flex}
+.nav-sep{display:none}
+.nav-theme{display:none}
+
+.nav-backdrop{
+  position:fixed; inset:0;
+  background:rgba(0,0,0,.35);
+  backdrop-filter:blur(2px);
+  z-index:55;
+}
+
+.nav-toggle{
+  display:none;
+  width:44px; height:44px; padding:0;
+  border-radius:14px;
+}
+.nav-toggle__icon{display:grid; gap:5px}
+.nav-toggle__icon span{
+  width:20px; height:2px; border-radius:2px;
+  background:currentColor; opacity:.9;
+}
+
+
+
+/* ================================
+   Desktop sidebar layout (ChatGPT / Яндекс.Бизнес feel)
+   ================================ */
+
+@media (min-width: 981px){
+  /*
+    Desktop density ("как будто 80–90% zoom").
+    Нельзя надёжно управлять системным зумом браузера у пользователей,
+    поэтому делаем интерфейс чуть компактнее: меньше типографика/отступы,
+    уже контейнер и сайдбар. На мобиле ничего не уменьшаем.
+  */
+  :root{
+  /* B2B-like dark theme (default) */
+  --bg:#0b0c10;
+  --bg2:#12131a;
+  --card:rgba(255,255,255,.06);
+  --card2:rgba(255,255,255,.085);
+  --text:#f3f5f7;
+  --muted:rgba(243,245,247,.72);
+  --border:rgba(255,255,255,.12);
+
+  --shadow-sm:0 10px 26px rgba(0,0,0,.28);
+  --shadow:0 16px 44px rgba(0,0,0,.36);
+  --shadow-md:0 26px 72px rgba(0,0,0,.44);
+
+  --accent:#ffb000;   /* warm yellow */
+  --accent2: var(--accent);  /* unified accent */
+  --radius:22px;
+  --container:1180px;
+  --gutter: clamp(22px, 4.2vw, 72px);
+  --ring:0 0 0 3px rgba(255,176,0,.22);
+  color-scheme:dark;
+}
+
+[data-theme="light"]{
+  /* Light theme (fallback / optional) */
+  --bg:#faf5ed;
+  --bg2:#f2e9dd;
+  --card:#fffdf8;
+  --card2:#ffffff;
+  --text:#0f172a;
+  --muted:#556070;
+  --border:rgba(15,23,42,.10);
+
+  --shadow-sm:0 6px 14px rgba(15,23,42,.06);
+  --shadow:0 10px 24px rgba(15,23,42,.08);
+  --shadow-md:0 16px 38px rgba(15,23,42,.12);
+
+  --accent:#d97706;
+  --accent2:#2563eb;
+  --ring:0 0 0 3px rgba(217,119,6,.22);
+  color-scheme:light;
+}
+
+/* Background: solid (no gradients) */
+body{
+  background: var(--bg);
+  line-height:1.65;
+}
+
+/* Header: more “product”, less glass */
+.site-header{
+  background:color-mix(in srgb, var(--bg) 92%, transparent 8%);
+  border-bottom:1px solid var(--border);
+}
+
+/* Typography rhythm */
+h1,h2,h3{letter-spacing:-.02em}
+h3{font-weight:800}
+.lead{font-size:18px; line-height:1.55}
+.hero-sub{margin:10px 0 0; font-size:18px; color:var(--muted); max-width:70ch}
+.section p{max-width:74ch}
+
+/* Cards: subtle, consistent */
+.card{
+  padding:20px;
+  border-radius:var(--radius);
+  background:var(--card);
+  box-shadow:none;
+}
+.card:hover{box-shadow:var(--shadow-sm)}
+@media (prefers-reduced-motion: reduce){
+  .card:hover{box-shadow:none}
+}
+
+/* Buttons: flat + crisp */
+.btn{border-radius:12px; font-weight:800}
+.btn-primary{
+  background:var(--accent);
+  border-color:transparent;
+  box-shadow:none;
+}
+.btn-primary:hover{
+  background:color-mix(in srgb, var(--accent) 92%, #000 8%);
+}
+.btn-outline{
+  background:transparent;
+  border-color:var(--border);
+}
+.btn-outline:hover{
+  background:color-mix(in srgb, var(--card) 60%, var(--bg2) 40%);
+  border-color:color-mix(in srgb, var(--border) 70%, var(--text) 30%);
+  text-decoration:none;
+}
+
+/* Chips / badges: calmer */
+.badge,
+.chip, .trust-pill,
+.pill-link,
+.trust-badge,
+.about-badge,
+.pricing-badge{
+  background:color-mix(in srgb, var(--card) 74%, var(--bg2) 26%);
+}
+
+/* Accordion: отделяем от фона */
+details.mini-accordion{
+  background:var(--card);
+}
+details.mini-accordion > summary{
+  padding:4px 2px;
+}
+
+/* Nav links: muted by default */
+.nav a:not(.btn){
+  color:var(--muted);
+  font-weight:800;
+}
+.nav a:hover:not(.btn){
+  color:var(--text);
+  background:color-mix(in srgb, var(--card) 55%, var(--bg2) 45%);
+}
+
+/* Page cards: more “UI”, less “плакат” */
+.page-ico{
+  width:56px; height:56px;
+  border-radius:16px;
+  background:color-mix(in srgb, var(--bg2) 72%, var(--card) 28%);
+}
+.page-ico svg{width:28px;height:28px}
+.page-meta p{color:var(--muted)}
+
+/* Footer: neutral */
+.site-footer{
+  background:transparent;
+}
+
+/* v5 layout polish (CTA + small details) */
+.cta-top{
+  display:grid;
+  grid-template-columns:1.12fr .88fr;
+  gap:18px;
+  align-items:start;
+  margin-bottom:18px;
+}
+@media (max-width: 860px){
+  .cta-top{grid-template-columns:1fr}
+}
+.cta-faq{display:grid; gap:12px}
+
+.cta-inner{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:18px;
+  align-items:stretch;
+}
+@media (max-width: 960px){
+  .cta-inner{grid-template-columns:1fr}
+}
+/* v5 hero background: lighter and calmer */
+.hero:before{
+  height:260px;
+  opacity:.55;
+  background:
+    radial-gradient(720px 340px at 20% 18%, rgba(37,99,235,.06), transparent 60%),
+    radial-gradient(720px 340px at 82% 10%, rgba(22,163,74,.08), transparent 62%);
+}
+[data-theme="dark"] .hero:before{
+  opacity:1;
+  background:
+    radial-gradient(720px 340px at 20% 18%, rgba(122,166,255,.16), transparent 62%),
+    radial-gradient(720px 340px at 82% 10%, rgba(52,211,153,.10), transparent 64%);
+}
+
+/* ================================
+   v6 — ВИЗУАЛ ФИКС (header)
+   (структуру страниц не трогаем)
+   ================================ */
+
+/* Theme toggle: в светлой теме иконка иногда «пропадает» — фиксируем жёстко */
+.theme-toggle{
+  color:var(--text);
+  background:color-mix(in srgb, var(--card) 70%, var(--bg2) 30%);
+  border-color:var(--border);
+}
+.theme-toggle svg, .theme-toggle svg *{stroke:currentColor !important}
+
+/* Важно: показываем только одну иконку (иначе получается «две сразу»)
+   Это переопределяет любые общие правила display для svg. */
+.theme-toggle .icon-sun,
+.theme-toggle .icon-moon,
+.nav-theme .icon-sun,
+.nav-theme .icon-moon{display:none}
+
+:root[data-theme="dark"] .theme-toggle .icon-sun,
+:root[data-theme="dark"] .nav-theme .icon-sun{display:block}
+
+:root:not([data-theme="dark"]) .theme-toggle .icon-moon,
+:root:not([data-theme="dark"]) .nav-theme .icon-moon{display:block}
+
+/* Header: компактнее и без дублей на десктопе */
+.header-inner{padding:8px 0}
+
+.header-actions{gap:12px}
+.header-actions .header-cta{padding:9px 12px; border-radius:14px}
+.header-actions .cta-ico{width:18px;height:18px; display:block; opacity:.9}
+.header-actions .contact-ico{width:16px;height:16px; display:block; opacity:.9}
+:root[data-theme="dark"] .header-actions img[src$=".png"], img[src$=".webp"], img[src$=".webp"]{filter:invert(1)}
+:root[data-theme="dark"] .trust-badge__icon img{filter:invert(1)}
+:root[data-theme="dark"] .pill img{filter:invert(1)}
+
+.header-actions .contact-link{color:var(--muted); font-weight:800}
+.header-actions .contact-link:hover{color:var(--text); text-decoration:none}
+
+@media (min-width: 981px){
+  .nav{padding:6px 18px 10px; gap:8px}
+  .nav a:not(.btn){padding:8px 10px; font-size:13px}
+
+  /* убираем вторую CTA/контакты из строки меню — они остаются только в верхней полосе */
+  .nav .nav-cta,
+  .nav .nav-theme,
+  .nav .nav-sep,
+  .nav a[href^="tel:"]{--nav-ico:url('../img/icons/nav/12-phone.svg');}
+  .nav a[href*="t.me/np_maps"]{display:flex !important}
+}
+/* --- Bento grid overrides (v10) --- */
+/* Readability: for text-heavy cards we avoid 3-up columns on desktop.
+   2 columns (or 1 on smaller screens) is noticeably easier to scan. */
+:root{ --grid-gap:18px; }
+[class*="-grid"]{ gap:var(--grid-gap); }
+
+/* Controlled columns (less "auto-fit chaos") */
+.pages-grid{
+  grid-template-columns:repeat(3, minmax(0,1fr));
+}
+@media (max-width: 860px){
+  .pages-grid{ grid-template-columns:repeat(2, minmax(0,1fr)); }
+}
+@media (max-width: 560px){
+  .pages-grid{ grid-template-columns:1fr; }
+}
+
+/* 3-up bento rows */
+/* Text-heavy “bento” rows: keep them 2-up on desktop */
+.formats-grid,
+.platforms-grid,
+.plan-grid,
+.pricing-grid{
+  grid-template-columns:repeat(2, minmax(0,1fr));
+}
+@media (max-width: 980px){
+  .formats-grid,
+  .platforms-grid,
+  .plan-grid,
+  .pricing-grid{ grid-template-columns:1fr; }
+}
+
+/* 4-up rows */
+/* Other grids: 2 columns by default, then stack */
+.solutions-grid,
+.addons-grid,
+.choose-grid,
+.monthly-grid{
+  grid-template-columns:repeat(2, minmax(0,1fr));
+}
+@media (max-width: 980px){
+  .solutions-grid,
+  .addons-grid,
+  .choose-grid,
+  .monthly-grid{ grid-template-columns:1fr; }
+}
+
+/* ================================
+   v24 — Process page polish
+   Цель: убрать «странно выглядит»
+   - нормальные пробелы/ритм в “что смотрю у конкурентов”
+   - более читабельная сетка “что вы получите”
+   - шаги процесса как карточки (без огромных буллетов)
+   ================================ */
+
+
+/* “Что смотрю у конкурентов” — сейчас там спаны склеиваются (свежестьпонимаю)
+   потому что без пробелов между <span>. Делаем их блоками и даём сетку/воздух. */
+.compare-mini{
+  margin-top:22px;
+  padding:18px;
+  border:1px solid var(--border);
+  border-radius:22px;
+  background:color-mix(in srgb, var(--card) 86%, var(--bg2) 14%);
+  box-shadow:var(--shadow);
+}
+.compare-mini__title{
+  margin:0;
+  font-size:14px;
+  letter-spacing:-.01em;
+}
+.compare-mini__title strong{font-weight:800}
+.compare-mini__title span{color:var(--muted); font-weight:700; margin-left:6px}
+
+.compare-grid{
+  display:grid;
+  grid-template-columns:repeat(3, minmax(0,1fr));
+  gap:14px 22px;
+  margin-top:14px;
+}
+@media (max-width: 980px){ .compare-grid{ grid-template-columns:repeat(2, minmax(0,1fr)); } }
+@media (max-width: 560px){ .compare-grid{ grid-template-columns:1fr; } }
+
+.compare-row{
+  padding:12px 12px;
+  border:1px solid color-mix(in srgb, var(--border) 85%, transparent 15%);
+  border-radius:18px;
+  background:color-mix(in srgb, var(--bg2) 45%, transparent 55%);
+}
+.compare-row span{display:block}
+.compare-k{font-weight:800}
+.compare-v{margin-top:6px; color:var(--muted); line-height:1.55}
+
+/* “Как работаем — по шагам” (process-grid) — превращаем список в аккуратные карточки */
+.process-grid{ gap:18px; }
+.process-grid ul{
+  margin:0;
+  padding:0;
+  list-style:none;
+  display:grid;
+  gap:12px;
+}
+.process-grid ul li{
+  margin:0;
+  padding:16px 18px;
+  border:1px solid var(--border);
+  border-radius:20px;
+  background:color-mix(in srgb, var(--card) 86%, var(--bg2) 14%);
+}
+/* убираем глобальные буллеты (у нас ul li::before задан для всего сайта) */
+.process-grid ul li::before{display:none; content:"";}
+.process-grid ul li strong{display:block; font-size:15px; margin-bottom:4px}
+
+.process-note{
+  padding:16px 16px;
+  border:1px solid var(--border);
+  border-radius:20px;
+  background:color-mix(in srgb, var(--card) 84%, var(--bg2) 16%);
+}
+.process-note p{margin:0 0 10px}
+.process-note p:last-child{margin-bottom:0}
+@media (max-width: 560px){
+  .solutions-grid,
+  .addons-grid,
+  .choose-grid,
+  .monthly-grid{ grid-template-columns:1fr; }
+}
+
+/* 5 cards → 3 columns */
+.tariffs-grid,
+.bundle-grid,
+.compare-grid{
+  grid-template-columns:repeat(3, minmax(0,1fr));
+}
+@media (max-width: 980px){
+  .tariffs-grid,
+  .bundle-grid,
+  .compare-grid{ grid-template-columns:repeat(2, minmax(0,1fr)); }
+}
+@media (max-width: 560px){
+  .tariffs-grid,
+  .bundle-grid,
+  .compare-grid{ grid-template-columns:1fr; }
+}
+
+/* FAQ: readable grid */
+.faq-grid{
+  grid-template-columns:repeat(3, minmax(0,1fr));
+}
+@media (max-width: 1100px){
+  .faq-grid{ grid-template-columns:repeat(2, minmax(0,1fr)); }
+}
+@media (max-width: 560px){
+  .faq-grid{ grid-template-columns:1fr; }
+}
+
+/* Two-column content grids */
+.honesty-grid,
+.honesty-extra-grid,
+.fit-grid{
+  grid-template-columns:repeat(2, minmax(0,1fr));
+}
+@media (max-width: 860px){
+  .honesty-grid,
+  .honesty-extra-grid,
+  .fit-grid{ grid-template-columns:1fr; }
+}
+
+/* Text + side card layouts */
+.intro-grid{
+  grid-template-columns:1.15fr .85fr;
+  align-items:start;
+}
+@media (max-width: 860px){
+  .intro-grid{ grid-template-columns:1fr; }
+}
+
+.process-grid{
+  grid-template-columns:1.15fr .85fr;
+  align-items:start;
+}
+@media (max-width: 860px){
+  .process-grid{ grid-template-columns:1fr; }
+}
+
+.loss-grid{
+  grid-template-columns:1fr 1.1fr .9fr;
+  align-items:start;
+}
+@media (max-width: 980px){
+  .loss-grid{ grid-template-columns:1fr; }
+}
+
+/* Make illustration blocks behave like bento cards */
+.section-illus-wrap{
+  border-radius:var(--radius);
+  overflow:hidden;
+}
+.section-illus-img{
+  width:100%;
+  height:auto;
+  display:block;
+}
+
+
+/* v16 fix: keep inline SVG icons from exploding (process/how cards) */
+.how-ico{
+  width:clamp(84px, 9vw, 132px);
+  height:clamp(84px, 9vw, 132px);
+  margin:6px auto 14px;
+  display:grid;
+  place-items:center;
+  color:color-mix(in srgb, var(--text) 92%, var(--muted) 8%);
+}
+.how-ico svg{width:100%; height:100%; display:block;}
+
+/* ================================
+   v17 — Hero first-screen polish
+   (keeps structure, fixes “стремно”)
+   ================================ */
+
+/* ================================
+   v69 — Pricing: visible price anchors
+   ================================ */
+.price-block{display:flex; flex-direction:column; gap:2px; margin:10px 0 10px;}
+.price-block .price{font-size:28px; font-weight:800; letter-spacing:-0.02em; line-height:1.05;}
+.price-block .price small{font-size:12px; font-weight:700; color:var(--muted); margin-left:8px; letter-spacing:0;}
+.price-block .price-meta{font-size:13px; color:var(--muted);}
+.price-block.is-tight{margin:8px 0 8px;}
+.tariff-card .price-block{margin:10px 0 12px;}
+.pricing-card .price-block{margin:8px 0 10px;}
+
+/* ================================
+   v72 — Tariffs: comparison + strong CTAs
+   ================================ */
+.compare-mini--tariffs{margin-top:16px;}
+.tariff-actions{margin-top:14px;}
+.tariff-actions .btn{width:100%;}
+
+.tariff-card,
+.pricing-card{position:relative;}
+
+.tariff-badge,
+.pricing-badge{
+  position:absolute;
+  top:14px;
+  right:14px;
+  display:inline-flex;
+  align-items:center;
+  padding:6px 10px;
+  border-radius:999px;
+  border:1px solid color-mix(in srgb, var(--border) 70%, var(--accent) 30%);
+  background:color-mix(in srgb, var(--card) 74%, var(--bg2) 26%);
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.01em;
+}
+
+.tariff-card--recommended{
+  border-color:color-mix(in srgb, var(--accent) 36%, var(--border) 64%);
+  box-shadow:0 22px 60px rgba(255,176,0,.10);
+}
+
+.tariff-card--recommended .tariff-badge{
+  border-color:color-mix(in srgb, var(--accent) 55%, var(--border) 45%);
+}
+
+@media (max-width: 560px){
+  .tariff-badge,
+  .pricing-badge{top:12px; right:12px;}
+}
+@media (max-width: 560px){
+  .price-block .price{font-size:26px;}
+}
+
+.hero{padding-top:34px}
+.hero-top{gap:26px; align-items:flex-start}
+.hero-head{max-width:760px; margin-left:auto; margin-right:auto}
+.hero h1{max-width:26ch; margin-left:auto; margin-right:auto; line-height:1.08}
+.hero-sub{max-width:56ch; margin-left:auto; margin-right:auto; font-size:17px}
+.hero .lead{max-width:62ch; margin-left:auto; margin-right:auto; margin-top:12px; font-size:16px}
+
+.hero-chips{gap:8px; margin:14px 0 8px}
+.chip{padding:7px 10px; font-weight:700; font-size:12px}
+
+/* Meta line instead of “pill salad” */
+.hero-trust--meta{gap:0; justify-content:center; margin-top:10px}
+.hero-trust--meta .trust-pill{
+  padding:0;
+  border:0;
+  background:transparent;
+  font-weight:600;
+  font-size:12px;
+  color:var(--muted);
+}
+.hero-trust--meta .trust-pill + .trust-pill::before{
+  content:"•";
+  margin:0 10px;
+  opacity:.6;
+}
+
+.hero-details{margin-top:14px}
+.hero-details summary{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  margin:0 auto;
+  padding:12px 18px;
+  border-radius:14px;
+  border:1px solid var(--border);
+  background:color-mix(in srgb, var(--card) 88%, var(--bg2) 12%);
+  font-weight:800;
+}
+.hero-details summary:hover{background:color-mix(in srgb, var(--card) 80%, var(--bg2) 20%)}
+.hero-details[open] summary{border-color:color-mix(in srgb, var(--border) 70%, var(--accent) 30%)}
+
+.hero-actions{gap:12px; margin-top:16px}
+.hero-actions .btn{min-width:240px}
+.hero-note{max-width:70ch; margin-left:auto; margin-right:auto}
+
+.hero-visual{justify-self:center; align-self:flex-start}
+.hero-visual .theme-art{max-width:620px; border-radius:28px}
+
+@media (max-width: 1100px){
+  .hero-visual .theme-art{max-width:520px}
+}
+
+/* Keep hero visual on mobile too (it’s part of the first screen) */
+@media (max-width: 960px){
+  .hero{padding-top:26px}
+  .hero-top{grid-template-columns:1fr; margin:12px auto 0}
+  .hero-visual .theme-art{max-width:520px}
+}
+
+@media (max-width: 540px){
+  .hero-actions .btn{min-width:100%}
+  .hero-visual .theme-art{max-width:100%}
+}
+
+
+/* ================================
+   v21 — Beige fix: remove banding / stripes
+   ================================ */
+body{
+  background: var(--bg);
+}
+.hero:before{
+  inset:-1px 0 auto 0;
+  height:560px;
+  opacity:.55;
+  background: none;
+}
+
+
+
+
+/* ===========================
+   v22 — текстовый ритм / «как на нормальных лендингах»
+   (без изменения структуры)
+   =========================== */
+
+:root{
+  --measure: 68ch;        /* комфортная длина строки */
+  --measureWide: 92ch;    /* для групп кнопок/пилюль */
+  --sectionY: clamp(52px, 6.2vw, 86px);
+}
+
+body{
+  font-size:15.5px;
+  line-height:1.65;
+  text-align:left;
+}
+
+.section{ padding: var(--sectionY) 0; }
+
+/* Заголовки не растягиваем на всю ширину */
+/* Headings: ChatGPT-like (left aligned, readable measure) */
+h1{ max-width: 28ch; margin-left:0; margin-right:0; }
+h2{ max-width: 44ch; margin-left:0; margin-right:0; }
+
+/* Основной текст делаем «колонкой», чтобы не было простыней */
+/* Body text: keep comfortable line length, but align to the left */
+p, ul, ol, .lead, .hero-format, .hero-mini, .kicker, .hero-kicker{
+  max-width: var(--measure);
+  margin-left:0;
+  margin-right:0;
+}
+p{ margin-bottom:14px; }
+ul,ol{ margin-bottom:14px; }
+
+/* Текст внутри карточек — ещё компактнее */
+.card p, .bento__item p{
+  max-width: 62ch;
+  margin-left:0;
+  margin-right:0;
+}
+
+/* Пилюли/ссылки — меньше веса, меньше «салата» */
+.page-links, .hero-actions{
+  max-width: var(--measureWide);
+  margin-left:0;
+  margin-right:0;
+}
+
+/* Make lists readable when left-aligned */
+ul{padding-left:0}
+ul li::before{margin-right:10px}
+
+/* ===== v23: ChatGPT-like desktop density / spacing ===== */
+@media (min-width: 981px){
+  :root{
+    --sidebar-w: 252px;
+    --sidebar-gap: 18px;
+    --container: 860px;
+    --radius: 16px;
+    --sectionY: clamp(44px, 4.8vw, 74px);
+    --measure: 66ch;
+    --measureWide: 90ch;
+  }
+
+  /* page gutters */
+  .container{padding:0 28px}
+
+  /* Sidebar — closer to ChatGPT sizing */
+  .site-header .container{padding:0 14px}
+  .nav a:not(.btn){font-size:12.6px; padding:8px 10px}
+  .nav a.nav-contact{
+    font-size: 12.3px !important;font-size:13px}
+  .nav a.nav-cta.btn{padding:11px 12px}
+
+  /* Cards / buttons — slightly smaller, more air */
+  .card{padding:18px}
+  .btn{padding:9px 12px}
+
+  /* Hero alignment (left, like ChatGPT content column) */
+  .hero-head{max-width:var(--measureWide); margin-left:0; margin-right:0}
+  .hero h1, .hero-sub, .hero .lead, .hero-note{margin-left:0; margin-right:0}
+  .hero-chips, .hero-actions, .hero-trust--meta{justify-content:flex-start}
+  .hero-details summary{margin-left:0}
+}
+.pill-link{
+  font-weight:700;
+  font-size:13px;
+  padding:8px 12px;
+}
+
+/* На мобиле показываем визуал (раньше скрывался) */
+@media (max-width: 960px){
+  .hero-visual{ display:block; justify-self:center; margin-top:6px; }
+  .hero-visual .theme-art{ max-width:420px; }
+}
+
+/* ===========================
+   v23 — FIX: убираем «полосы/линии» на фоне (особенно в dark)
+   Причина: hero::before имел фиксированную высоту и обрывался внутри hero.
+   Решение: делаем оверлей на всю высоту hero + мягкое затухание вниз.
+   =========================== */
+
+.hero{ position:relative; }
+
+/* No gradients: prevents visible banding/stripes on many monitors */
+.hero::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  opacity:0;
+  background:none;
+}
+
+
+/* ================================
+   v25 — Scoped grids (fix “всё сломано”)
+   Возвращаем общий .solutions-grid в 4 колонки (как было),
+   а 3-колоночную сетку делаем ТОЛЬКО внутри #deliverables,
+   чтобы “4 блока работы” на system.html не ломались.
+   ================================ */
+
+#deliverables .solutions-grid{ grid-template-columns:repeat(3, minmax(0,1fr)); }
+@media (max-width: 1100px){ #deliverables .solutions-grid{ grid-template-columns:repeat(2, minmax(0,1fr)); } }
+@media (max-width: 560px){ #deliverables .solutions-grid{ grid-template-columns:1fr; } }
+
+
+/* ===========================
+   v26 — Sticky CTA on mobile (index only via .has-sticky-cta)
+   =========================== */
+.sticky-cta{ display:none; }
+
+@media (max-width: 960px){
+  .has-sticky-cta{ padding-bottom: 88px; }
+  .sticky-cta{
+    display:block;
+    position:fixed;
+    left:0; right:0; bottom:0;
+    z-index:60;
+    padding:10px 14px calc(10px + env(safe-area-inset-bottom));
+    background:color-mix(in srgb, var(--bg) 88%, transparent 12%);
+    border-top:1px solid var(--border);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+  }
+  .sticky-cta__btn{
+    width:100%;
+    justify-content:center;
+  }
+}
+
+@media (min-width: 961px){
+  .has-sticky-cta{ padding-bottom:0; }
+}
+
+
+/* ==========================
+   v27 — Landing mode (home)
+   Цель: меньше ощущения «доков», сильнее иерархия и CTA.
+   ========================== */
+
+/* Home page: more landing-like rhythm */
+.page-home .hero-sub{font-size:16px; color:var(--muted); margin-top:10px}
+
+@media (min-width: 981px){
+  /* Make home content read like a landing (not centered paragraphs everywhere) */
+  .page-home main{ text-align:left; }
+
+  /* Give the copy more width and reduce forced line breaks */
+  .page-home .hero-top{ grid-template-columns:1fr; }
+  .page-home h1{ font-size:clamp(30px, 3.2vw, 46px); line-height:1.06; }
+
+  /* Hero block as a “product card” */
+  .page-home .hero-head{
+    text-align:left;
+    max-width:920px;
+    margin-left:0;
+    margin-right:0;
+    background:color-mix(in srgb, var(--card) 86%, var(--bg2) 14%);
+    border:1px solid var(--border);
+    border-radius:24px;
+    padding:22px 20px;
+    box-shadow:var(--shadow);
+  }
+
+  /* reduce forced line breaks + remove “centered blocks inside the card” */
+  .page-home .hero-head h1{
+    max-width:34ch;
+    margin-left:0;
+    margin-right:0;
+    text-align:left;
+  }
+  .page-home .hero-head .hero-sub,
+  .page-home .hero-head .lead,
+  .page-home .hero-head .hero-trust{
+    max-width:68ch;
+    margin-left:0;
+    margin-right:0;
+  }
+  .page-home .hero-visual .theme-art{ box-shadow:var(--shadow); }
+
+  /* Chips: 2 columns on desktop to shorten the first screen */
+  .page-home .hero-chips{
+    display:grid;
+    grid-template-columns:repeat(2, minmax(0,1fr));
+    justify-content:stretch;
+    gap:10px;
+  }
+  .page-home .chip{ justify-content:flex-start; text-align:left; white-space:normal; }
+
+  /* CTA alignment */
+  .page-home .hero-actions{ justify-content:flex-start; }
+  .page-home .hero-actions .btn{ padding:12px 16px; font-size:16px; border-radius:14px; }
+
+  /* Trust pills aligned with content */
+  .page-home .hero-trust{ justify-content:flex-start; }
+
+  /* Cards: left align for faster scanning */
+  .page-home .card{ text-align:left; }
+
+  /* Section heads: left align on desktop */
+  .page-home .section-head{ align-items:center; }
+  .page-home .section-head h2{ margin-bottom:6px; }
+
+  /* Forms: feel like a component, not plain inputs */
+  .page-home .hero-form{
+    background:color-mix(in srgb, var(--bg2) 78%, var(--card) 22%);
+    border:1px solid var(--border);
+    border-radius:18px;
+    padding:12px;
+  }
+}
+
+@media (max-width: 980px){
+  /* Mobile: keep it readable (Chat-like), not centered paragraphs */
+  .page-home main{ text-align:left; }
+  .page-home .hero-head{ text-align:left; }
+  .page-home .hero-actions{ justify-content:flex-start; }
+}
+
+/* ================================
+   v7 — Services page: clearer grid
+   ================================ */
+.services-grid{
+  grid-template-columns:repeat(3, minmax(0,1fr));
+}
+@media (max-width: 1100px){
+  .services-grid{grid-template-columns:repeat(2, minmax(0,1fr));}
+}
+@media (max-width: 860px){
+  .services-grid{grid-template-columns:1fr;}
+}
+.service-card--full{grid-column:1 / -1;}
+
+/* Service cards: make rows feel even (no "crooked" bottoms) */
+.service-card{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  text-align:left;
+}
+.service-card h3{margin:0;}
+.service-card p{margin:0;}
+.service-card ul{margin:0;}
+.service-card .hero-actions{margin-top:auto;}
+
+
+/* =========================
+   Selector (services: quick choose) + recommendations
+   ========================= */
+.selector-block{
+  margin-top:16px;
+  padding:18px;
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  background:color-mix(in srgb, var(--card) 88%, var(--bg2) 12%);
+  text-align:left;
+}
+.selector-block h3{margin-top:0;}
+.selector-block p{max-width:70ch;}
+
+.selector-grid{
+  display:grid;
+  grid-template-columns:repeat(2, minmax(0, 1fr));
+  gap:12px;
+  margin-top:14px;
+}
+@media (max-width: 860px){
+  .selector-grid{grid-template-columns:1fr;}
+}
+
+.selector-option{
+  cursor:pointer;
+  text-align:left;
+  border:1px solid var(--border);
+  background:var(--bg);
+  transition:transform .12s ease, border-color .12s ease, box-shadow .12s ease;
+}
+.selector-option{min-height:122px;}
+.selector-option h3{margin:0 0 6px 0; font-size:18px;}
+.selector-option p{margin:0;}
+.selector-option:hover{
+  transform:translateY(-1px);
+  border-color:color-mix(in srgb, var(--accent) 32%, var(--border) 68%);
+  box-shadow:0 10px 22px rgba(0,0,0,.10);
+}
+.selector-option.is-active{
+  border-color:color-mix(in srgb, var(--accent) 75%, var(--border) 25%);
+  box-shadow:0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent 82%);
+}
+
+.selector-result{margin-top:14px;}
+.selector-result .hero-actions{flex-wrap:wrap; gap:10px;}
+
+/* Quick skip actions above the selector grid (do not look like the main hero CTA) */
+.selector-quick{justify-content:flex-start; margin-top:12px; align-items:stretch;}
+.selector-quick .btn{
+  flex:1 1 260px;
+  min-width:240px;
+}
+@media (max-width: 860px){
+  .selector-quick .btn{min-width:0; flex:1 1 0;}
+}
+
+.service-card.is-recommended{
+  border-color:color-mix(in srgb, var(--accent) 55%, var(--border) 45%);
+  box-shadow:0 0 0 3px color-mix(in srgb, var(--accent) 12%, transparent 88%);
+}
+.service-card.is-recommended .pill{
+  border-color:color-mix(in srgb, var(--accent) 60%, var(--border) 40%);
+}
+
+.format-card.is-picked{
+  border-color:color-mix(in srgb, var(--accent) 65%, var(--border) 35%);
+  box-shadow:0 0 0 3px color-mix(in srgb, var(--accent) 12%, transparent 88%);
+}
+
+
+/* No pictures mode: hide visual columns */
+.hero-visual{display:none !important;}
+.section-illus-wrap{display:none !important;}
+.cta-visual{display:none !important;}
+
+
+/* ================================
+   Readability v3 — ChatGPT-like measure
+   Цель: легче читать длинные блоки (меньше "плотности")
+   - текст слева
+   - нормальная ширина строки (measure)
+   - больше межстрочного и межабзацного воздуха
+   - списки с висячим отступом
+   - без "80–90% zoom" на десктопе
+   ================================ */
+
+:root{
+  --measure: 72ch;            /* комфортная длина строки */
+  --measure-narrow: 62ch;
+  --p-space: 18px;
+  --lh: 1.75;
+}
+
+body{
+  text-align:left;
+  line-height: var(--lh);
+}
+
+/* Make paragraphs breathe */
+p{ margin:0 0 var(--p-space); }
+
+/* Reading blocks: keep text in a centered, left-aligned column */
+.hero-head,
+.section-head,
+.process-note,
+.compare-mini,
+.selector-block > h3,
+.selector-block > p,
+.selector-result,
+.page-intro,
+.page-content{
+  max-width: var(--measure);
+  margin-left:auto;
+  margin-right:auto;
+  text-align:left;
+}
+
+/* Most section intros are direct children of .container */
+.section > .container > h2,
+.section > .container > p,
+.section > .container > details,
+.section > .container > form{
+  max-width: var(--measure);
+  margin-left:auto;
+  margin-right:auto;
+}
+
+/* But grids should remain wide */
+.section > .container > .solutions-grid,
+.section > .container > .plan-grid,
+.section > .container > .pricing-grid,
+.section > .container > .formats-grid,
+.section > .container > .services-grid,
+.section > .container > .pages-grid,
+.section > .container > .faq-grid,
+.section > .container > .case-grid,
+.section > .container > .honesty-grid,
+.section > .container > .fit-grid,
+.section > .container > .process-grid{
+  max-width: none;
+}
+
+/* Lists: hanging indent (readable on long lines) */
+ul{ padding-left:0; }
+ul li{
+  position:relative;
+  padding-left:20px;
+}
+ul li::before{
+  position:absolute;
+  left:0;
+  top:0.95em;
+  transform:translateY(-50%);
+}
+
+/* mini-list should also have hanging indent */
+.mini-list li{ position:relative; padding-left:20px; }
+.mini-list li::before{ position:absolute; left:0; top:0.95em; transform:translateY(-50%); margin-right:0; }
+
+/* Cards and long text in cards should be left-aligned */
+.card{ text-align:left; }
+
+/* Inputs: left aligned text (easier to scan) */
+.cta-form input,
+.cta-form textarea,
+.hero-form input{
+  text-align:left;
+}
+
+/* Buttons row: align with text on desktop, center on mobile */
+.hero-actions{ justify-content:flex-start; }
+.hero-chips{ justify-content:flex-start; }
+.hero-trust{ justify-content:flex-start; }
+
+@media (max-width: 820px){
+  .hero-actions{ justify-content:center; }
+  .hero-chips{ justify-content:center; }
+  .hero-trust{ justify-content:center; }
+}
+
+/* Remove the deliberate "desktop compact/zoom" feel */
+@media (min-width: 981px){
+  :root{
+    --sidebar-w: 240px;
+    --sidebar-gap: 18px;
+    --container: 1040px;
+    --radius: 18px;
+  }
+  body{ font-size:16px; }
+  .card{ padding:18px; border-radius:var(--radius); }
+  .btn{ padding:10px 14px; border-radius:12px; }
+  .chip, .trust-pill{ padding:8px 12px; font-size:13px; }
+}
+
+/* Prefer 2 columns for text-heavy grids on desktop */
+@media (min-width: 981px){
+  .solutions-grid,
+  .plan-grid,
+  .pricing-grid,
+  .formats-grid,
+  .pages-grid,
+  .faq-grid{ grid-template-columns:repeat(2, minmax(0,1fr)); }
+}
+
+/* ===== v24: More side padding / narrower reading column (по просьбе) ===== */
+:root{
+  --gutter: clamp(26px, 4.8vw, 92px);
+}
+
+.container{
+  padding-left: var(--gutter);
+  padding-right: var(--gutter);
+}
+
+.nav{
+  padding-left: var(--gutter);
+  padding-right: var(--gutter);
+}
+
+.mobile-menu{
+  inset: 74px var(--gutter) auto;
+}
+
+/* Sidebar has its own padding — keep it compact */
+.site-header .container{
+  padding-left: 14px;
+  padding-right: 14px;
+}
+
+@media (min-width: 981px){
+  :root{
+    /* Slightly narrower content column, more air near window edges */
+    --container: 920px;
+    --sidebar-gap: 18px;
+    --gutter: clamp(34px, 4.2vw, 128px);
+  }
+
+  body{ padding-right: var(--gutter); }
+}
+
+/* ===== Readability v5 overrides ===== */
+
+/* ===== Readability v5 overrides =====
+   Goal: easier reading (like ChatGPT): left-aligned body text, comfortable line length,
+   no artificial "desktop zoom", bigger gutters.
+====================================== */
+
+body{ text-align:left; font-size:16px; line-height:1.65; }
+
+p, li{ line-height:1.75; }
+p{ margin:0 0 16px; }
+
+/* Readability: normal lists */
+ul:not(.mini-list), ol{
+  margin: 0 0 14px;
+  padding-left: 1.15em;
+  list-style-position: outside;
+}
+ul:not(.mini-list){ list-style: disc; }
+ol{ list-style: decimal; }
+/* Reset older "hanging indent" rules for regular lists */
+ul:not(.mini-list) li, ol li{
+  margin:8px 0;
+  position: static;
+  padding-left: 0;
+}
+ul:not(.mini-list) li::before{ content:none !important; } /* kill global custom bullet */
+
+/* Keep "mini-list" stylized, but make it readable */
+.mini-list{ list-style:none; padding-left:0; }
+.mini-list li{ margin:10px 0; }
+
+/* Section headings: left by default */
+.section-head{ justify-content:flex-start; }
+.section-head h2{ max-width: 46ch; }
+
+/* Make long copy blocks narrower */
+.section p,
+.card p,
+.hero-sub,
+.lead{ max-width: 72ch; }
+
+/* Hero: left aligned (center only on small screens) */
+.hero h1,
+.hero .hero-sub,
+.hero .lead,
+.hero .hero-note{ margin-left:0; margin-right:0; }
+.hero h1{ max-width: 32ch; }
+.hero-actions,
+.hero-chips,
+.hero-trust{ justify-content:flex-start; }
+
+@media (max-width: 820px){
+  .hero-actions,
+  .hero-chips,
+  .hero-trust{ justify-content:center; }
+  .section-head{ justify-content:space-between; }
+}
+
+/* Remove "desktop compact/zoom" feel and increase gutters */
+@media (min-width: 981px){
+  :root{
+    --sidebar-w: 260px;
+    --sidebar-gap: 18px;
+    --container: 820px;
+    --gutter: clamp(32px, 4vw, 120px);
+    --radius: 18px;
+  }
+
+  /* Let container handle side padding; avoid double padding */
+  body{
+    padding-left: calc(var(--sidebar-w) + var(--sidebar-gap));
+    padding-right: 0;
+    font-size:16px;
+  }
+
+  .container{ padding-left: var(--gutter); padding-right: var(--gutter); }
+
+
+  /* Sidebar nav should stay compact (avoid huge gutters inside) */
+  .nav{ padding-left:0 !important; padding-right:0 !important; }
+
+  .card{ padding:18px; border-radius: var(--radius); }
+  .btn{ padding:10px 14px; border-radius:12px; }
+  .chip, .trust-pill{ padding:8px 12px; font-size:13px; }
+
+  /* Prefer 2 columns for text-heavy grids */
+  .solutions-grid,
+  .plan-grid,
+  .pricing-grid,
+  .formats-grid,
+  .pages-grid,
+  .faq-grid,
+  .services-grid{ grid-template-columns:repeat(2, minmax(0,1fr)); }
+}
+
+/* On very wide screens, keep content visually centered in the available area */
+@media (min-width: 1300px){
+  main{ padding-right: 20px; }
+}
+
+/* ==========================
+   v28 — Chat landing (home)
+   ========================== */
+
+/* On the chat home we show sticky CTA only when the composer is off-screen */
+.page-home .sticky-cta{display:none;}
+@media (max-width: 960px){
+  .page-home.has-sticky-cta{padding-bottom:0 !important;}
+  .page-home.sticky-enabled .sticky-cta{display:block;}
+  .page-home.sticky-enabled.has-sticky-cta{padding-bottom:88px !important;}
+}
+
+.chat-page{padding-top:22px;}
+
+.chat-app{
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.chat-thread{
+  display:flex;
+  flex-direction:column;
+  gap: 14px;
+  padding: 6px 0 18px;
+}
+
+.chat-msg{display:flex;}
+.chat-msg.assistant{justify-content:flex-start;}
+.chat-msg.user{justify-content:flex-end;}
+
+.chat-bubble{
+  max-width: min(72ch, 100%);
+  padding:16px 18px;
+  border-radius:18px;
+  border:1px solid var(--border);
+  background:color-mix(in srgb, var(--card) 88%, var(--bg2) 12%);
+  box-shadow:0 0 0 rgba(0,0,0,0);
+  text-align:left;
+  line-height: 1.7;
+}
+.chat-msg.assistant .chat-bubble{border-top-left-radius:10px;}
+.chat-msg.user .chat-bubble{
+  border-top-right-radius:10px;
+  border-color:color-mix(in srgb, var(--accent) 26%, var(--border) 74%);
+  background:linear-gradient(180deg, color-mix(in srgb, var(--accent) 94%, #fff 6%), var(--accent));
+  color:#fff;
+}
+
+.chat-bubble h1,
+.chat-bubble h2,
+.chat-bubble h3{margin-top:0;}
+.chat-bubble p:last-child{margin-bottom:0;}
+
+.chat-title{font-size:clamp(26px, 3vw, 40px); letter-spacing:-.02em; line-height:1.06; margin:0 0 10px;}
+.chat-sub{margin:0 0 12px; color:var(--muted);}
+
+.chat-quick{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:12px;
+}
+.chat-chip{
+  appearance:none;
+  border:1px solid var(--border);
+  background:color-mix(in srgb, var(--card) 86%, var(--bg2) 14%);
+  border-radius:999px;
+  padding:8px 12px;
+  font-weight:800;
+  cursor:pointer;
+  color:color-mix(in srgb, var(--text) 86%, var(--muted) 14%);
+  transition:transform .12s ease, box-shadow .12s ease, background-color .12s ease, border-color .12s ease;
+}
+.chat-chip:hover{box-shadow:var(--shadow); text-decoration:none;}
+.chat-chip:active{transform:translateY(1px);}
+.chat-chip:focus{outline:none;}
+.chat-chip:focus-visible{box-shadow:var(--ring);}
+
+/* Selected state for chat chips (mini-quiz, etc.) */
+.chat-chip.is-selected{
+  border-color:var(--accent);
+  box-shadow:0 0 0 4px color-mix(in srgb, var(--accent) 18%, transparent);
+}
+
+/* Chat mini-quiz blocks inside bubbles */
+.chat-quiz{margin-top:12px;}
+.chat-quiz .muted{margin-bottom:8px;}
+.chat-quiz__row{display:flex; gap:10px; align-items:center;}
+.chat-quiz__input{
+  flex:1;
+  min-width:0;
+  padding:10px 12px;
+  border-radius:999px;
+  border:1px solid var(--border);
+  background:color-mix(in srgb, var(--card) 90%, var(--bg2) 10%);
+  color:var(--text);
+}
+.chat-quiz__input:focus{outline:none;}
+.chat-quiz__input:focus-visible{box-shadow:var(--ring);}
+
+.chat-cards{display:grid; gap:12px; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); margin-top:12px;}
+.chat-cards .card{box-shadow:0 0 0 rgba(0,0,0,0);} /* bubbles already create hierarchy */
+
+.chat-compose{
+  position:sticky;
+  bottom:0;
+  z-index:20;
+  margin-top:12px;
+  padding:12px;
+  border-radius:18px;
+  border:1px solid var(--border);
+  background:color-mix(in srgb, var(--bg) 92%, transparent 8%);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+
+/* ==========================
+   v44 — Global Chat Composer Dock (all pages)
+   Цель: как блок «введение Яндекс.Карт» — CTA закреплён снизу, контент едет.
+   ========================== */
+
+.has-chat-dock #main-content{
+  padding-bottom: calc(var(--dock-h, 132px) + 12px);
+}
+
+.chat-dock{
+  position: fixed;
+  bottom: 0;
+  left: var(--gutter);
+  right: var(--gutter);
+  z-index: 90;
+  margin: 0;
+  padding: 8px 10px calc(8px + env(safe-area-inset-bottom, 0px));
+  border-radius: 16px;
+}
+
+
+/* Input error state (used for required contact) */
+.chat-dock input.is-error{
+  border-color: rgba(255, 90, 90, .85) !important;
+  box-shadow: 0 0 0 4px rgba(255, 90, 90, .18) !important;
+}
+
+/* Prevent the dock from growing too tall on mobile */
+@media (max-width: 980px){
+  .chat-dock .chat-form{ max-height: 72vh; overflow:auto; }
+  .chat-dock .chat-mini-quiz__body,
+  .chat-dock .dock-more__body{ max-height: 36vh; overflow:auto; }
+}
+
+
+/* On desktop with fixed sidebar — do not go under it */
+@media (min-width: 981px){
+  .chat-dock{
+    left: calc(var(--sidebar-w) + var(--sidebar-gap));
+    right: var(--gutter);
+  }
+}
+
+/* Dock row layout */
+.chat-dock .chat-form__row{
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+  align-items: center;
+}
+
+.chat-dock .chat-form__row input{
+  height: 40px;
+  padding: 0 12px;
+  border-radius: 12px;
+}
+
+.chat-dock .btn{
+  height: 40px;
+  white-space: nowrap;
+}
+
+.chat-dock .chat-note{
+  margin-top: 8px;
+  font-size: 13px;
+}
+
+/* Dock: keep it compact — quiz moved to page content */
+.chat-dock details.chat-mini-quiz,
+.chat-dock > .chat-note{
+  display:none !important;
+}
+
+/* When a global fixed dock is present, never show the old mobile sticky CTA */
+.has-chat-dock .sticky-cta{display:none !important;}
+
+@media (max-width: 860px){
+  .chat-dock .chat-form__row{
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "field"
+      "btn";
+  }
+  .chat-dock .chat-form__row input{ grid-area: field; }
+  .chat-dock .chat-form__row .chat-dock__btn{ grid-area: btn; width:100%; justify-content:center; }
+}
+
+
+/* ==========================
+   v65 — Dock modes (Telegram / Call / Copy)
+   ========================== */
+
+.chat-dock .dock-modes{
+  display:flex;
+  gap:6px;
+  flex-wrap:wrap;
+  margin: 2px 0 8px;
+}
+
+.chat-dock .dock-mode{
+  height:32px;
+  padding:0 10px;
+  border-radius:999px;
+  border:1px solid var(--border);
+  background:color-mix(in srgb, var(--card) 84%, var(--bg2) 16%);
+  color:var(--muted);
+  font-weight:800;
+  cursor:pointer;
+  user-select:none;
+}
+
+.chat-dock .dock-mode:hover{
+  color:var(--text);
+}
+
+.chat-dock .dock-mode.is-active{
+  background:var(--card);
+  color:var(--text);
+  border-color:color-mix(in srgb, var(--border) 55%, var(--accent) 45%);
+  box-shadow: var(--shadow-sm);
+}
+
+.chat-dock details.dock-more{
+  margin-top:8px;
+  border:1px solid var(--border);
+  border-radius:14px;
+  background:color-mix(in srgb, var(--card) 86%, var(--bg2) 14%);
+  overflow:hidden;
+}
+
+.chat-dock details.dock-more summary{
+  list-style:none;
+  cursor:pointer;
+  padding:9px 12px;
+  font-weight:800;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  user-select:none;
+}
+
+.chat-dock details.dock-more summary::-webkit-details-marker{display:none;}
+.chat-dock details.dock-more summary::after{content:"⌄"; color:var(--muted); transition:transform .18s ease, color .18s ease;}
+.chat-dock details.dock-more[open] summary{border-bottom:1px solid var(--border); background:color-mix(in srgb, var(--card) 78%, var(--bg2) 22%);}
+.chat-dock details.dock-more[open] summary::after{transform:rotate(180deg); color:var(--text);}
+
+.chat-dock .dock-more__body{
+  padding:10px 12px;
+  display:grid;
+  gap:8px;
+}
+
+.chat-dock .dock-more__body input{
+  height:40px;
+  padding:0 12px;
+  border-radius:12px;
+  border:1px solid var(--border);
+  background:var(--card);
+  color:var(--text);
+}
+
+.chat-dock .dock-check{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font-size:13px;
+  color:var(--muted);
+}
+
+.chat-dock .dock-check input{ width:16px; height:16px; }
+
+.chat-compose__hint{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-bottom:10px;
+}
+
+.badge-topic{
+  background:color-mix(in srgb, var(--bg2) 70%, var(--card) 30%);
+}
+
+.chat-form__row{display:flex; gap:10px; align-items:center;}
+.chat-form__row input{
+  flex:1;
+  min-width:0;
+  padding:10px 12px;
+  border-radius:999px;
+  border:1px solid var(--border);
+  background:var(--card);
+  color:var(--text);
+}
+.chat-form__row input:focus{outline:none;}
+.chat-form__row input:focus-visible{box-shadow:var(--ring);}
+
+.chat-note{margin-top:10px;}
+
+/* Chat: mini-quiz in composer */
+.chat-mini-quiz{
+  margin-top:10px;
+  border:1px solid var(--border);
+  border-radius:14px;
+  background:color-mix(in srgb, var(--card) 86%, var(--bg2) 14%);
+  overflow:hidden;
+}
+.chat-mini-quiz summary{
+  list-style:none;
+  cursor:pointer;
+  padding:10px 12px;
+  font-weight:800;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  user-select:none;
+}
+.chat-mini-quiz summary::-webkit-details-marker{display:none;}
+.chat-mini-quiz summary::after{content:"⌄"; color:var(--muted); transition:transform .18s ease, color .18s ease;}
+.chat-mini-quiz[open] summary{border-bottom:1px solid var(--border); background:color-mix(in srgb, var(--card) 78%, var(--bg2) 22%);}
+.chat-mini-quiz[open] summary::after{transform:rotate(180deg); color:var(--text);}
+.chat-mini-quiz__body{padding:12px;}
+.chat-mini-grid{display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:10px;}
+.field{display:flex; flex-direction:column; gap:6px;}
+.field__label{font-size:12px; font-weight:800; color:var(--muted);}
+.field input, .field select{
+  width:100%;
+  padding:10px 12px;
+  border-radius:999px;
+  border:1px solid var(--border);
+  background:var(--card);
+  color:var(--text);
+}
+.field input:focus, .field select:focus{outline:none;}
+.field input:focus-visible, .field select:focus-visible{box-shadow:var(--ring);}
+@media (max-width: 860px){
+  .chat-mini-grid{grid-template-columns:1fr;}
+}
+
+/* Chat: collapsible details (to keep messages airy) */
+.chat-more{
+  margin-top:12px;
+  border:1px solid var(--border);
+  border-radius:14px;
+  background:color-mix(in srgb, var(--card) 86%, var(--bg2) 14%);
+  overflow:hidden;
+}
+.chat-more summary{
+  list-style:none;
+  cursor:pointer;
+  padding:10px 12px;
+  font-weight:800;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  user-select:none;
+}
+.chat-more summary::-webkit-details-marker{display:none;}
+.chat-more summary::after{
+  content:"⌄";
+  color:var(--muted);
+  transition:transform .18s ease, color .18s ease;
+}
+.chat-more[open] summary{
+  border-bottom:1px solid var(--border);
+  background:color-mix(in srgb, var(--card) 78%, var(--bg2) 22%);
+}
+.chat-more[open] summary::after{transform:rotate(180deg); color:var(--text);}
+.chat-more__body{padding:12px;}
+@media (prefers-reduced-motion: reduce){
+  .chat-more summary::after{transition:none;}
+}
+
+.chat-links{margin-top:14px; text-align:left;}
+
+/* Home: "second screen" — compact promise structure (benefit-only headings) */
+.home-outline{padding-top:12px;}
+.home-outline__head{
+  max-width: var(--measure);
+  margin: 0 auto 14px;
+}
+.home-outline__head h2{margin:0 0 8px;}
+.home-outline__head p{margin:0;}
+
+.promise-grid{
+  display:grid;
+  gap:14px;
+  grid-template-columns:repeat(2, minmax(0, 1fr));
+}
+
+.promise-card h3{
+  margin:0 0 8px;
+  font-size:18px;
+  line-height:1.25;
+  letter-spacing:-.01em;
+}
+
+.promise-card p{margin:0;}
+
+/* Micro-proof chips inside promise cards (small evidence in one line) */
+.micro-proof{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  align-items:center;
+  margin:10px 0 10px;
+}
+
+
+/* Micro-fact line under a promise (one concrete artifact/example, no fluff) */
+.micro-fact{
+  margin:0 0 10px;
+  font-size:13px;
+  line-height:1.35;
+  color:color-mix(in srgb, var(--text) 88%, var(--muted) 12%);
+  font-weight:600;
+}
+
+/* Mini snippet: one concrete fragment (regulation/template/metrics) */
+.mini-snippet{
+  margin: 0 0 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--card) 82%, var(--bg2) 18%);
+  color: color-mix(in srgb, var(--text) 86%, var(--muted) 14%);
+  font-size: 12.5px;
+  line-height: 1.45;
+}
+.mini-snippet .snippet-line{
+  margin: 0;
+}
+.mini-snippet .snippet-line + .snippet-line{
+  margin-top: 6px;
+}
+
+.mf-label{
+  font-weight:800;
+  color:var(--muted);
+  margin-right:6px;
+}
+
+.proof-chip{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:6px 10px;
+  border-radius:999px;
+  border:1px solid var(--border);
+  background:color-mix(in srgb, var(--card) 86%, var(--bg2) 14%);
+  color:var(--muted);
+  font-weight:800;
+  font-size:12px;
+  text-decoration:none;
+}
+
+.proof-chip:hover{
+  color:var(--text);
+  border-color:color-mix(in srgb, var(--border) 55%, var(--text) 45%);
+}
+
+.home-outline__actions{
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+  align-items:center;
+  max-width: var(--measure);
+  margin: 16px auto 0;
+}
+
+@media (max-width: 920px){
+  .promise-grid{grid-template-columns:1fr;}
+}
+
+@media (max-width: 560px){
+  .home-outline__actions .btn{width:100%;}
+}
+
+@media (max-width: 560px){
+  .chat-form__row{flex-direction:column; align-items:stretch;}
+  .chat-form__row .btn{width:100%;}
+}
+
+
+
+/* Home: quick objections / mini‑FAQ (benefit summaries, no long reads) */
+.home-objections{padding-top:14px;}
+.home-objections__head{
+  max-width: var(--measure);
+  margin: 0 auto 14px;
+}
+.home-objections__head h2{margin:0 0 8px;}
+.home-objections__head p{margin:0;}
+
+.qa-list{
+  max-width: var(--measure);
+  margin: 0 auto;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.qa{
+  border:1px solid var(--border);
+  border-radius:16px;
+  background:var(--card);
+  overflow:hidden;
+}
+
+.qa summary{
+  cursor:pointer;
+  list-style:none;
+  padding:14px 14px;
+  font-weight:800;
+  line-height:1.25;
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:12px;
+  user-select:none;
+}
+.qa summary::-webkit-details-marker{display:none;}
+.qa summary::after{
+  content:"⌄";
+  color:var(--muted);
+  transition:transform .18s ease, color .18s ease;
+  margin-top:1px;
+}
+.qa[open] summary{
+  border-bottom:1px solid var(--border);
+  background:color-mix(in srgb, var(--card) 78%, var(--bg2) 22%);
+}
+.qa[open] summary::after{transform:rotate(180deg); color:var(--text);}
+
+.qa__body{padding:12px 14px 14px;}
+.qa__body p{margin:0 0 10px;}
+.qa__body p:last-child{margin-bottom:0;}
+
+.home-objections__actions{
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+  align-items:center;
+  max-width: var(--measure);
+  margin: 14px auto 0;
+}
+
+@media (max-width: 560px){
+  .home-objections__actions .btn{width:100%;}
+}
+
+/* Home: comparison table (helps decide fast without long reads) */
+.home-compare{padding-top:14px;}
+.home-compare__head{
+  max-width: var(--measure);
+  margin: 0 auto 14px;
+}
+.home-compare__head h2{margin:0 0 8px;}
+.home-compare__head p{margin:0;}
+
+.compare-wrap{
+  max-width: var(--container);
+  margin: 0 auto;
+  overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
+  border:1px solid var(--border);
+  border-radius:18px;
+  background:var(--card);
+  box-shadow:none;
+}
+
+.compare-table{
+  width:100%;
+  min-width:0;
+  table-layout:fixed;
+  border-collapse:separate;
+  border-spacing:0;
+  text-align:left;
+}
+
+.compare-table th,
+.compare-table td{
+  padding:14px 16px;
+  border-bottom:1px solid var(--border);
+  vertical-align:top;
+  font-size:14px;
+  line-height:1.45;
+  overflow-wrap:anywhere;
+  hyphens:auto;
+  color:color-mix(in srgb, var(--text) 86%, var(--muted) 14%);
+}
+
+.compare-table thead th{
+  background:color-mix(in srgb, var(--card) 72%, var(--bg2) 28%);
+  color:var(--muted);
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  font-size:11px;
+}
+
+.compare-table tbody th{
+  color:var(--text);
+  font-weight:800;
+  width:220px;
+  background:var(--card);
+}
+
+/* Zebra rows (readable, less "tabley") */
+.compare-table tbody tr:nth-child(even) td{
+  background: color-mix(in srgb, var(--bg2) 55%, var(--card) 45%);
+}
+.compare-table tbody tr:nth-child(even) th{
+  background: color-mix(in srgb, var(--bg2) 55%, var(--card) 45%);
+}
+
+.compare-table tr:last-child th,
+.compare-table tr:last-child td{border-bottom:0;}
+
+.compare-table .is-best{
+  background:color-mix(in srgb, var(--accent) 10%, transparent 90%);
+  color:var(--text);
+}
+.compare-table thead .is-best{
+  background:color-mix(in srgb, var(--accent) 14%, var(--bg2) 86%);
+  color:var(--text);
+}
+
+/* Sticky first column only when table реально скроллится (узкие экраны) */
+@media (max-width: 980px){
+  .compare-table{min-width: 720px;}
+  .compare-table thead th{
+    position:sticky;
+    top:0;
+    z-index:1;
+  }
+  .compare-table tbody th{
+    position:sticky;
+    left:0;
+    z-index:2;
+    box-shadow: 1px 0 0 var(--border), 10px 0 18px rgba(15,23,42,.08);
+  }
+  .compare-table thead th:first-child{
+    position:sticky;
+    left:0;
+    z-index:3;
+    box-shadow: 1px 0 0 var(--border), 10px 0 18px rgba(15,23,42,.08);
+  }
+}
+
+@media (max-width: 560px){
+  .compare-table{min-width: 680px;}
+  .home-compare__actions .btn{width:100%;}
+}
+  .home-compare__actions .btn{width:100%;}
+}
+
+/* Home: mini‑cases excerpt (proof without long reads) */
+.home-cases{padding-top:14px;}
+.home-cases__head{
+  max-width: var(--measure);
+  margin: 0 auto 14px;
+}
+.home-cases__head h2{margin:0 0 8px;}
+.home-cases__head p{margin:0;}
+
+.home-cases-grid{
+  display:grid;
+  gap:14px;
+  grid-template-columns:repeat(3, minmax(0, 1fr));
+}
+@media (max-width: 1080px){
+  .home-cases-grid{grid-template-columns:repeat(2, minmax(0, 1fr));}
+}
+@media (max-width: 920px){
+  .home-cases-grid{grid-template-columns:1fr;}
+}
+
+/* ==========================
+   v66 — Proof strips (home mini cases)
+   ========================== */
+
+.case-proof{
+  display:grid;
+  gap:8px;
+  margin: 0 0 12px;
+}
+.proof-item{
+  display:flex;
+  gap:10px;
+  align-items:flex-start;
+  padding:12px;
+  border-radius:16px;
+  border:1px solid var(--border);
+  background:color-mix(in srgb, var(--card) 84%, var(--bg2) 16%);
+}
+.proof-item img{
+  width:18px;
+  height:18px;
+  opacity:.9;
+  margin-top:2px;
+  flex:0 0 auto;
+}
+.proof-text strong{
+  display:block;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.02em;
+}
+.proof-text span{
+  display:block;
+  font-size:12px;
+  color:var(--muted);
+  margin-top:2px;
+  line-height:1.3;
+}
+
+.case-thumb{
+  min-height: 120px;
+  margin-bottom: 12px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  font-size:11px;
+  font-weight:800;
+}
+
+.mini-case-dl{
+  margin: 10px 0 0;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+.mini-case-row{
+  display:grid;
+  grid-template-columns: 72px 1fr;
+  gap:10px;
+  align-items:start;
+}
+.mini-case-row dt{
+  margin:0;
+  padding-top:2px;
+  font-size:11px;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:var(--muted);
+  font-weight:800;
+}
+.mini-case-row dd{
+  margin:0;
+  font-size:13px;
+  line-height:1.45;
+  color:color-mix(in srgb, var(--text) 86%, var(--muted) 14%);
+}
+
+.mini-case-note{margin-top:10px;}
+
+.home-cases__actions{
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+  align-items:center;
+  max-width: var(--measure);
+  margin: 14px auto 0;
+}
+@media (max-width: 560px){
+  .home-cases__actions .btn{width:100%;}
+  .mini-case-row{grid-template-columns: 1fr;}
+}
+
+/* ==========================
+   v29 — Cases (proof by format)
+   ========================== */
+
+.case-card{padding:18px;}
+.case-meta{display:flex; align-items:flex-start; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:10px;}
+.case-meta h3{margin:0;}
+.case-tag{display:inline-flex; align-items:center; gap:8px; padding:6px 10px; border-radius:999px; border:1px solid var(--border); background:color-mix(in srgb, var(--card) 86%, var(--bg2) 14%); color:var(--muted); font-weight:800; font-size:12px;}
+
+.case-grid{display:grid; gap:14px; grid-template-columns:repeat(2, minmax(0,1fr)); margin-top:12px;}
+@media (max-width: 920px){
+  .case-grid{grid-template-columns:1fr;}
+}
+
+.case-col h4{margin:0 0 8px; font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted);}
+.case-col ul{margin:0;}
+
+.kpi-row{display:flex; flex-wrap:wrap; gap:10px; margin-top:10px;}
+.kpi{padding:10px 12px; border:1px dashed var(--border); border-radius:14px; background:color-mix(in srgb, var(--card) 78%, transparent 22%); font-size:13px; color:var(--text);}
+.kpi strong{display:block; font-size:12px; color:var(--muted); margin-bottom:2px;}
+
+.placeholder{border:1px dashed var(--border); border-radius:16px; padding:14px; background:color-mix(in srgb, var(--card) 62%, transparent 38%); color:var(--muted);}
+.placeholder p{margin:0;}
+
+/* v70 — Callouts (trust notes, not placeholders) */
+.callout{border:1px solid var(--border); border-radius:16px; padding:14px; background:color-mix(in srgb, var(--accent) 6%, var(--card) 94%); color:var(--text);}
+.callout p{margin:0;}
+.callout .muted{color:var(--muted);}
+
+/* ================================
+   v76 — Proof / success criteria helpers
+   ================================ */
+.callout-actions{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top:10px;
+}
+.section-actions{
+  margin-top:14px;
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+}
+
+
+/* ===== Doc mode v9 (subpages): TL;DR + section accordions ===== */
+
+.is-doc-hidden{ display:none !important; }
+
+.doc-page .hero{ padding-bottom: 18px; }
+/* In doc-mode the hero is a header, not a full landing block: reduce empty space */
+.doc-page .hero.section{
+  padding: clamp(22px, 2.8vw, 40px) 0 18px;
+}
+.doc-intro{ padding-top: 8px; }
+
+.doc-intro-card{
+  background: color-mix(in srgb, var(--card) 88%, var(--bg2) 12%);
+  border: 1px solid var(--border);
+  border-radius: calc(var(--radius) + 4px);
+  box-shadow: var(--shadow);
+  padding: clamp(16px, 2.2vw, 24px);
+}
+
+.doc-intro-top{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.doc-h2{
+  font-size: 18px;
+  margin: 4px 0 0;
+}
+
+.doc-actions{
+  display:flex;
+  gap: 8px;
+  align-items:center;
+  flex-wrap:wrap;
+}
+
+.doc-tldr{
+  margin: 14px 0 0;
+  padding-left: 1.15em;
+  list-style: disc;
+}
+.doc-tldr li{ margin: 8px 0; }
+.doc-tldr li::before{ content:none !important; }
+
+.doc-hint{margin:12px 0 0; max-width:72ch;}
+
+.doc-row{
+  margin-top: 14px;
+  display:flex;
+  align-items:flex-start;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.doc-row__label{
+  font-size: 13px;
+  line-height: 1.4;
+  padding-top: 4px;
+}
+
+.doc-scenarios{
+  display:flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.doc-pills{
+  display:flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.doc-controls{ margin-top: 6px; }
+.doc-toggle-all{ padding-left: 14px; padding-right: 14px; }
+
+/* Details / accordions for sections */
+.doc-details{
+  width:100%;
+  border: 1px solid var(--border);
+  border-radius: calc(var(--radius) + 2px);
+  background: var(--card);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.doc-details + .doc-details{ margin-top: 14px; }
+
+.doc-details summary{
+  list-style:none;
+  cursor:pointer;
+  padding: 16px 18px;
+  display:flex;
+  flex-direction:column;
+  gap: 6px;
+  user-select:none;
+}
+
+.doc-details summary::-webkit-details-marker{ display:none; }
+
+.doc-summary__title{
+  font-weight:800;
+  letter-spacing: -0.01em;
+}
+
+.doc-summary__desc{
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.doc-details[open] summary{
+  border-bottom: 1px solid var(--border);
+  background: color-mix(in srgb, var(--card) 84%, var(--bg2) 16%);
+}
+
+.doc-details__body{
+  padding: 14px 18px 18px;
+}
+
+/* Make internal sections feel like a doc (less empty space between accordions) */
+.doc-page .section{ padding: clamp(26px, 3.2vw, 46px) 0; }
+
+
+
+/* ==========================
+   v31 — Proof blocks: mini-cases + report preview
+   ========================== */
+
+.btn-sm{ padding:8px 11px; border-radius:11px; font-size:13px; }
+
+.mini-case-grid{display:grid; gap:14px; grid-template-columns:repeat(2, minmax(0,1fr)); margin-top:12px;}
+@media (max-width: 920px){
+  .mini-case-grid{grid-template-columns:1fr;}
+}
+
+.mini-case{padding:18px;}
+.mini-case__kicker{margin:0 0 8px; font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); font-weight:800;}
+.mini-case h3{margin:0 0 8px;}
+.mini-case .muted.small{margin-top:10px;}
+
+.report-sheet{padding:18px;}
+.report-head{display:flex; align-items:flex-start; justify-content:space-between; gap:14px; flex-wrap:wrap; margin-bottom:12px;}
+.report-title{margin:0;}
+.report-meta{display:flex; align-items:center; gap:10px; flex-wrap:wrap; justify-content:flex-end;}
+
+.report-grid{display:grid; grid-template-columns:repeat(12, minmax(0,1fr)); gap:14px;}
+.report-block{grid-column: span 6; border:1px solid var(--border); border-radius:14px; padding:14px; background:color-mix(in srgb, var(--card) 86%, var(--bg2) 14%);}
+.report-block--wide{grid-column: span 12;}
+.report-block h4{margin:0 0 10px; font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted);}
+
+.report-metrics{display:flex; flex-direction:column; gap:8px;}
+.report-metric{display:flex; justify-content:space-between; gap:10px; padding:8px 10px; border:1px dashed var(--border); border-radius:12px; background:color-mix(in srgb, var(--card) 70%, transparent 30%);}
+.report-metric span{color:var(--muted); font-size:13px;}
+.report-metric strong{font-size:13px;}
+
+.report-foot{margin-top:12px;}
+
+.report-sheet--mini{margin-top:14px;}
+.report-grid--mini .report-block{grid-column: span 6;}
+
+@media (max-width: 920px){
+  .report-block{grid-column: span 12;}
+  .report-grid--mini .report-block{grid-column: span 12;}
+}
+
+@media print{
+  .site-header, .site-footer, .no-print, .nav-backdrop{display:none !important;}
+  body{background:#fff;}
+  .card{box-shadow:none !important;}
+  .section{padding:18px 0;}
+  .container{max-width:100%; padding:0 14mm;}
+}
+
+
+/* ===== v12: Scope + SLA (что входит / не входит) ===== */
+.scope-grid{
+  display:grid;
+  gap:16px;
+  margin-top:18px;
+}
+@media (min-width: 981px){
+  .scope-grid{ grid-template-columns:repeat(2, minmax(0, 1fr)); align-items:start; }
+}
+.scope-list{
+  list-style:none !important;
+  padding-left:0 !important;
+  margin:0 0 14px;
+}
+.scope-list li{
+  position:relative;
+  padding-left:28px;
+  margin:10px 0;
+}
+.scope-list li::before{
+  content:"•";
+  position:absolute;
+  left:0;
+  top:.15em;
+  width:20px;
+  height:20px;
+  border-radius:999px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:800;
+  font-size:12px;
+  border:1px solid var(--border);
+  background:color-mix(in srgb, var(--bg2) 70%, var(--card) 30%);
+}
+.scope-list.is-plus li::before{ content:"✓"; color:var(--accent); }
+.scope-list.is-minus li::before{ content:"×"; color:var(--accent2); }
+
+.sla-card{ margin-top:18px; }
+.table-wrap{
+  overflow:auto;
+  -webkit-overflow-scrolling:touch;
+}
+.sla-table{
+  width:100%;
+  border-collapse:collapse;
+  font-size:14px;
+}
+.sla-table th,
+.sla-table td{
+  text-align:left;
+  padding:12px 10px;
+  border-bottom:1px solid var(--border);
+  vertical-align:top;
+}
+.sla-table thead th{
+  font-weight:800;
+  color:color-mix(in srgb, var(--text) 84%, var(--muted) 16%);
+}
+.sla-table tr:last-child td{ border-bottom:none; }
+
+
+/* ===== v13: Terms / payment / risks ===== */
+.terms-grid{
+  display:grid;
+  gap:16px;
+  margin-top:18px;
+}
+@media (min-width: 981px){
+  .terms-grid{ grid-template-columns:repeat(3, minmax(0, 1fr)); align-items:start; }
+}
+.notice{
+  margin-top:16px;
+  border:1px solid var(--border);
+  background:color-mix(in srgb, var(--card) 70%, var(--bg2) 30%);
+}
+.notice.notice-warn{
+  border-left:4px solid var(--accent2);
+}
+.notice.notice-warn h3{
+  margin-top:0;
+}
+
+
+/* ==========================
+   v16 — Doc readability polish
+   - anchor scroll margin
+   - accordions chevron + hover + focus
+   ========================== */
+
+[id]{ scroll-margin-top: 92px; }
+
+.doc-details summary{
+  position: relative;
+  padding-right: 56px;
+  transition: background .18s ease;
+}
+
+.doc-details summary::after{
+  content: "⌄";
+  position: absolute;
+  right: 18px;
+  top: 16px;
+  font-size: 18px;
+  line-height: 1;
+  color: var(--muted);
+  transform: rotate(0deg);
+  transition: transform .18s ease, color .18s ease;
+}
+
+.doc-details[open] summary::after{
+  transform: rotate(180deg);
+  color: var(--text);
+}
+
+.doc-details summary:hover{
+  background: color-mix(in srgb, var(--card) 80%, var(--bg2) 20%);
+}
+
+.doc-details summary:focus-visible{
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 55%, transparent 45%);
+  border-radius: 12px;
+}
+
+/* ==========================
+   v32 — Performance
+   - content-visibility for below-the-fold sections
+   - contain cards to reduce paint/layout scope
+   ========================== */
+
+@supports (content-visibility: auto) {
+  .page-home .section:not(.hero):not(#cta),
+  .page-home .home-outline,
+  .page-home .home-objections,
+  .page-home .home-compare,
+  .page-home .home-cases,
+  .page-home .site-footer {
+    content-visibility: auto;
+    contain-intrinsic-size: 1px 900px;
+  }
+}
+
+.card { contain: layout paint; }
+
+/* ==========================
+   v33 — UX polish
+   - toast feedback for copy / telegram actions
+   ========================== */
+
+.toast {
+  position: fixed;
+  top: calc(env(safe-area-inset-top, 0px) + 14px);
+  right: 14px;
+  left: auto;
+  bottom: auto;
+  transform: translateY(-6px);
+  z-index: 80;
+  max-width: min(420px, calc(100vw - 28px));
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: color-mix(in srgb, var(--card) 88%, var(--bg2) 12%);
+  color: var(--text);
+  box-shadow: var(--shadow);
+  font-weight:800;
+  font-size: 13px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .18s ease, transform .18s ease;
+}
+
+.toast.is-visible{
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (max-width: 520px){
+  .toast{ left: 14px; right: 14px; max-width: none; }
+}
+
+@media (prefers-reduced-motion: reduce){
+  .toast{ transition: none; }
+}
+
+
+/* ==========================
+   v35 — Hard polish (7 fixes)
+   Цель: читать как в ChatGPT, без визуальных багов и дублей CTA
+   ========================== */
+
+/* 1) Убираем полосы/бэндинг — выключаем градиентный оверлей hero */
+.hero::before{ background:none !important; opacity:0 !important; }
+
+/* 2) Текст в main всегда слева и с комфортным ритмом */
+main{ text-align:left; }
+
+/* 3) Ограничиваем длину строки для прямых детей контейнера */
+main .container > :is(h1,h2,p,ul,ol,.section-head,.lead,.muted){
+  max-width: var(--measure, 72ch);
+}
+
+/* 4) Герой: чипсы/пилюли/кнопки — не по центру на десктопе */
+@media (min-width: 981px){
+  .hero-actions, .hero-chips, .hero-trust, .page-links{ justify-content:flex-start !important; }
+}
+
+/* 5) В формах — читаемый ввод */
+.cta-form input, .cta-form textarea{ text-align:left; }
+
+/* 6) Если после вырезания primary CTA осталась одна кнопка — не растягиваем её */
+.hero-actions .btn{ width:auto; }
+
+/* 7) Немного больше воздуха между смысловыми блоками */
+.section p + ul, .section p + ol{ margin-top:-6px; }
+
+
+
+/* ==========================
+   v36 — Perf + polish
+   - hover effects only on mouse
+   - disable backdrop blur on mobile
+   ========================== */
+
+@media (hover:hover) and (pointer:fine){
+  .card:hover{ box-shadow: var(--shadow-sm, var(--shadow)); }
+  .btn:hover{ box-shadow: 0 10px 20px rgba(15,23,42,.10); }
+}
+
+@media (hover:none){
+  .card:hover{ box-shadow: none; }
+  .btn:hover{ box-shadow: none; }
+}
+
+@media (max-width: 900px){
+  .site-header{
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+  }
+}
+
+/* ==========================
+   v36 — Perf + polish
+   - disable expensive glass/hover on touch
+   - keep hover only for mouse/trackpad
+   ========================== */
+
+@media (max-width: 900px){
+  .site-header{
+    -webkit-backdrop-filter:none !important;
+    backdrop-filter:none !important;
+  }
+}
+
+/* Default: no hover shadow (prevents sticky :hover on touch) */
+.card:hover{ box-shadow:none; }
+
+@media (hover:hover) and (pointer:fine){
+  .card:hover{ box-shadow:var(--shadow-sm); }
+  .btn-primary:hover{ background:color-mix(in srgb, var(--accent) 92%, #000 8%); }
+  .btn-outline:hover{ background:color-mix(in srgb, var(--card) 60%, var(--bg2) 40%); }
+}
+
+@media (hover:none){
+  .btn-primary:hover{ background:var(--accent); }
+  .btn-outline:hover{ background:transparent; }
+}
+
+
+
+/* =========================================================
+   Visual Refresh v6 (premium depth + stronger hierarchy)
+   ========================================================= */
+:root{
+  --container: 1120px;
+  --radius: 20px;
+  --shadow-sm: 0 10px 30px rgba(15,23,42,.10);
+  --shadow: 0 18px 46px rgba(15,23,42,.14);
+  --shadow-md: 0 26px 72px rgba(15,23,42,.18);
+}
+
+/* Typography: a bit more premium */
+body{
+  font-family: Inter, system-ui,-apple-system,Segoe UI,Roboto,Arial,Helvetica,sans-serif;
+  font-size: 16.5px;
+  line-height: 1.65;
+  background:
+    radial-gradient(900px 640px at 12% -10%, color-mix(in srgb, var(--accent) 22%, transparent 78%), transparent 62%),
+    radial-gradient(760px 560px at 92% 8%, color-mix(in srgb, var(--accent2) 18%, transparent 82%), transparent 60%),
+    radial-gradient(900px 720px at 70% 110%, color-mix(in srgb, var(--accent) 14%, transparent 86%), transparent 70%),
+    linear-gradient(180deg, color-mix(in srgb, var(--bg2) 26%, var(--bg) 74%), var(--bg));
+  background-color: var(--bg);
+}
+
+h1,h2,h3{
+  font-family: Manrope, Inter, system-ui,-apple-system,Segoe UI,Roboto,Arial,Helvetica,sans-serif;
+  letter-spacing: -0.02em;
+}
+h1{font-size: clamp(34px, 4.2vw, 58px);}
+h2{font-size: clamp(26px, 3.2vw, 38px);}
+.lead{font-size: 19px;}
+
+/* Cards: add depth + hover */
+.card{
+  box-shadow: var(--shadow-sm);
+  background: linear-gradient(180deg,
+    color-mix(in srgb, var(--card) 92%, var(--bg2) 8%),
+    color-mix(in srgb, var(--card) 86%, var(--bg2) 14%));
+}
+.card:hover{
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+  border-color: color-mix(in srgb, var(--accent) 18%, var(--border) 82%);
+}
+@media (prefers-reduced-motion: reduce){
+  .card:hover{transform:none;}
+}
+
+/* Buttons: more "agency" feel */
+.btn-primary{
+  box-shadow: 0 14px 34px color-mix(in srgb, var(--accent) 35%, transparent 65%);
+}
+.btn-primary:hover{
+  transform: translateY(-1px);
+  filter: saturate(112%);
+}
+.btn-outline:hover{
+  border-color: color-mix(in srgb, var(--accent) 22%, var(--border) 78%);
+}
+
+/* Section rhythm: subtle full-width alternation */
+main > .section{
+  position: relative;
+}
+main > .section:nth-of-type(even){
+  background: color-mix(in srgb, var(--bg2) 32%, transparent 68%);
+}
+[data-theme="dark"] main > .section:nth-of-type(even){
+  background: color-mix(in srgb, var(--bg2) 22%, transparent 78%);
+}
+
+/* Hero: visual flourish without changing content */
+.hero, .chat-page{
+  position: relative;
+  overflow: clip;
+}
+.hero::before, .chat-page::before{
+  content:"";
+  position:absolute;
+  inset:-1px;
+  background:
+    radial-gradient(860px 520px at 18% -6%, color-mix(in srgb, var(--accent) 18%, transparent 82%), transparent 60%),
+    radial-gradient(760px 520px at 92% 12%, color-mix(in srgb, var(--accent2) 14%, transparent 86%), transparent 60%);
+  pointer-events:none;
+}
+.hero::after, .chat-page::after{
+  content:"";
+  position:absolute;
+  right: clamp(-220px, -10vw, -90px);
+  top: clamp(-130px, -6vw, -40px);
+  width: min(560px, 46vw);
+  height: min(560px, 46vw);
+  background: url("../img/hero-map.svg") center/contain no-repeat;
+  opacity: .22;
+  transform: rotate(8deg);
+  pointer-events:none;
+  filter: drop-shadow(0 26px 60px rgba(0,0,0,.22));
+}
+[data-theme="light"] .hero::after,
+[data-theme="light"] .chat-page::after{opacity:.16; filter: drop-shadow(0 22px 52px rgba(15,23,42,.12));}
+
+
+/* Sidebar (desktop): more premium glass */
+@media (min-width: 981px){
+  :root{
+    --sidebar-w: 190px;
+    --sidebar-gap: 18px;
+    --gutter: clamp(24px, 3.2vw, 84px);
+  }
+  body{
+    padding-left: calc(var(--sidebar-w) + var(--sidebar-gap));
+    padding-right: var(--gutter);
+  }
+  .site-header{
+    border-right: 1px solid var(--border);
+    background: color-mix(in srgb, var(--bg) 62%, transparent 38%);
+    backdrop-filter: saturate(140%) blur(16px);
+  }
+  .nav{
+    padding: 10px 12px;
+  }
+  .nav a:not(.btn){
+    width:100%;
+    justify-content:flex-start;
+    border-radius: 12px;
+    padding: 10px 12px;
+  }
+  .nav a:not(.btn):hover{
+    background: color-mix(in srgb, var(--bg2) 35%, transparent 65%);
+  }
+}
+
+/* Tiny polish: smoother separators */
+hr{
+  border:0;
+  height:1px;
+  background: linear-gradient(90deg, transparent, var(--border), transparent);
+}
+
+/* B2B-like bullets in hero */
+.hero-bullets{margin:18px 0 0; padding:0; list-style:none}
+.hero-bullets li{margin:10px 0; color:color-mix(in srgb, var(--text) 86%, var(--muted) 14%)}
+.hero-bullets li::before{
+  content:"—";
+  margin-right:10px;
+  color:var(--accent);
+  font-weight:800;
+}
+
+/* Desktop header: closer to B2B (top navigation + right actions) */
+@media (min-width: 981px){
+  .header-inner{padding:14px 0 10px}
+  .logo-image{height:38px}
+  .nav{
+    justify-content:flex-start;
+    align-items:center;
+    gap:8px;
+  }
+  .nav-bottom{
+    margin-left:auto;
+    flex-direction:row;
+    align-items:center;
+    gap:12px;
+  }
+  .nav-cta{display:inline-flex}
+  .nav-cta.btn{padding:12px 20px}
+  .nav-contact{
+    font-size: 12.3px !important;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    padding:10px 14px;
+    border-radius:999px;
+    background:rgba(255,255,255,.04);
+    border:1px solid var(--border);
+    color:var(--text);
+    font-weight:800;
+    text-decoration:none;
+  }
+  .nav-contact:hover{background:rgba(255,255,255,.07)}
+}
+
+/* Page sections: a bit more contrast separation on dark */
+.section{
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.02), transparent 38%);
+}
+.section:nth-of-type(even){
+  background:
+    radial-gradient(1200px 560px at 15% 0%, rgba(255,176,0,.08), transparent 65%),
+    linear-gradient(180deg, rgba(255,255,255,.02), transparent 38%);
+}
+
+
+/* =========================================================
+   v51 — Return to ChatGPT-like LEFT SIDEBAR on desktop
+   - keeps dark + yellow accent
+   - moves doc chips/anchors into the sidebar
+   ========================================================= */
+@media (min-width: 981px){
+  :root{
+    --sidebar-w: 190px;
+    --sidebar-gap: 18px;
+    --gutter: clamp(24px, 3.2vw, 84px);
+  }
+
+  body{
+    padding-left: calc(var(--sidebar-w) + var(--sidebar-gap)) !important;
+    padding-right: var(--gutter) !important;
+  }
+
+  .site-header{
+    position: fixed !important;
+    top:0 !important;
+    left:0 !important;
+    bottom:0 !important;
+    width: var(--sidebar-w) !important;
+    border-bottom: none !important;
+    border-right: 1px solid var(--border) !important;
+  }
+
+  .header-inner{
+    padding: 14px 0 10px !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 8px !important;
+  }
+
+  .brand{ width:100%; justify-content:space-between; }
+
+  .nav-toggle{ display:none !important; }
+  .nav-backdrop{ display:none !important; }
+
+  .nav{
+    display:flex !important;
+    flex-direction: column !important;
+    flex-wrap: nowrap !important;
+    gap: 4px !important;
+    justify-content: flex-start !important;
+    align-items: stretch !important;
+
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 6px 8px 10px !important;
+
+    height: calc(100vh - 72px) !important;
+    overflow: hidden !important;
+    overscroll-behavior: none !important;
+    scrollbar-width: none !important;
+  }
+
+  .nav::-webkit-scrollbar{ display:none !important; }
+
+  .nav a:not(.btn){
+    width:100% !important;
+    display:flex !important;
+    justify-content:flex-start !important;
+    border-radius: 14px !important;
+    padding: 7px 8px !important;
+    font-size: 12.3px !important;
+    line-height: 1.15 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  /* keep room for nav icons */
+  .nav a:not(.btn)[data-ico]{ padding-left: 34px !important; }
+  .nav a.btn[data-ico]{ padding-left: 40px !important; }
+  .nav a.nav-contact[data-ico]{ padding-left: 34px !important; }
+
+
+  .nav-bottom{
+    margin-top: auto !important;
+    display:flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+    padding-top: 10px !important;
+    border-top: 1px solid color-mix(in srgb, var(--border) 86%, transparent 14%) !important;
+
+    position: static !important;
+    bottom: 0 !important;
+    background: linear-gradient(180deg, transparent, color-mix(in srgb, var(--bg) 88%, transparent 12%) 22%) !important;
+  }
+
+  .nav-cta.btn{
+    width: 100% !important;
+    justify-content: center !important;
+    border-radius: 14px !important;
+    font-size: 12.4px !important;
+    padding: 10px 12px !important;
+  }
+
+  .nav-contact{
+    font-size: 12.2px !important;
+    width:100% !important;
+    justify-content:flex-start !important;
+    border-radius: 14px !important;
+    background: rgba(255,255,255,.03) !important;
+  }
+
+  /* If chat dock exists on a page, keep it inside the content column */
+  .chat-dock{
+    left: calc(var(--sidebar-w) + var(--sidebar-gap) + var(--gutter)) !important;
+    right: var(--gutter) !important;
+  }
+
+  /* Quick blocks in sidebar (for doc pages) */
+  .nav-quick{
+    margin: 10px 2px 6px;
+    padding: 12px 10px;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    background: color-mix(in srgb, var(--card) 86%, transparent 14%);
+  }
+
+  .nav-quick__title{
+    font-size: 12px;
+    letter-spacing: .02em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 8px;
+    font-weight:800;
+  }
+
+  .nav-quick__list{ display:flex; flex-direction:column; gap:8px; }
+
+  .nav-quick__link{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding: 10px 12px;
+    border-radius: 12px;
+    background: rgba(255,255,255,.03);
+    border: 1px solid color-mix(in srgb, var(--border) 80%, transparent 20%);
+    color: var(--text);
+    text-decoration: none;
+    font-weight:800;
+  }
+
+  .nav-quick__link:hover{ background: rgba(255,255,255,.06); }
+
+  .nav-quick__sub{
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px dashed color-mix(in srgb, var(--border) 70%, transparent 30%);
+  }
+
+  .nav-quick__anchor{
+    font-weight:700;
+    color: color-mix(in srgb, var(--text) 78%, var(--muted) 22%);
+  }
+
+  .nav-quick__anchor:hover{ color: var(--text); }
+}
+
+
+/* Global nav icons (data-ico -> svg in img/icons/nav) */
+.nav a[data-ico]{
+  position: relative;
+  --nav-ico: none;
+}
+
+/* Use mask-image properties (more compatible than shorthand with CSS vars) */
+.nav a[data-ico]::before{
+  content:"";
+  position:absolute;
+  left:10px;
+  top:50%;
+  transform:translateY(-50%);
+  width:16px;
+  height:16px;
+  background-color: currentColor;
+  opacity:.92;
+
+  -webkit-mask-image: var(--nav-ico);
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  -webkit-mask-size: contain;
+
+          mask-image: var(--nav-ico);
+          mask-repeat: no-repeat;
+          mask-position: center;
+          mask-size: contain;
+
+  pointer-events:none;
+}
+
+.nav a:not(.btn)[data-ico]{ padding-left: 34px; }
+.nav a.btn[data-ico]{ padding-left: 40px; }
+
+/* mapping */
+.nav a[data-ico="home"]{--nav-ico:url('../img/icons/nav/01-home.svg');}
+.nav a[data-ico="losses"]{--nav-ico:url('../img/icons/nav/02-warning.svg');}
+.nav a[data-ico="why"]{--nav-ico:url('../img/icons/nav/03-sparkles.svg');}
+.nav a[data-ico="system"]{--nav-ico:url('../img/icons/nav/04-list.svg');}
+.nav a[data-ico="process"]{--nav-ico:url('../img/icons/nav/05-edit.svg');}
+.nav a[data-ico="plan"]{--nav-ico:url('../img/icons/nav/06-calendar.svg');}
+.nav a[data-ico="pricing"]{--nav-ico:url('../img/icons/nav/07-box.svg');}
+.nav a[data-ico="services"]{--nav-ico:url('../img/icons/nav/08-briefcase.svg');}
+.nav a[data-ico="cases"]{--nav-ico:url('../img/icons/nav/08-briefcase.svg');}
+.nav a[data-ico="honesty"]{--nav-ico:url('../img/icons/nav/09-shield-check.svg');}
+.nav a[data-ico="about"]{--nav-ico:url('../img/icons/nav/10-user.svg');}
+.nav a[data-ico="faq"]{--nav-ico:url('../img/icons/nav/11-help.svg');}
+.nav a[data-ico="phone"]{--nav-ico:url('../img/icons/nav/12-phone.svg');}
+.nav a[data-ico="tg"]{--nav-ico:url('../img/icons/nav/13-telegram.svg');}
+
+/* ensure channel link is visible in sidebar (older rules may hide it) */
+.nav a[href*="t.me/np_maps"]{ display:flex; }
+
+
+
+/* ======================================
+   FIX: nav icons via inline <img.nav-ico>
+   (mask-image is flaky in some browsers)
+   ====================================== */
+.nav a[data-ico]::before{ content:none !important; display:none !important; }
+.nav a[data-ico]{ --nav-ico: none !important; }
+
+.nav a{
+  display:flex;
+  align-items:center;
+  gap: 8px;
+}
+
+/* remove extra left padding reserved for pseudo icons */
+.nav a:not(.btn)[data-ico],
+.nav a.btn[data-ico],
+.nav a.nav-contact[data-ico]{
+  padding-left: 12px !important;
+}
+
+.nav a .nav-ico{
+  width:16px;
+  height:16px;
+  flex: 0 0 16px;
+  opacity:.92;
+}
+
+/* Make icons readable in dark theme */
+:root[data-theme="dark"] .nav a .nav-ico{
+  filter: brightness(0) invert(1);
+}
+
+/* Keep icons natural in light theme */
+:root[data-theme="light"] .nav a .nav-ico{
+  filter: none;
+}
+
+
+/* v60: final override — narrower sidebar */
+@media (min-width: 980px){
+  :root{ --sidebar-w: 170px; }
+}
+
+/* ================================
+   v62 — Background composition fix
+   - no weird crop of the map/pins
+   - no vertical seam near the left sidebar
+   ================================ */
+
+body{position:relative; isolation:isolate;}
+
+/* Global background layer that spans the whole viewport (including under the sidebar)
+   so the decorative map doesn't "start" after the sidebar padding. */
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:0;
+  pointer-events:none;
+  background:
+    radial-gradient(1000px 620px at 12% -8%, rgba(255,176,0,.18), transparent 62%),
+    radial-gradient(900px 640px at 92% 10%, rgba(255,106,0,.16), transparent 60%),
+    radial-gradient(920px 760px at 50% 112%, rgba(91,33,182,.12), transparent 62%),
+    url("../img/hero-map.svg") right -40px center / min(840px, 68vw) no-repeat;
+  opacity:.90;
+  /* filter removed for smooth scrolling */
+}
+
+/* Keep all site UI above the background layer */
+body > header,
+body > main,
+body > footer,
+body > .chat-dock{
+  position:relative;
+  z-index:1;
+}
+body > #navBackdrop{
+  position:fixed;
+  z-index:2;
+}
+
+
+[data-theme="light"] body::before{
+  opacity:.42;
+  /* filter removed for smooth scrolling */
+}
+
+/* Disable section-level map overlay to avoid double rendering and odd clipping */
+.hero::after,
+.chat-page::after{display:none !important;}
+
+/* Hero visual: keep the SVG readable (no "cover" cropping) */
+.hero-art{padding:18px; aspect-ratio: 16 / 11;}
+.hero-art img{
+  object-fit:contain !important;
+  transform:none !important;
+  opacity:.92;
+}
+
+/* Desktop sidebar: slightly tighter gap so the layout doesn't feel "cut" */
+@media (min-width: 981px){
+  :root{ --sidebar-gap: 10px; }
+  .site-header{ box-shadow: 14px 0 40px rgba(0,0,0,.40); }
+}
+
+/* =========================================================
+   v63 — Mobile left drawer nav (fix)
+   - makes the existing JS (body.nav-open) actually work
+   - keeps the “ChatGPT-like” left menu idea on mobile
+   ========================================================= */
+
+@media (max-width: 980px){
+  /* Header is the top bar */
+  .site-header{
+    position: sticky;
+    top: 0;
+    z-index: 70;
+  }
+
+  /* Make room for the burger button (it sits outside .container in markup) */
+  .site-header .container.header-inner{
+    padding-right: 64px;
+  }
+
+  /* Burger button */
+  .nav-toggle{
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    right: 14px;
+    top: 10px;
+    z-index: 80;
+  }
+
+  /* Backdrop must be above the page content */
+  #navBackdrop{
+    position: fixed;
+    inset: 0;
+    z-index: 74;
+  }
+  #navBackdrop[hidden]{
+    display: none !important;
+  }
+
+  /* Turn the nav into a left drawer */
+  #siteNav{
+    display: flex !important;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: min(86vw, 320px);
+    flex-direction: column;
+    flex-wrap: nowrap;
+    gap: 6px;
+    padding: 14px 12px;
+    background: color-mix(in srgb, var(--bg) 92%, transparent 8%);
+    border-right: 1px solid var(--border);
+    box-shadow: var(--shadow-md);
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+
+    transform: translateX(-105%);
+    transition: transform .22s ease;
+    z-index: 75;
+  }
+
+  body.nav-open #siteNav{ transform: translateX(0); }
+  body.nav-open{ overflow: hidden; }
+
+  /* Make links feel like a real menu */
+  #siteNav a:not(.btn){
+    width: 100% !important;
+    justify-content: flex-start;
+    border-radius: 14px;
+    padding: 10px 12px;
+  }
+
+  /* Bottom group sticks to the bottom */
+  #siteNav .nav-bottom{
+    margin-top: auto;
+    padding-top: 10px;
+    border-top: 1px solid color-mix(in srgb, var(--border) 86%, transparent 14%);
+  }
+
+  /* Don't show the old (unused) header nav system on mobile */
+  .menu-btn,
+  .mobile-menu{ display: none !important; }
+}
+
+/* =========================================================
+   v71 — Nav clarity pass
+   - stronger active state ("где я")
+   - keep active link visible inside scrollable sidebar
+   - mobile burger becomes obvious (icon + "Меню")
+   ========================================================= */
+
+@media (min-width: 981px){
+  /* allow scrolling inside the fixed sidebar (needed for long menus) */
+  #siteNav{
+    overflow: auto !important;
+    -webkit-overflow-scrolling: touch;
+  }
+  #siteNav::-webkit-scrollbar{ width: 0; height: 0; }
+  #siteNav{ scrollbar-width: none; }
+}
+
+/* Strong active item (works for pages and index section highlighting) */
+#siteNav a[aria-current="page"]:not(.btn),
+#siteNav a[aria-current="location"]:not(.btn),
+#siteNav a[aria-current="true"]:not(.btn){
+  position: relative;
+  background: color-mix(in srgb, var(--bg2) 72%, var(--card) 28%) !important;
+  border-color: color-mix(in srgb, var(--border) 55%, var(--accent) 45%) !important;
+  color: var(--text) !important;
+  font-weight:800 !important;
+  padding-left: 16px !important; /* room for the accent bar */
+}
+
+#siteNav a[aria-current="page"]:not(.btn)::before,
+#siteNav a[aria-current="location"]:not(.btn)::before,
+#siteNav a[aria-current="true"]:not(.btn)::before{
+  content: "";
+  position: absolute;
+  left: 6px;
+  top: 7px;
+  bottom: 7px;
+  width: 3px;
+  border-radius: 3px;
+  background: linear-gradient(180deg, var(--accent), var(--accent2));
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 25%, transparent 75%);
+}
+
+@media (max-width: 980px){
+  /* make room for a wider burger button */
+  .site-header .container.header-inner{ padding-right: 118px; }
+
+  .nav-toggle{
+    gap: 8px;
+    padding: 0 12px;
+    width: auto;
+    min-width: 44px;
+    border: 1px solid color-mix(in srgb, var(--border) 86%, transparent 14%);
+    background: color-mix(in srgb, var(--card) 72%, var(--bg2) 28%);
+    box-shadow: var(--shadow-sm);
+  }
+  .nav-toggle:active{ transform: translateY(1px); }
+  .nav-toggle__label{
+    display: inline-block;
+    font-weight:800;
+    font-size: 12.5px;
+    letter-spacing: .02em;
+    color: var(--text);
+    opacity: .95;
+  }
+  .nav-toggle__icon{ gap: 4px; }
+  .nav-toggle__icon span{ width: 18px; }
+
+  /* sidebar group labels read as headings */
+  #siteNav .nav-label{
+    padding: 14px 10px 6px;
+    font-size: 10.5px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: color-mix(in srgb, var(--text) 62%, var(--muted) 38%);
+  }
+}
+
+
+/* ==========================
+   v73 — Footer CTA anchor + Mobile CTA bar
+   Goal: final CTA always reachable + mobile quick actions
+   ========================== */
+
+.free-audit-anchor{ scroll-margin-top: 96px; }
+
+@media (max-width: 960px){
+  /* On mobile: use in-page CTA + small bottom bar instead of the fixed dock */
+  .chat-dock{ display:none !important; }
+  .has-chat-dock #main-content{ padding-bottom: calc(84px + env(safe-area-inset-bottom)); }
+
+  .mobile-cta-bar{
+    position: fixed;
+    left: 0; right: 0; bottom: 0;
+    z-index: 95;
+    padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
+    background: color-mix(in srgb, var(--bg) 88%, transparent 12%);
+    border-top: 1px solid var(--border);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .mobile-cta-bar__btn{
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (min-width: 961px){
+  .mobile-cta-bar{ display:none; }
+}
+
+/* ==========================
+   v74 — Scanability (prose width + hierarchy)
+   - comfortable line length in doc accordions
+   - stronger FAQ accordions
+   - better mobile reading
+   ========================== */
+
+:root{
+  --prose: 72ch;
+}
+
+/* Keep reading width comfortable inside doc accordions */
+.doc-details__body > :is(p, ul, ol, blockquote, .lead, .accent, .notice){
+  max-width: var(--prose);
+}
+
+.doc-details__body h3,
+.doc-details__body h4{
+  max-width: var(--prose);
+  margin-top: 18px;
+}
+
+.doc-details__body h3:first-child,
+.doc-details__body h4:first-child{ margin-top: 0; }
+
+/* Make long lists easier to scan (only direct lists inside sections) */
+.doc-details__body > :is(ul, ol):not(.mini-list){
+  padding: 12px 18px 12px 34px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--card) 86%, var(--bg2) 14%);
+}
+
+.doc-details__body > :is(ul, ol):not(.mini-list) li{ margin: 10px 0; }
+
+/* FAQ accordions — proper summary styling */
+details.faq-item{ padding:0; }
+
+.faq-summary{
+  list-style:none;
+  cursor:pointer;
+  padding: 16px 18px;
+  padding-right: 56px;
+  font-weight:800;
+  letter-spacing: -0.01em;
+  position: relative;
+  user-select: none;
+}
+
+.faq-summary::-webkit-details-marker{ display:none; }
+
+.faq-summary::after{
+  content: "⌄";
+  position: absolute;
+  right: 18px;
+  top: 18px;
+  font-size: 18px;
+  line-height: 1;
+  color: var(--muted);
+  transform: rotate(0deg);
+  transition: transform .18s ease, color .18s ease;
+}
+
+details[open] > .faq-summary::after{
+  transform: rotate(180deg);
+  color: var(--text);
+}
+
+details.faq-item[open] > .faq-summary{
+  border-bottom: 1px solid var(--border);
+  background: color-mix(in srgb, var(--card) 84%, var(--bg2) 16%);
+}
+
+.faq-summary:hover{
+  background: color-mix(in srgb, var(--card) 80%, var(--bg2) 20%);
+}
+
+.faq-summary:focus-visible{
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 55%, transparent 45%);
+  border-radius: 12px;
+}
+
+.faq-content{ padding: 0 18px 18px; }
+
+/* ==========================
+   v78 — Progressive disclosure (fold sections)
+   - collapses long checklists into <details> without losing scanability
+   ========================== */
+
+details.fold-item{
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--card) 84%, var(--bg2) 16%);
+  overflow: hidden;
+}
+
+.fold-summary{
+  list-style: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  padding-right: 56px;
+  font-weight:800;
+  letter-spacing: -0.01em;
+  position: relative;
+  user-select: none;
+}
+.fold-summary::-webkit-details-marker{ display: none; }
+
+.fold-summary::after{
+  content: "⌄";
+  position: absolute;
+  right: 16px;
+  top: 16px;
+  font-size: 18px;
+  line-height: 1;
+  color: var(--muted);
+  transition: transform .18s ease, color .18s ease;
+}
+details[open] > .fold-summary::after{
+  transform: rotate(180deg);
+  color: var(--text);
+}
+
+details.fold-item[open] > .fold-summary{
+  border-bottom: 1px solid var(--border);
+  background: color-mix(in srgb, var(--card) 80%, var(--bg2) 20%);
+}
+
+.fold-summary:hover{
+  background: color-mix(in srgb, var(--card) 76%, var(--bg2) 24%);
+}
+
+.fold-summary:focus-visible{
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 55%, transparent 45%);
+  border-radius: 12px;
+}
+
+.fold-content{ padding: 0 16px 16px; }
+.fold-preview{ margin: 12px 0 10px; }
+
+.fold-list{
+  margin: 0;
+  padding-left: 18px;
+}
+.fold-list li{ margin: 10px 0; }
+
+.plan-highlights{ margin: 10px 0 12px; }
+
+
+/* Mobile: bigger text + tighter paddings */
+@media (max-width: 560px){
+  body{ font-size:17px; }
+
+  .doc-intro-card{ padding: 16px; }
+
+  .doc-details summary{
+    padding: 14px 14px;
+    padding-right: 52px;
+  }
+  .doc-details summary::after{
+    right: 14px;
+    top: 15px;
+  }
+
+  .doc-details__body{ padding: 12px 14px 14px; }
+
+  .doc-details__body > :is(ul, ol):not(.mini-list){
+    padding: 12px 14px 12px 30px;
+  }
+
+  .faq-summary{
+    padding: 14px 14px;
+    padding-right: 52px;
+  }
+  .faq-summary::after{
+    right: 14px;
+    top: 16px;
+  }
+  .faq-content{ padding: 0 14px 14px; }
+}
+
+/* ================================
+   v73 — Performance helpers
+   - content-visibility for long pages (faster render on mobile)
+   - keeps hero always visible to avoid odd first-paint
+   ================================ */
+
+@supports (content-visibility: auto){
+  /* Render the first screen as usual */
+  #hero{ content-visibility: visible; }
+
+  /* Defer rendering of offscreen sections */
+  .section:not(#hero){
+    content-visibility: auto;
+    contain-intrinsic-size: 1px 900px;
+  }
+}
+
+
+/* v80 — First CTA (after hero) */
+.first-cta{padding-top:10px}
+.first-cta-card{display:flex; align-items:center; justify-content:space-between; gap:16px; padding:18px; border-radius:22px}
+.first-cta-title{margin:0; font-weight:800; letter-spacing:-.01em; font-size:clamp(18px, 2.0vw, 22px)}
+.first-cta-sub{margin:8px 0 0; max-width:74ch}
+.first-cta-actions{display:flex; gap:10px; flex-wrap:wrap; align-items:center}
+.first-cta-actions .btn{white-space:nowrap}
+@media (max-width: 960px){
+  .first-cta-card{flex-direction:column; align-items:stretch}
+  .first-cta-actions{width:100%}
+  .first-cta-actions .btn{flex:1; text-align:center}
+}
+@media (max-width: 520px){
+  .first-cta-actions{flex-direction:column}
+  .first-cta-actions .btn{width:100%}
+}
+
+
+/* v81 — Free audit modal */
+body.np-modal-open{ overflow:hidden; }
+
+.np-modal-backdrop{
+  position:fixed;
+  inset:0;
+  background: rgba(0,0,0,.54);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 9998;
+}
+
+.np-modal{
+  position:fixed;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding: clamp(14px, 3vw, 26px);
+  z-index: 9999;
+}
+
+.np-modal[hidden],
+.np-modal-backdrop[hidden]{
+  display:none !important;
+}
+
+.np-modal-dialog{
+  width: min(620px, 100%);
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 26px;
+  box-shadow: var(--shadow-md);
+  padding: 16px;
+  position:relative;
+}
+
+.np-modal-head h2{ margin:0; font-weight:800; letter-spacing:-.02em; }
+.np-modal-head p{ margin:8px 0 0; }
+
+.np-modal-close{
+  position:absolute;
+  top: 10px;
+  right: 10px;
+  width: 38px;
+  height: 38px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,.06);
+  color: var(--text);
+  font-size: 22px;
+  line-height: 1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+}
+.np-modal-close:hover{ box-shadow: var(--shadow-sm); transform: translateY(-1px); }
+.np-modal-close:focus-visible{ outline:2px solid rgba(255,255,255,.42); outline-offset:2px; }
+
+.np-modal-form{ margin-top: 12px; }
+
+@media (max-width: 560px){
+  .np-modal{ align-items:flex-end; padding: 12px; }
+  .np-modal-dialog{ border-radius: 24px 24px 0 0; padding-bottom: 14px; }
+}
+
+
+/* ================================
+   v86 — Cookie / analytics notice
+   ================================ */
+.cookie-banner{position:fixed;left:var(--gutter);right:var(--gutter);bottom:calc(var(--dock-h, 132px) + 14px);z-index:9999}
+.cookie-banner .cookie-card{display:flex;gap:14px;align-items:center;justify-content:space-between;background:rgba(18,19,26,.92);border:1px solid var(--border);border-radius:18px;box-shadow:var(--shadow);padding:12px 14px;backdrop-filter: blur(10px)}
+.cookie-banner .cookie-text{font-size:13.5px;line-height:1.35;color:var(--muted);margin:0}
+.cookie-banner .cookie-text strong{color:var(--text)}
+.cookie-banner .cookie-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+.cookie-banner .cookie-actions .btn{white-space:nowrap}
+@media (max-width: 960px){
+  .cookie-banner{bottom:calc(84px + env(safe-area-inset-bottom) + 12px)}
+}
+@media (max-width: 520px){
+  .cookie-banner{left:12px;right:12px;bottom:calc(84px + env(safe-area-inset-bottom) + 12px)}
+  .cookie-banner .cookie-card{flex-direction:column;align-items:stretch;padding:10px 12px;gap:10px}
+  .cookie-banner .cookie-text{font-size:12.5px;line-height:1.3}
+  .cookie-banner .cookie-actions{justify-content:flex-end;flex-wrap:nowrap;gap:8px}
+  .cookie-banner .cookie-actions .btn{width:auto}
+}
+
+
+/* ================================
+   v87 — Compact sidebar nav + dock quiz
+   ================================ */
+
+.nav-more{
+  margin: 6px 2px 0;
+}
+.nav-more__summary{
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+  padding: 7px 8px;
+  border-radius: 14px;
+  font-weight:800;
+  font-size: 12.3px;
+  color: var(--text);
+  background: rgba(255,255,255,.03);
+  border: 1px solid color-mix(in srgb, var(--border) 85%, transparent 15%);
+}
+.nav-more__summary:hover{
+  background: color-mix(in srgb, var(--bg2) 35%, transparent 65%);
+}
+.nav-more[open] .nav-more__summary{
+  box-shadow: var(--ring);
+}
+.nav-more__body{
+  margin-top: 6px;
+  display: grid;
+  gap: 4px;
+}
+
+/* Make summary arrow smaller */
+.nav-more__summary::marker{ content: ""; }
+.nav-more__summary::-webkit-details-marker{ display:none; }
+.nav-more__summary:after{
+  content: "▾";
+  float: right;
+  opacity: .7;
+}
+.nav-more[open] .nav-more__summary:after{ content:"▴"; }
+
+/* Dock quiz chips */
+.dock-quiz{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin: 6px 0 10px;
+}
+.dock-quiz .chip{
+  cursor:pointer;
+}
+.pain-chip.is-active{
+  border-color: color-mix(in srgb, var(--accent) 70%, var(--border) 30%);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 14%, transparent 86%);
+}
+
+/* Dock details inputs spacing */
+.chat-dock .dock-more__body{
+  display:grid;
+  gap:8px;
+}
+.chat-dock .dock-more input{
+  width:100%;
+  border-radius: 14px;
+}
+
+
+
+/* =========================================================
+   v88 — Home page density + contrast (B2B‑Creative vibe)
+   Цель: больше «плотности», чёткая иерархия, контрастные CTA.
+   ========================================================= */
+
+/* Contrast tuning */
+:root{
+  --card: rgba(255,255,255,.08);
+  --card2: rgba(255,255,255,.11);
+  --border: rgba(255,255,255,.18);
+  --muted: rgba(243,245,247,.84);
+  --ring: 0 0 0 3px rgba(255,176,0,.26);
+}
+
+/* Primary CTA: один акцентный цвет, без «кислотных» градиентов */
+.btn-primary{
+  background: var(--accent) !important;
+  color: #111 !important;
+  border-color: rgba(255,255,255,.12) !important;
+  box-shadow: 0 14px 34px rgba(255,176,0,.22) !important;
+}
+.btn-primary:hover{
+  filter: brightness(1.03);
+  box-shadow: 0 18px 46px rgba(255,176,0,.18) !important;
+}
+
+/* Home density */
+.page-home .section{ padding: clamp(26px, 3.2vw, 52px) 0; }
+.page-home .section-head{ gap: 10px; }
+.page-home .section-head p{ max-width: 70ch; }
+
+.page-home .hero-head h1{ max-width: 22ch; }
+.page-home .hero-kicker{
+  font-size: 12.5px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.page-home .lead{ font-size: 18px; line-height: 1.45; max-width: 66ch; }
+
+.hero-trust{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top: 12px;
+}
+.trust-pill{
+  display:inline-flex;
+  align-items:center;
+  padding: 8px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  font-weight:800;
+  font-size: 12.5px;
+  line-height: 1.1;
+  color: var(--text);
+}
+
+/* Proof items as a single top row on the homepage */
+.page-home .case-proof{ margin: 12px 0 14px; }
+.case-proof--top{
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+@media (max-width: 920px){
+  .case-proof--top{ grid-template-columns: 1fr; }
+}
+
+/* Trust metrics */
+.trust-metrics-grid{
+  display:grid;
+  gap:12px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin-top: 14px;
+}
+@media (max-width: 1080px){
+  .trust-metrics-grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 560px){
+  .trust-metrics-grid{ grid-template-columns: 1fr; }
+}
+.trust-metric{ padding: 16px; }
+.trust-num{
+  font-weight:800;
+  font-size: 22px;
+  letter-spacing: -0.02em;
+  margin-bottom: 6px;
+}
+.trust-metric h3{ margin: 0 0 6px; font-size: 15px; }
+.trust-metric p{ margin: 0; }
+
+/* Tighten common grids on the homepage */
+.page-home .promise-grid,
+.page-home .home-cases-grid,
+.page-home .pricing-grid,
+.page-home .fit-grid{ gap: 12px; }
+
+.page-home .promise-card{ padding: 16px; }
+.page-home .pricing-card{ padding: 16px; }
+.page-home .card{ backdrop-filter: none; }
+
+/* Make callouts feel like a “panel” */
+.page-home .callout{
+  border-radius: 18px;
+  background: color-mix(in srgb, var(--card2) 86%, var(--bg2) 14%);
+}
+
+/* Sidebar: чуть более «узкий и собранный» */
+@media (min-width: 981px){
+  :root{
+    --sidebar-w: 186px;
+    --sidebar-gap: 16px;
+  }
+  .nav a:not(.btn){ padding: 7px 8px !important; }
+  .nav-cta.btn{ padding: 10px 12px !important; }
+}
+
+/* Mobile: больше воздуха для тапа */
+@media (max-width: 520px){
+  .btn{ padding: 11px 14px; }
+  .trust-pill{ padding: 9px 11px; font-size: 12.8px; }
+}
+
+
+
+/* =========================================================
+   v89 — Micro‑icons, dividers, editorial typography
+   Цель: ещё ближе к «плотности» референса, без потери сайдбара.
+   ========================================================= */
+
+.section-divider{
+  height: 1px;
+  max-width: var(--container);
+  margin: 18px auto;
+  background: linear-gradient(90deg,
+    transparent,
+    color-mix(in srgb, var(--border) 70%, transparent 30%),
+    transparent
+  );
+  opacity: .9;
+}
+
+/* Hero trust pills (non-meta version) */
+.hero-trust{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:14px;
+}
+.hero-trust:not(.hero-trust--meta) .trust-pill{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:9px 11px;
+  border-radius:999px;
+  border:1px solid color-mix(in srgb, var(--border) 86%, transparent 14%);
+  background: color-mix(in srgb, var(--card) 82%, var(--bg2) 18%);
+  color: var(--text);
+  font-weight:800;
+  font-size: 13px;
+  line-height: 1;
+}
+.pill-ico{
+  width:16px;
+  height:16px;
+  opacity:.92;
+  flex:0 0 auto;
+}
+
+/* Promise cards: small icon block */
+.promise-ico{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:38px;
+  height:38px;
+  border-radius:12px;
+  border:1px solid var(--border);
+  background: color-mix(in srgb, var(--card) 74%, var(--bg2) 26%);
+  margin-bottom:10px;
+}
+.ui-ico{ width:18px; height:18px; opacity:.95; }
+
+/* Pricing headings with icons */
+.pricing-head h3{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.heading-ico{
+  width:18px;
+  height:18px;
+  opacity:.95;
+  flex:0 0 auto;
+}
+
+/* Editorial typography tweaks */
+.hero .hero-head h1{ text-wrap: balance; }
+.lead{ max-width: 62ch; }
+.section-head h2{ text-wrap: balance; }
+
+
+
+/* ================================
+   v90 — Ref-like density + contrast (desktop) + micro-interactions
+   Цель: «как b2b-creative» по плотности и читабельности, без потери левого меню.
+   ================================ */
+
+/* Desktop density (tight, editorial) */
+@media (min-width: 981px){
+  :root{
+    --sidebar-w: 224px;
+    --sidebar-gap: 16px;
+    --container: 900px;
+    --radius: 16px;
+    --sectionY: clamp(34px, 3.6vw, 56px);
+    --measure: 64ch;
+    --measureWide: 88ch;
+  }
+
+  body{ font-size: 15.5px; }
+
+  /* Slightly tighter page gutters */
+  .container{ padding: 0 24px; }
+
+  /* Tighter components */
+  .card{ padding: 16px; border-radius: var(--radius); }
+  .btn{ padding: 9px 12px; border-radius: 12px; }
+
+  /* Tighter grids */
+  [class*="-grid"]{ gap: 12px; }
+
+  /* Hero: less air, more punch */
+  .hero-top{ gap: 24px; }
+  .hero-actions{ gap: 10px; margin-top: 14px; }
+  .hero-mini{ margin-top: 10px; }
+  .hero-format{ margin-top: 10px; }
+
+  /* Sidebar: slightly denser, clearer hit areas */
+  #siteNav{ padding: 12px 10px; }
+  #siteNav a:not(.btn){
+    border-radius: 12px;
+    padding: 9px 10px;
+    transition: transform .12s ease, background-color .12s ease, border-color .12s ease, box-shadow .12s ease;
+  }
+
+  /* Active: solid accent bar (cleaner than gradient) */
+  #siteNav a[aria-current="page"]:not(.btn)::before,
+  #siteNav a[aria-current="location"]:not(.btn)::before,
+  #siteNav a[aria-current="true"]:not(.btn)::before{
+    background: var(--accent) !important;
+    box-shadow: none !important;
+  }
+}
+
+/* Micro interactions (hover devices only) */
+@media (hover:hover){
+  .card{
+    transition: transform .14s ease, box-shadow .14s ease, border-color .14s ease, background-color .14s ease;
+  }
+  .card:hover{
+    transform: translateY(-2px);
+    border-color: color-mix(in srgb, var(--border) 55%, var(--accent) 45%);
+  }
+
+  .btn:hover{ transform: translateY(-1px); }
+
+  #siteNav a:not(.btn):hover{
+    background: color-mix(in srgb, var(--bg2) 78%, var(--card) 22%);
+    border-color: color-mix(in srgb, var(--border) 70%, transparent 30%);
+    transform: translateX(1px);
+    text-decoration: none;
+  }
+}
+
+
+
+/* ================================
+   v91 — Editorial typography + baseline rhythm (ref-like)
+   Цель: больше «дорогой редакционности»: контраст заголовков, ритм, воздух внутри блоков,
+   при этом общий интерфейс остаётся плотным и не шумит.
+   ================================ */
+
+:root{
+  --space-1: 6px;
+  --space-2: 10px;
+  --space-3: 14px;
+  --space-4: 20px;
+  --space-5: 28px;
+}
+
+/* Stronger contrast for headings (all themes) */
+h1,h2,h3,h4{ color: var(--text); }
+.muted{ color: color-mix(in srgb, var(--muted) 86%, var(--text) 14%); }
+
+/* Baseline rhythm (global) */
+p, ul, ol{ margin: 0 0 var(--space-2); }
+p:last-child, ul:last-child, ol:last-child{ margin-bottom: 0; }
+
+h1{ margin: 0 0 var(--space-2); }
+h2{ margin: 0 0 var(--space-2); }
+h3{ margin: 0 0 var(--space-1); }
+h4{ margin: 0 0 var(--space-1); }
+
+/* Make cards read like editorial blocks */
+.card > * + *{ margin-top: var(--space-2); }
+.card .card-head{ margin-bottom: var(--space-1); }
+.card .muted{ margin-top: 0; }
+
+/* Section heads: subtle hairline divider (desktop only for cleanliness) */
+@media (min-width: 981px){
+  :root{
+    /* Slightly stronger separation */
+    --border: rgba(255,255,255,.16);
+  }
+  [data-theme="light"]{
+    --border: rgba(15,23,42,.12);
+  }
+
+  .section-head{
+    padding-bottom: var(--space-2);
+    margin-bottom: var(--space-3);
+    border-bottom: 1px solid color-mix(in srgb, var(--border) 78%, transparent 22%);
+  }
+
+  /* Typography scale: punchier, more readable */
+  h1{
+    font-size: clamp(34px, 3.2vw, 44px);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+  }
+  h2{
+    font-size: clamp(24px, 2.1vw, 30px);
+    line-height: 1.14;
+    letter-spacing: -0.01em;
+  }
+  h3{
+    font-size: 18px;
+    line-height: 1.22;
+    letter-spacing: -0.005em;
+  }
+  .lead{
+    font-size: clamp(17px, 1.45vw, 20px);
+    line-height: 1.55;
+  }
+
+  /* Lists: tighter, but clearer */
+  .mini-list li{ margin: 6px 0; }
+
+  /* Pills/chips: more “print-like” */
+  .chip, .trust-pill, .pill-link{
+    border-color: color-mix(in srgb, var(--border) 85%, transparent 15%);
+  }
+
+  /* Divider utility if present */
+  .divider, hr{
+    border: none;
+    height: 1px;
+    background: color-mix(in srgb, var(--border) 70%, transparent 30%);
+    margin: var(--space-4) 0;
+  }
+}
+
+/* Mobile: keep readability, avoid over-tightening */
+@media (max-width: 520px){
+  :root{
+    --space-2: 12px;
+    --space-3: 16px;
+  }
+  h1{ line-height: 1.08; }
+  .card > * + *{ margin-top: 12px; }
+}
+
+
+/* v94 — Proof previews */
+.proof-img{width:100%;height:auto;display:block;border:1px solid var(--border);border-radius:14px;background:var(--card);}
+
+/* ================================
+   v95 — CRO tweaks (audit step 2)
+   - Trust bullets (already in hero)
+   - First-CTA bullets
+   - Stronger secondary CTA on hero
+   - Less intrusive cookie banner (desktop)
+   ================================ */
+
+.first-cta-bullets{
+  margin:10px 0 0;
+  padding-left:18px;
+  color:var(--muted);
+  font-size:13.5px;
+  line-height:1.35;
+}
+.first-cta-bullets li{ margin:5px 0; }
+.first-cta-bullets strong{ color:var(--text); font-weight:700; }
+
+/* Hero secondary CTA should feel “real”, not like a weak link */
+.page-home .hero-actions .btn-outline{
+  background: rgba(255,255,255,.06);
+  border-color: color-mix(in srgb, var(--accent) 30%, var(--border) 70%);
+}
+.page-home .hero-actions .btn-outline:hover{
+  background: rgba(255,255,255,.09);
+  border-color: color-mix(in srgb, var(--accent) 42%, var(--border) 58%);
+}
+
+/* Cookie banner: keep it compact on desktop (do not span the whole width) */
+@media (min-width: 981px){
+  .cookie-banner{left:auto; right:var(--gutter); max-width:560px;}
+}
+
+
+/* ==========================
+   v95 — Readability boosts (global safe)
+   - limit line length in key headings/sections
+   ========================== */
+.hero-head > :is(p,.lead,.hero-kicker),
+.section-head > p,
+.home-outline__head > p,
+.home-cases__head > p{
+  max-width: var(--prose);
+}
+
+
+
+/* ==========================
+   v95 — Anchor offsets (sticky header friendly)
+   ========================== */
+html{
+  scroll-padding-top: 88px;
+}
+@media (max-width: 980px){
+  html{ scroll-padding-top: 76px; }
+}
+:is(section[id], [id]):target{
+  scroll-margin-top: 88px;
+}
+@media (max-width: 980px){
+  :is(section[id], [id]):target{ scroll-margin-top: 76px; }
+}
+
+
+
+/* ==========================
+   v95 — In-page nav chips
+   ========================== */
+.inpage-nav{
+  margin-top: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+.inpage-nav__label{
+  font-size: 12px;
+  color: var(--muted);
+  margin-right: 6px;
+}
+.inpage-nav .chip--link{
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.inpage-nav .chip--link:hover{
+  text-decoration: none;
+}
+@media (max-width: 520px){
+  .inpage-nav__label{ width: 100%; margin-right: 0; }
+}
+
+
+
+/* ==========================
+   v95 — Rhythm polish (safe spacing)
+   - less cramped long pages
+   - clearer hierarchy between blocks
+   ========================== */
+.section-head{ margin-bottom: 16px; }
+.section-head h2{ margin-bottom: 8px; }
+.card p:last-child{ margin-bottom: 0; }
+
+.doc-details{ margin: 10px 0; }
+.doc-details__body{ padding-top: 6px; }
+.doc-details__body > :is(p, ul, ol, blockquote){ margin-bottom: 12px; }
+.doc-details__body > :is(ul, ol){ margin-top: 6px; }
+.doc-details__body > :is(h2, h3){ margin-top: 22px; }
+.doc-details__body > :is(h2):first-child,
+.doc-details__body > :is(h3):first-child{ margin-top: 10px; }
+
+.callout{ margin: 16px 0; }
+.callout p{ margin: 0; }
+
+
+
+/* ==========================
+   v95 — Secondary CTA punch
+   - make outline buttons feel actionable
+   ========================== */
+.btn.btn-outline{
+  border-width: 1.5px;
+}
+.btn.btn-outline:hover{
+  transform: translateY(-1px);
+}
+@media (prefers-reduced-motion: reduce){
+  .btn.btn-outline:hover{ transform: none; }
+}
+
+
+
+/* ==========================
+   v95 — Focus ring polish
+   ========================== */
+:focus-visible{
+  outline: 2px solid rgba(255,176,0,.55);
+  outline-offset: 3px;
+}
+
+
+
+/* Related links (knowledge graph / internal linking) */
+.related-grid{
+  display:grid;
+  gap:14px;
+  grid-template-columns:repeat(3, minmax(0, 1fr));
+}
+.related-card h3{margin:0 0 6px;}
+.related-card h3 a{color:inherit; text-decoration:none;}
+.related-card h3 a:hover{text-decoration:underline;}
+.related-card p{margin:0;}
+@media (max-width: 980px){
+  .related-grid{grid-template-columns:repeat(2, minmax(0, 1fr));}
+}
+@media (max-width: 560px){
+  .related-grid{grid-template-columns:1fr;}
+}
+
+
+/* v97 — CRO cleanup: reduce duplicates on doc pages */
+.doc-page .first-cta{ display:none; }
+
+/* Legal line under forms */
+.form-legal{ margin:10px 0 0; font-size:13px; line-height:1.45; }
+.form-legal a{ text-decoration:underline; }
+
+
+/* =========================================================
+   Performance: prevent scroll jank (glass + fixed background)
+   - keeps "glass" look at rest, disables heavy filters while scrolling
+   ========================================================= */
+.hp-field{
+  position:absolute !important;
+  left:-9999px !important;
+  top:auto !important;
+  width:1px !important;
+  height:1px !important;
+  opacity:0 !important;
+  pointer-events:none !important;
+}
+
+html.is-scrolling .site-header,
+html.is-scrolling .chat-compose,
+html.is-scrolling .mobile-cta-bar,
+html.is-scrolling .nav-backdrop{
+  -webkit-backdrop-filter:none !important;
+  backdrop-filter:none !important;
+}
+
+/* fixed background: keep it light */
+html.is-scrolling body::before{ filter:none !important; }
+
+/* Optional: on mobile, blur is rarely worth the FPS cost */
+@media (max-width: 980px){
+  .site-header,
+  .chat-compose,
+  .mobile-cta-bar{ -webkit-backdrop-filter:none; backdrop-filter:none; }
+}
+
+
+
+/* =========================
+   Home blocks — "reference-like" sections (Why / Stack / Capabilities)
+   Lightweight (no blur/filters), mobile-first
+   ========================= */
+
+.section-paper{
+  background: rgba(255,255,255,.94);
+  color:#0f172a;
+}
+.section-paper .muted{ color: rgba(15,23,42,.72); }
+.section-paper .pill-link{
+  background: rgba(15,23,42,.06);
+  border-color: rgba(15,23,42,.18);
+  color:#0f172a;
+}
+.section-paper .pill-link:hover{
+  background: rgba(15,23,42,.10);
+}
+[data-theme="light"] .section-paper{
+  background: var(--card2);
+  color: var(--text);
+}
+[data-theme="light"] .section-paper .muted{ color: var(--muted); }
+[data-theme="light"] .section-paper .pill-link{
+  background: rgba(0,0,0,.04);
+  border-color: rgba(0,0,0,.12);
+  color: var(--text);
+}
+
+/* WHY */
+.home-why{ position: relative; overflow: hidden; }
+.home-why h2{ letter-spacing:-.02em; }
+.why-path{
+  position:absolute;
+  inset: 120px 0 auto 0;
+  pointer-events:none;
+  z-index:0;
+  color: rgba(15,23,42,.38);
+}
+.why-path svg{ width:100%; height:220px; display:block; }
+.why-grid{
+  position:relative;
+  z-index:1;
+  margin-top: 26px;
+  display:grid;
+  grid-template-columns: repeat(4, minmax(0,1fr));
+  gap: clamp(14px, 2vw, 26px);
+  align-items:start;
+}
+.why-item{
+  padding: 8px 2px;
+}
+.why-illus{
+  width: 84px; height: 84px;
+  border-radius: 22px;
+  display:grid; place-items:center;
+  background: rgba(255,176,0,.12);
+  border: 1px solid rgba(255,176,0,.25);
+  box-shadow: 0 10px 26px rgba(15,23,42,.10);
+  transform: rotate(-2deg);
+  margin-bottom: 14px;
+}
+.why-item:nth-child(2) .why-illus{ transform: rotate(2deg); background: rgba(37,99,235,.10); border-color: rgba(37,99,235,.22); }
+.why-item:nth-child(3) .why-illus{ transform: rotate(-1deg); background: rgba(16,185,129,.10); border-color: rgba(16,185,129,.22); }
+.why-item:nth-child(4) .why-illus{ transform: rotate(3deg); background: rgba(244,63,94,.10); border-color: rgba(244,63,94,.20); }
+.why-ico{ width: 38px; height: 38px; opacity:.95; }
+.why-item h3{ font-size: 18px; line-height:1.15; margin: 0 0 8px; }
+.why-item p{ margin:0; }
+
+.paper-callout{
+  margin-top: 20px;
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: rgba(15,23,42,.06);
+  border: 1px solid rgba(15,23,42,.12);
+}
+[data-theme="light"] .paper-callout{
+  background: rgba(0,0,0,.04);
+  border-color: rgba(0,0,0,.10);
+}
+
+@media (max-width: 980px){
+  .why-grid{ grid-template-columns: repeat(2, minmax(0,1fr)); }
+  .why-path{ display:none; }
+}
+@media (max-width: 560px){
+  .why-grid{ grid-template-columns: 1fr; }
+  .why-item{ padding: 2px 0; }
+}
+
+/* STACK (dark reference section) */
+.section-ink{
+  background:
+    radial-gradient(900px 520px at 12% 10%, rgba(255,176,0,.14), transparent 62%),
+    radial-gradient(760px 520px at 82% 20%, rgba(37,99,235,.10), transparent 60%),
+    linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,0));
+}
+.home-stack .muted{ max-width: 68ch; }
+.stack-grid{
+  margin-top: 26px;
+  display:grid;
+  grid-template-columns: repeat(4, minmax(0,1fr));
+  gap: 0;
+  border-radius: var(--radius);
+  overflow:hidden;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,.03);
+}
+.stack-col{
+  padding: 22px 18px 20px;
+  min-height: 280px;
+  position:relative;
+}
+.stack-col + .stack-col::before{
+  content:"";
+  position:absolute;
+  left:0; top:18px; bottom:18px;
+  width:2px;
+  background: rgba(255,176,0,.72);
+  opacity:.9;
+}
+.stack-top{
+  display:flex;
+  align-items:center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.stack-illus{
+  width: 54px; height: 54px;
+  border-radius: 16px;
+  display:grid; place-items:center;
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.14);
+}
+.stack-illus img{ width: 26px; height: 26px; opacity:.95; }
+.stack-col h3{ margin:0; font-size: 18px; line-height:1.15; }
+.stack-list{
+  margin: 0;
+  padding-left: 18px;
+  color: var(--muted);
+  display:grid;
+  gap: 8px;
+}
+.stack-foot{
+  margin-top: 14px;
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.12);
+}
+.stack-links{
+  margin-top: 8px;
+  display:flex;
+  flex-wrap:wrap;
+  gap: 10px 12px;
+}
+
+@media (max-width: 1040px){
+  .stack-grid{ grid-template-columns: repeat(2, minmax(0,1fr)); }
+  .stack-col + .stack-col::before{ display:none; }
+  .stack-col{ border-top: 1px solid rgba(255,255,255,.10); }
+  .stack-col:nth-child(1), .stack-col:nth-child(2){ border-top: none; }
+  .stack-col:nth-child(2)::after, .stack-col:nth-child(4)::after{
+    content:"";
+    position:absolute;
+    left:0; top:0; right:0;
+    height:2px;
+    background: rgba(255,176,0,.58);
+    opacity:.85;
+  }
+}
+@media (max-width: 560px){
+  .stack-grid{ grid-template-columns: 1fr; }
+  .stack-col{ min-height:auto; }
+  .stack-col{ border-top: 1px solid rgba(255,255,255,.12); }
+  .stack-col:nth-child(1){ border-top:none; }
+  .stack-col:nth-child(2)::after, .stack-col:nth-child(4)::after{ display:none; }
+}
+
+/* CAPABILITIES stepper */
+.home-capabilities{ position:relative; }
+.cap-stepper{
+  margin-top: 18px;
+  display:flex;
+  align-items:center;
+  gap: 18px;
+  position:relative;
+  padding: 10px 6px;
+}
+.cap-stepper::before{
+  content:"";
+  position:absolute;
+  left: 24px; right: 24px;
+  top: 50%;
+  height: 1px;
+  background: rgba(255,255,255,.18);
+}
+.cap-step{
+  width: 44px; height: 44px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.26);
+  background: rgba(255,255,255,.04);
+  display:grid;
+  place-items:center;
+  position:relative;
+  z-index:1;
+  cursor:pointer;
+  transition: transform .15s ease, background .15s ease, border-color .15s ease;
+}
+.cap-step:hover{ transform: translateY(-1px); }
+.cap-step:focus-visible{
+  outline: none;
+  box-shadow: var(--ring);
+}
+.cap-step.is-active{
+  background: rgba(255,176,0,.18);
+  border-color: rgba(255,176,0,.56);
+}
+.cap-num{ font-weight: 800; letter-spacing:.02em; }
+.cap-panels{ margin-top: 14px; }
+.cap-panel{
+  display:none;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,.04);
+  box-shadow: var(--shadow-sm);
+  overflow:hidden;
+  padding: clamp(16px, 2vw, 22px);
+  gap: 18px;
+  grid-template-columns: 380px 1fr;
+  align-items:center;
+}
+.cap-panel.is-active{ display:grid; }
+.cap-media{
+  position:relative;
+  min-height: 220px;
+  display:grid;
+  place-items:center;
+}
+.cap-water{
+  position:absolute;
+  inset:auto 0 0 0;
+  text-align:center;
+  font-size: 140px;
+  font-weight: 800;
+  letter-spacing: -0.06em;
+  color: rgba(255,255,255,.06);
+  line-height: 1;
+  pointer-events:none;
+}
+.cap-sticker{
+  width: 120px; height: 120px;
+  border-radius: 30px;
+  display:grid; place-items:center;
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.14);
+  transform: rotate(-4deg);
+}
+.cap-sticker img{ width: 56px; height: 56px; opacity:.96; }
+.cap-text h3{ margin:0 0 10px; font-size: 22px; }
+.cap-text p{ margin:0 0 12px; }
+.cap-bullets{
+  margin: 0;
+  padding-left: 18px;
+  color: var(--muted);
+  display:grid;
+  gap: 8px;
+}
+
+@media (max-width: 940px){
+  .cap-panel{ grid-template-columns: 1fr; }
+  .cap-media{ min-height: 180px; }
+  .cap-water{ font-size: 120px; }
+  .cap-stepper{ overflow:auto; -webkit-overflow-scrolling: touch; }
+  .cap-stepper::before{ left: 10px; right: 10px; }
+}
+
+
+/* HOME: LOSSES (paper section) */
+.home-losses{ position:relative; overflow:hidden; }
+.home-losses .section-head{ margin-bottom: 6px; }
+.losses-path{
+  position:absolute;
+  inset: 110px 0 auto 0;
+  pointer-events:none;
+  z-index:0;
+  color: rgba(15,23,42,.34);
+}
+.losses-path svg{ width:100%; height:240px; display:block; }
+.losses-grid{
+  position:relative;
+  z-index:1;
+  margin-top: 22px;
+  display:grid;
+  grid-template-columns: repeat(3, minmax(0,1fr));
+  gap: clamp(14px, 2vw, 22px);
+  align-items:stretch;
+}
+.loss-card{ padding: 18px 18px 16px; }
+.loss-illus{
+  width: 78px; height: 78px;
+  border-radius: 22px;
+  display:grid; place-items:center;
+  background: rgba(255,176,0,.12);
+  border: 1px solid rgba(255,176,0,.22);
+  box-shadow: 0 10px 26px rgba(15,23,42,.10);
+  transform: rotate(-2deg);
+  margin-bottom: 12px;
+}
+.loss-card:nth-child(2) .loss-illus{ transform: rotate(2deg); background: rgba(37,99,235,.10); border-color: rgba(37,99,235,.20); }
+.loss-card:nth-child(3) .loss-illus{ transform: rotate(-1deg); background: rgba(16,185,129,.10); border-color: rgba(16,185,129,.20); }
+.loss-illus img{ width: 34px; height: 34px; opacity:.95; }
+.loss-card h3{ margin: 0 0 8px; font-size: 18px; line-height:1.15; }
+.loss-card p{ margin:0 0 10px; }
+.home-losses__actions{
+  margin-top: 18px;
+  display:flex;
+  flex-wrap:wrap;
+  gap: 12px;
+  align-items:center;
+}
+
+@media (max-width: 980px){
+  .losses-grid{ grid-template-columns: 1fr; }
+  .losses-path{ display:none; }
+  .home-losses__actions{ gap: 10px; }
+}
+
+/* HOME: PRICING (3 plans) */
+.pricing-free{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap: 14px;
+}
+.pricing-free p{ margin:0; max-width: 72ch; }
+@media (max-width: 820px){
+  .pricing-free{ flex-direction:column; align-items:flex-start; }
+}
+
+.plans-grid{
+  margin-top: 18px;
+  display:grid;
+  grid-template-columns: repeat(3, minmax(0,1fr));
+  gap: clamp(14px, 2vw, 18px);
+  align-items:stretch;
+}
+.plan-card{ padding: 18px; position:relative; }
+.plan-card--best{ transform: translateY(-2px); }
+.plan-head{ margin-bottom: 12px; }
+.plan-title{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+.plan-title h3{ margin:0; font-size: 20px; line-height:1.1; }
+.plan-badge, .plan-tag{
+  font-size: 12px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.18);
+  background: rgba(255,255,255,.04);
+  color: var(--text);
+  white-space:nowrap;
+}
+.plan-tag{
+  border-color: rgba(255,176,0,.55);
+  background: rgba(255,176,0,.16);
+}
+.plan-features{
+  margin: 0;
+  padding: 0;
+  list-style:none;
+  display:grid;
+  gap: 8px;
+  color: var(--muted);
+}
+.plan-features li{
+  position:relative;
+  padding-left: 18px;
+}
+.plan-features li::before{
+  content:"";
+  position:absolute;
+  left:0; top: .48em;
+  width: 9px; height: 9px;
+  border-radius: 2px;
+  background: rgba(255,176,0,.70);
+}
+.plan-card--best .plan-features li::before{ background: rgba(255,176,0,.85); }
+
+.plan-more{
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255,255,255,.10);
+}
+.section-paper .plan-more{ border-top-color: rgba(15,23,42,.10); }
+.plan-more summary{
+  cursor:pointer;
+  font-weight: 700;
+  color: var(--text);
+}
+.plan-more summary::marker{ color: rgba(255,176,0,.85); }
+.plan-more .mini-list{ margin-top: 10px; }
+.plan-foot{
+  margin-top: 14px;
+  display:grid;
+  gap: 10px;
+}
+
+.pricing-note{ margin-top: 12px; }
+
+/* Compare: collapsible */
+.compare-details{
+  margin-top: 14px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,.03);
+  overflow:hidden;
+}
+.compare-details summary{
+  cursor:pointer;
+  font-weight: 800;
+  padding: 14px 16px;
+  list-style:none;
+}
+.compare-details summary::-webkit-details-marker{ display:none; }
+.compare-details summary::after{
+  content:"▾";
+  float:right;
+  opacity:.75;
+  transition: transform .15s ease;
+}
+.compare-details[open] summary::after{ transform: rotate(180deg); }
+.compare-details .compare-wrap{ margin: 0; border: 0; border-radius: 0; }
+
+@media (max-width: 980px){
+  .plans-grid{ grid-template-columns: 1fr; }
+  .plan-card--best{ transform:none; }
+}
+
+
+
+/* ================================
+   vXX — Preload all sections (no deferred render on scroll)
+   Why: on fast scroll, content-visibility:auto can feel like blocks "load in" and cause jank.
+   Apply by adding class "preload-all" to <html>.
+   ================================ */
+@supports (content-visibility: auto){
+  html.preload-all .section,
+  html.preload-all .page-home .section,
+  html.preload-all .page-home .home-outline,
+  html.preload-all .page-home .home-objections,
+  html.preload-all .page-home .home-compare,
+  html.preload-all .page-home .home-cases,
+  html.preload-all .page-home .site-footer{
+    content-visibility: visible !important;
+    contain-intrinsic-size: auto !important;
+  }
+}

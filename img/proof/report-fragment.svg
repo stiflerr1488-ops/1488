@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700">
+  <defs>
+    <style>
+      .bg{fill:#0b0d12}
+      .card{fill:#111726;stroke:#26324a;stroke-width:2}
+      .muted{fill:#9aa7bf;font-family:system-ui, -apple-system, Segoe UI, Roboto, Arial; font-size:22px}
+      .text{fill:#e7eefc;font-family:system-ui, -apple-system, Segoe UI, Roboto, Arial; font-size:28px; font-weight:600}
+      .mono{fill:#cfe0ff;font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; font-size:22px}
+      .chip{fill:#162038;stroke:#2a3a5c;stroke-width:2}
+    </style>
+  </defs>
+  <rect class="bg" x="0" y="0" width="1200" height="700"/>
+  <rect class="card" x="70" y="70" width="1060" height="560" rx="22"/>
+  <text class="text" x="110" y="135">Анонимизированный фрагмент отчёта</text>
+  <text class="muted" x="110" y="175">Цикл: 7 дней • Город/ниша скрыты • без реальных цифр</text>
+  <rect class="chip" x="110" y="210" width="320" height="56" rx="14"/>
+  <text class="mono" x="130" y="248">Цель: ↑ действий</text>
+  <rect class="chip" x="450" y="210" width="310" height="56" rx="14"/>
+  <text class="mono" x="470" y="248">Фокус: карточка</text>
+  <rect class="chip" x="780" y="210" width="310" height="56" rx="14"/>
+  <text class="mono" x="800" y="248">След. шаг: отзывы</text>
+
+  <text class="text" x="110" y="320">Что сделали</text>
+  <text class="muted" x="110" y="360">• Переписали оффер в описании и услугах</text>
+  <text class="muted" x="110" y="395">• Вычистили дубликаты / категории / атрибуты</text>
+  <text class="muted" x="110" y="430">• Переупаковали фото: обложка → процесс → результат</text>
+
+  <text class="text" x="640" y="320">Что изменилось</text>
+  <text class="muted" x="640" y="360">Открытия → Действия → Конверсии</text>
+  <rect class="chip" x="640" y="385" width="430" height="36" rx="10"/>
+  <rect class="chip" x="640" y="435" width="380" height="36" rx="10"/>
+  <rect class="chip" x="640" y="485" width="460" height="36" rx="10"/>
+
+  <text class="text" x="110" y="535">Комментарий</text>
+  <text class="muted" x="110" y="575">Почему это сработало: убрали «шум» и сделали путь к действию очевидным.</text>
+</svg>

@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="NP.Maps">
+  <defs>
+    <linearGradient id="a" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffb000"/>
+      <stop offset="1" stop-color="#ffd35a"/>
+    </linearGradient>
+    <filter id="s" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="10" stdDeviation="18" flood-color="#000" flood-opacity=".35"/>
+    </filter>
+  </defs>
+  <!-- background -->
+  <rect x="24" y="24" width="464" height="464" rx="110" fill="#0b0c10"/>
+  <!-- pin -->
+  <g filter="url(#s)">
+    <path d="M256 114c-63.3 0-114.6 51.3-114.6 114.6 0 86.8 104.3 185.8 110.2 191.3a6.7 6.7 0 0 0 8.8 0c5.9-5.5 110.2-104.5 110.2-191.3C370.6 165.3 319.3 114 256 114Z" fill="url(#a)"/>
+    <circle cx="256" cy="229" r="46" fill="#0b0c10" opacity=".92"/>
+  </g>
+  <!-- NP mark -->
+  <g fill="#ffffff" opacity=".92">
+    <path d="M188 356v-78h18l39 51v-51h18v78h-18l-39-51v51z"/>
+    <path d="M300 356v-78h34c22 0 36 12 36 31 0 19-14 31-36 31h-16v16zm18-33h14c11 0 18-6 18-14s-7-14-18-14h-14z"/>
+  </g>
+</svg>

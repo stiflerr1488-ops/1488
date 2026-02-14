@@ -1,0 +1,46 @@
+<!doctype html>
+<html class="preload-all" lang="ru">
+<head>
+  <script>document.documentElement.classList.add("is-loading");</script>
+  <style>
+/* Critical loader: shows instantly, prevents "фон → потом UI" */
+#appLoader{position:fixed;inset:0;display:grid;place-items:center;background:#0b0c10;z-index:9999;opacity:1;visibility:visible;transition:opacity .22s ease}
+#appLoader .app-loader__inner{display:grid;place-items:center;gap:12px;padding:28px 22px}
+#appLoader .app-loader__logo{display:grid;place-items:center;padding:16px 18px;border-radius:18px;background:rgba(255,255,255,.06);box-shadow:0 18px 60px rgba(0,0,0,.45)}
+#appLoader img{display:block;height:36px;width:auto}
+#appLoader .app-loader__dots{display:flex;gap:8px;opacity:.75}
+#appLoader .app-loader__dots span{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.75);animation:npDot 1s infinite}
+#appLoader .app-loader__dots span:nth-child(2){animation-delay:.14s}
+#appLoader .app-loader__dots span:nth-child(3){animation-delay:.28s}
+@keyframes npDot{0%,80%,100%{transform:translateY(0);opacity:.45}40%{transform:translateY(-6px);opacity:1}}
+@media (prefers-reduced-motion: reduce){#appLoader .app-loader__dots span{animation:none}}
+/* Light theme */
+html[data-theme="light"] #appLoader{background:#f6f7fb}
+html[data-theme="light"] #appLoader img{filter:invert(1)}
+html[data-theme="light"] #appLoader .app-loader__logo{background:rgba(0,0,0,.06);box-shadow:0 18px 60px rgba(0,0,0,.18)}
+html[data-theme="light"] #appLoader .app-loader__dots span{background:rgba(0,0,0,.55)}
+/* Hide when ready */
+html:not(.is-loading) #appLoader{opacity:0;pointer-events:none}
+html.is-loading body{overflow:hidden}
+html.is-loading body > :not(#appLoader){opacity:0;pointer-events:none}
+</style>
+
+  <meta charset="utf-8">
+  <meta http-equiv="refresh" content="0; url=result.html">
+  <meta name="robots" content="noindex">
+  <link rel="canonical" href="result.html">
+  <title>Результат — NP.Maps</title>
+</head>
+<body>
+<div class="app-loader" id="appLoader" role="status" aria-label="Загрузка">
+  <div class="app-loader__inner">
+    <div class="app-loader__logo">
+      <img alt="NP.Maps" decoding="async" fetchpriority="high" height="36" loading="eager" src="img/icons/np-logo-light.webp" width="89"/>
+    </div>
+    <div class="app-loader__dots" aria-hidden="true"><span></span><span></span><span></span></div>
+  </div>
+</div>
+
+  <p>Страница переехала: <a href="result.html">Результат и отчётность</a>.</p>
+</body>
+</html>
