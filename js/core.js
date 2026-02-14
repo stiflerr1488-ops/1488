@@ -155,8 +155,7 @@
     if (lead.recommendation) lines.push("Рекомендация: " + lead.recommendation);
     if (lead.city) lines.push("Город: " + lead.city);
     if (lead.points) lines.push("Точек: " + lead.points);
-    if (lead.goal) lines.push("Цель: " + lead.goal);
-    if (lead.topic) lines.push("Ниша: " + lead.topic);
+    if (lead.comment) lines.push("Комментарий: " + lead.comment);
     if (lead.name) lines.push("Имя: " + lead.name);
     if (lead.contact) lines.push("Контакт: " + lead.contact);
     return lines.join("\n");
@@ -224,6 +223,58 @@
       track("theme_toggle", { theme: next });
     });
   })();
+
+
+  // =========================
+  // Conditional contact field (conversion friction reducer)
+  // 
+  // Pattern supported:
+  // - input[name="contact"]
+  // - input[name="allow_tg"] (checkbox)
+  // 
+  // Behavior:
+  // - allow_tg checked  -> contact is optional + hidden (less noise)
+  // - allow_tg unchecked -> contact is required + visible
+  // =========================
+  const wireConditionalContact = (form) => {
+    const allow = qs('input[name="allow_tg"]', form);
+    const contact = qs('input[name="contact"]', form);
+    if (!allow || !contact) return;
+
+    // Wrapper: ONLY hide a dedicated wrapper (label/field). Never hide a whole form section.
+    const wrap = contact.closest('label') || contact.closest('.field') || contact.closest('[data-contact-wrap]');
+    if (!wrap) return;
+
+    const apply = () => {
+      const tgOk = !!allow.checked;
+      // If Telegram is ok -> hide contact block
+      try { wrap.hidden = tgOk; } catch (_) {}
+      try { contact.required = !tgOk; } catch (_) {}
+
+      // Helpful microcopy (optional)
+      const hint = qs('[data-contact-hint]', form);
+      if (hint) {
+        hint.textContent = tgOk
+          ? "Ответ — в Telegram (если нужно, уточню детали)."
+          : "Оставьте телефон или email — пришлю разбор туда.";
+      }
+
+      // Update label text if it exists
+      const labelText = wrap.querySelector('span');
+      if (labelText) {
+        labelText.textContent = tgOk ? "Контакт для ответа" : "Телефон или email (обязательно)";
+      }
+    };
+
+    allow.addEventListener('change', () => {
+      apply();
+      if (!allow.checked) {
+        try { contact.focus(); } catch (_) {}
+      }
+    });
+
+    apply();
+  };
 
 
   // =========================
@@ -459,6 +510,9 @@
     });
 
     forms.forEach((form) => {
+      // Reduce visible fields: hide contact unless Telegram is NOT ok
+      try { wireConditionalContact(form); } catch (_) {}
+
       form.addEventListener("submit", async (e) => {
         e.preventDefault();
 
@@ -469,6 +523,15 @@
           try { card.focus(); } catch (_) {}
           return;
         }
+
+        // Let native constraint validation handle conditional required fields
+        try {
+          if (!form.checkValidity()) {
+            form.reportValidity();
+            showStatus(form, "Проверьте поля формы.", false);
+            return;
+          }
+        } catch (_) {}
 
         showStatus(form, "Отправляю…", true);
 

@@ -68,7 +68,7 @@ html.is-loading body > :not(#appLoader){opacity:0;pointer-events:none}
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 
-<link href="css/styles.css?v=109" rel="stylesheet"/>
+<link href="css/styles.css?v=111" rel="stylesheet"/>
 <link href="sitemap.xml" rel="sitemap" type="application/xml"/>
 <link href="https://mc.yandex.ru" rel="preconnect"/>
 <link href="//mc.yandex.ru" rel="dns-prefetch"/>
@@ -266,8 +266,8 @@ html.is-loading body > :not(#appLoader){opacity:0;pointer-events:none}
 <div class="hero-head">
 <h1>Форматы работы и усиления</h1>
 <p class="hero-kicker">Разбор • Формат • Ведение</p>
-<p class="lead">Сначала — бесплатный разбор. Потом выбираем формат. Я беру на себя карточку, отзывы и рекламу — чтобы вы не держали в голове, что править и в каком порядке.</p>
-<p class="muted">Делаю только то, что влияет на выбор и видно в метриках карточки: открытия, звонки, маршруты, записи.</p>
+<p class="lead">Сначала — бесплатный разбор по карточке. Потом — честная рекомендация формата: разовый «Старт» или системный «Рост».</p>
+<p class="muted">Работаю только по тому, что видно в метриках карточки: открытия → действия (звонки/маршруты/записи) → конверсия.</p>
 <div class="hero-actions">
 <a class="btn btn-primary" data-track="cta_free_hero" href="#cta">Получить разбор</a>
 <a class="btn btn-outline" data-track="cta_cases_hero" href="result.html">Смотреть результат</a>
@@ -290,22 +290,48 @@ html.is-loading body > :not(#appLoader){opacity:0;pointer-events:none}
 </div>
 </div>
 </div>
-</section><section class="section pricing" id="pricing">
+</section>
+
+<!-- TL;DR: чтобы страницы не читали как простыню -->
+<section class="section" id="tldr">
+  <div class="container">
+    <div class="card tldr-card">
+      <div class="tldr-top">
+        <div>
+          <p class="tldr-title">Если читать 30 секунд</p>
+          <p class="tldr-note">Разбор бесплатно: 3–7 правок + первый шаг на 7 дней. Дальше — разовый «Старт» (быстро наводим порядок) или «Рост» (/мес: отзывы, контент, контроль).</p>
+        </div>
+        <div class="tldr-actions" aria-label="Быстрые действия">
+          <a class="btn btn-primary" data-track="tldr_free" href="#cta">Получить разбор</a>
+          <a class="btn btn-outline" data-track="tldr_tariffs" href="#tariffs">К форматам</a>
+          <a class="btn btn-outline" data-track="tldr_examples" href="result.html#cases">Примеры</a>
+        </div>
+      </div>
+      <div class="tldr-grid" role="list">
+        <div class="tldr-item" role="listitem"><strong>Разбор (0 ₽)</strong><span class="muted">3–7 правок и первый шаг на 7 дней. Чтобы понять, что чинить первым.</span></div>
+        <div class="tldr-item" role="listitem"><strong>Старт (разово)</strong><span class="muted">Фундамент карточки + витрина + регламент ответов. Быстро убираем «хаос».</span></div>
+        <div class="tldr-item" role="listitem"><strong>Рост (/мес)</strong><span class="muted">Отзывы/ответы/контент + контроль в циклах. Устойчивый рост без «качелей».</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section pricing" id="pricing">
 <div class="container">
 <div class="bundle-head">
 <h2>Понимаете, за что платите — и что будет на выходе</h2>
-<p class="muted">Сначала — короткий разбор. Потом — предлагаю формат и стоимость. Так честнее и точнее.</p>
+<p class="muted">Сначала — разбор. Потом — формат и цена. Без покупки «вслепую» и без обещаний «магических заявок».</p>
 </div>
 <div class="bundle-subhead" id="tariffs">
 <h3>3 формата работы</h3>
-<p class="muted">Начать можно с разбора: вы сразу поймёте, где ломается выбор. Дальше — либо разовая работа «Старт», либо ежемесячное сопровождение.</p>
+<p class="muted">Разбор показывает, где теряется выбор. Дальше — либо разовая «сборка» карточки, либо системное ведение.</p>
 </div>
 <div aria-label="Сравнение форматов" class="compare-mini compare-mini--tariffs">
 <p class="compare-mini__title"><strong>Сравнение 3 форматов</strong> <span>за 15 секунд</span></p>
 <div class="compare-grid">
-<div class="compare-row"><span class="compare-k">Разбор (0 ₽)</span><span class="compare-v">15–20 минут → 3–7 правок + план на 30 дней. Чтобы понять, что чинить первым.</span></div>
-<div class="compare-row"><span class="compare-k">Старт (разово)</span><span class="compare-v">Фундамент карточки + витрина + регламент ответов. Быстро убираем «хаос» и делаем понятно за 10 секунд.</span></div>
-<div class="compare-row"><span class="compare-k">Рост (/мес)</span><span class="compare-v">Отзывы, ответы, контент и контроль в циклах. Для устойчивого роста без «качелей».</span></div>
+<div class="compare-row"><span class="compare-k">Разбор (0 ₽)</span><span class="compare-v">3–7 правок + первый шаг на 7 дней. Понимаете, что чинить первым.</span></div>
+<div class="compare-row"><span class="compare-k">Старт (разово)</span><span class="compare-v">Карточка «понятна за 10 секунд»: витрина, фото, тексты, правила ответов.</span></div>
+<div class="compare-row"><span class="compare-k">Рост (/мес)</span><span class="compare-v">Доверие и контроль: отзывы/ответы/контент + отчётность в циклах.</span></div>
 </div>
 </div>
 <div class="tariffs-grid bundle-grid">
@@ -317,14 +343,23 @@ html.is-loading body > :not(#appLoader){opacity:0;pointer-events:none}
 <h3>Разбор</h3>
 <div aria-label="Стоимость" class="price-block">
 <div class="price">0 ₽ <small>бесплатно</small></div>
-<div class="price-meta">15–20 минут • 3–7 правок + план на 30 дней</div>
+<div class="price-meta">15–20 минут • 3–7 правок + первый шаг</div>
 </div>
-<p class="muted">15–20 минут: карточка + конкуренты + список правок с приоритетом.</p>
-<ul>
-<li>где ломается выбор (первый экран / фото / отзывы / шаг к действию)</li>
-<li>3–7 правок с максимальным эффектом на доверие и конверсию</li>
-<li>план на 30 дней: что правим первым шагом</li>
+<ul class="mini-list">
+<li><strong>Смотрю:</strong> карточку + выдачу + 2–5 конкурентов рядом.</li>
+<li><strong>На выходе:</strong> 3–7 правок с приоритетом + план на 30 дней.</li>
+<li><strong>Первый шаг:</strong> что сделать за 7 дней, чтобы пошли действия.</li>
 </ul>
+<details class="fold-item" style="margin-top:10px;">
+  <summary class="fold-summary">Что нужно от вас (1 минуту)</summary>
+  <div class="fold-content">
+    <ul class="mini-list">
+      <li>Ссылка на карточку (или «название + адрес»).</li>
+      <li>Город/район и сколько точек (если сеть).</li>
+      <li>Коротко: «что болит» (если есть) — 1 строкой.</li>
+    </ul>
+  </div>
+</details>
 <div class="tariff-actions">
 <a class="btn btn-primary btn-block" data-track="tariff_free" href="#cta">Получить разбор</a>
 </div>
@@ -339,13 +374,23 @@ html.is-loading body > :not(#appLoader){opacity:0;pointer-events:none}
 <div class="price">от 25 000 ₽ <small>разово</small></div>
 <div class="price-meta">1 точка • фундамент + витрина + регламент ответов</div>
 </div>
-<p class="muted">Делаем карточку понятной и конкурентной: фундамент + витрина + правила.</p>
-<ul>
-<li>категории/атрибуты/контакты/график — без дыр</li>
-<li>описание, услуги, структура — «что вы делаете» за 5 секунд</li>
-<li>регламент ответов (позитив/негатив/вопросы)</li>
-<li>первые правки по контенту (что снять/что добавить)</li>
+<ul class="mini-list">
+  <li><strong>Цель:</strong> убрать «хаос» и сделать карточку понятной за 10 секунд.</li>
+  <li><strong>Срок:</strong> обычно 7–14 дней на 1 точку (по объёму работ).</li>
+  <li><strong>На выходе:</strong> витрина + фото по структуре + тексты + правила ответов.</li>
 </ul>
+<details class="fold-item" style="margin-top:10px;">
+  <summary class="fold-summary">Что входит (коротко)</summary>
+  <div class="fold-content">
+    <ul class="mini-list">
+      <li>категории/атрибуты/контакты/график — без дыр</li>
+      <li>описание и услуги: «кто вы / что делаете / как записаться»</li>
+      <li>структура фото: вход → процесс → результат → команда</li>
+      <li>регламент ответов: позитив/негатив/вопросы</li>
+      <li>первые правки по контенту: что снять/что добавить</li>
+    </ul>
+  </div>
+</details>
 <div class="tariff-actions">
 <a class="btn btn-primary btn-block" data-tariff="poryadok" data-track="tariff_order" href="#cta">Обсудить формат</a>
 </div>
@@ -360,30 +405,42 @@ html.is-loading body > :not(#appLoader){opacity:0;pointer-events:none}
 <div class="price">от 35 000 ₽ <small>/мес</small></div>
 <div class="price-meta">1 точка • минимум 2 месяца • отчёт и план в каждом цикле</div>
 </div>
-<p class="muted">Система, которая держит доверие и конверсию: отзывы, ответы, контент, контроль.</p>
-<ul>
-<li>стратегия отзывов + материалы для команды</li>
-<li>контроль качества ответов и скорости реакции</li>
-<li>контент‑план для карточки (фото/видео/кейсы)</li>
-<li>отчёт: сделано → изменилось → план</li>
+<ul class="mini-list">
+  <li><strong>Цель:</strong> устойчивый рост за счёт доверия и контроля.</li>
+  <li><strong>Ритм:</strong> цикл 7–14 дней → правка → замер → вывод.</li>
+  <li><strong>На выходе:</strong> отчёт «сделано → изменилось → план» в каждом цикле.</li>
 </ul>
-<p class="muted"><a class="link-more" data-track="monthly_more" href="#monthly">Как устроено ведение →</a></p>
+<details class="fold-item" style="margin-top:10px;">
+  <summary class="fold-summary">Что входит (коротко)</summary>
+  <div class="fold-content">
+    <ul class="mini-list">
+      <li>система отзывов + материалы для команды (без накруток)</li>
+      <li>контроль качества ответов и скорости реакции</li>
+      <li>контент‑план карточки (фото/видео/кейсы) + контроль актуальности</li>
+      <li>сравнение с конкурентами рядом и корректировка приоритетов</li>
+    </ul>
+    <p class="muted small" style="margin-top:8px;"><a class="link-more" data-track="monthly_more" href="#monthly">Как устроено ведение →</a></p>
+  </div>
+</details>
 <div class="tariff-actions">
 <a class="btn btn-primary btn-block" data-tariff="support" data-track="tariff_support" href="#cta">Обсудить сопровождение</a>
 </div>
 <p class="tag">Подходит: «хочу устойчивый рост без качелей»</p>
 </article>
-<article class="card tariff-standards col-12">
-<h3>Как это выглядит по‑взрослому</h3>
-<p class="muted">Без накрутки, без «пачек одинаковых отзывов», без схем, которые потом прилетают банами. Мы строим доверие так, чтобы оно держалось.</p>
-<ul class="standards-list">
-<li>сначала диагноз → потом план → потом действия</li>
-<li>1 гипотеза за цикл → 7+ дней на данные → вывод</li>
-<li>отчёт: что сделали / что поменялось / что делаем дальше</li>
-</ul>
-</article>
-<article class="card addons col-12" id="addons">
-<h3>Опции (когда нужно ускорить)</h3>
+<details class="card tariff-standards col-12">
+  <summary class="faq-summary">Принципы работы (без накруток и «магии»)</summary>
+  <div class="faq-content">
+    <ul class="mini-list">
+      <li><strong>Сначала диагноз → потом план → потом действия.</strong> Не продаю «пакет», пока не вижу картину.</li>
+      <li><strong>1 гипотеза за цикл.</strong> Делаем правку и даём данным 7+ дней, чтобы не гадать.</li>
+      <li><strong>Отчёт по делу.</strong> «Что сделали → что изменилось → что дальше» (1 страница).</li>
+      <li><strong>Без риска карточки.</strong> Никаких фейк‑отзывов и схем, из-за которых прилетают блокировки.</li>
+    </ul>
+  </div>
+</details>
+<details class="card addons col-12" id="addons">
+<summary class="faq-summary">Опции (когда нужно ускорить)</summary>
+<div class="faq-content">
 <div class="addons-grid">
 <div class="addon">
 <h4>Приоритет</h4>
@@ -402,9 +459,45 @@ html.is-loading body > :not(#appLoader){opacity:0;pointer-events:none}
 <p class="muted">Делаю только в Санкт‑Петербурге (если актуально).</p>
 </div>
 </div>
-</article>
 </div>
-<p class="pricing-note"><strong>Цены — ориентиры.</strong> Точную стоимость и формат называю после бесплатного разбора (потому что города, конкуренция и исходное состояние сильно отличаются). Для сети/нескольких точек считаю отдельно; рекламный бюджет всегда оплачивается отдельно.</p>
+</details>
+<details class="card col-12" id="quick-faq">
+  <summary class="faq-summary">Частые вопросы (за 30 секунд)</summary>
+  <div class="faq-content">
+    <div class="fit-grid">
+      <details class="card">
+        <summary class="faq-summary">Будет ли договор / счёт?</summary>
+        <div class="faq-content">
+          <p class="muted">Да. Работаем по оферте на сайте или по договору (если нужно юрлицо). Счёт/акт — без проблем.</p>
+        </div>
+      </details>
+      <details class="card">
+        <summary class="faq-summary">Можно без Telegram?</summary>
+        <div class="faq-content">
+          <p class="muted">Да. В форме есть режим «телефон/email». Я отвечу туда.</p>
+        </div>
+      </details>
+      <details class="card">
+        <summary class="faq-summary">Что будет на выходе?</summary>
+        <div class="faq-content">
+          <ul class="mini-list">
+            <li>список правок с приоритетом (что даёт быстрый эффект)</li>
+            <li>план на 7–30 дней (что делать по порядку)</li>
+            <li>по ведению — отчёт и план в каждом цикле</li>
+          </ul>
+        </div>
+      </details>
+      <details class="card">
+        <summary class="faq-summary">Когда ждать эффект?</summary>
+        <div class="faq-content">
+          <p class="muted">Быстрые правки карточки часто дают сдвиг за 7–14 дней. Устойчивый рост — это 2–3 цикла: правка → замер → вывод.</p>
+        </div>
+      </details>
+    </div>
+  </div>
+</details>
+</div>
+<p class="pricing-note"><strong>Цены — ориентиры.</strong> Точный формат/стоимость называю после разбора. Для сети считаю отдельно; рекламный бюджет всегда отдельной строкой.</p>
 </div>
 </section>
 <section class="section" id="terms">
@@ -625,7 +718,7 @@ html.is-loading body > :not(#appLoader){opacity:0;pointer-events:none}
 <div class="monthly-cta card">
 <h3>Нужен контроль под ключ?</h3>
 <p class="muted">Напишите «Ведение» — скажу, что проверить в вашей карточке в первую очередь и как начнём.</p>
-<a class="btn btn-outline" data-track="monthly_to_pricing" href="#monthly">Что входит в сопровождение →</a>
+<a class="btn btn-outline" data-track="monthly_to_cta" href="#cta">Обсудить ведение →</a>
 <p class="muted small">Можно без звонков: достаточно города/ниши и ссылки на карточку (если есть).</p>
 </div>
 </div>
@@ -788,14 +881,15 @@ html.is-loading body > :not(#appLoader){opacity:0;pointer-events:none}
 <span>Ссылка на карточку или название</span>
 <input autocomplete="url" enterkeyhint="next" id="tgCardLite" inputmode="url" name="card" placeholder="Ссылка на Яндекс/2ГИС/Google или “Название, адрес”" required="" type="text"/>
 </label>
-<label>
-<span>Контакт для ответа (если Telegram нельзя)</span>
-<input autocomplete="tel" enterkeyhint="done" id="tgContact" inputmode="text" name="contact" placeholder="Телефон / email / @telegram — если ответ не в Telegram" type="text"/>
-</label>
 <label class="check">
 <input checked="" id="tgAllowTg" name="allow_tg" type="checkbox"/>
 <span>Можно ответить в Telegram (если удобно)</span>
 </label>
+<label data-contact-wrap>
+  <span>Телефон или email (обязательно)</span>
+  <input autocomplete="tel" enterkeyhint="done" id="tgContact" inputmode="text" name="contact" placeholder="Телефон или email" type="text"/>
+</label>
+<p class="form-hint" data-contact-hint>Ответ — в Telegram (если нужно, уточню детали).</p>
 <div class="cta-form__actions">
 <button class="btn btn-primary btn-block" data-placement="cta" data-tg-send="1" data-track="tg_submit_cta" type="submit">Получить 3–5 точек роста</button>
 <button class="btn btn-outline btn-block" data-copy-lead="1" data-placement="cta" data-track="lead_copy_cta" type="button">Скопировать заявку</button>
@@ -821,7 +915,7 @@ html.is-loading body > :not(#appLoader){opacity:0;pointer-events:none}
 </div>
 </div>
 </footer>
-<script defer="" src="js/core.js?v=109"></script>
+<script defer="" src="js/core.js?v=111"></script>
 <script defer="" src="js/doc.js?v=109"></script>
 <div class="chat-compose chat-dock" id="ctaDock">
 <form autocomplete="on" class="chat-form" data-placement="chat">
@@ -862,19 +956,9 @@ html.is-loading body > :not(#appLoader){opacity:0;pointer-events:none}
 <span class="field__label">Город/район</span>
 <input name="city" placeholder="Например: Москва, СВАО" type="text"/>
 </label>
-<label class="field">
-<span class="field__label">Цель</span>
-<select name="goal">
-<option selected="" value="">—</option>
-<option>Больше звонков/заявок</option>
-<option>Убрать негатив и поднять доверие</option>
-<option>Поднять конверсию карточки</option>
-<option>Запустить/прибрать рекламу</option>
-</select>
-</label>
-<label class="field">
-<span class="field__label">Ниша (необязательно)</span>
-<input name="topic" placeholder="Например: стоматология / автосервис" type="text"/>
+<label class="field field--wide">
+<span class="field__label">Коротко о задаче (необязательно)</span>
+<textarea name="comment" placeholder="Например: хотим больше звонков; рейтинг 4.1; отзывов мало" rows="2"></textarea>
 </label>
 </div>
 <p class="muted">Обещание: чек‑лист + 3–5 точек роста и первый шаг.</p>

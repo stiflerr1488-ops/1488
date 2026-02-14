@@ -55,7 +55,7 @@ html.is-loading body > :not(#appLoader){opacity:0;pointer-events:none}
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 
-<link href="css/styles.css?v=109" rel="stylesheet"/>
+<link href="css/styles.css?v=111" rel="stylesheet"/>
 <link href="https://mc.yandex.ru" rel="preconnect"/>
 <link href="//mc.yandex.ru" rel="dns-prefetch"/>
 <script type="application/ld+json">
@@ -245,7 +245,7 @@ html.is-loading body > :not(#appLoader){opacity:0;pointer-events:none}
       }
     })();
   </script>
-<script defer="" src="js/core.js?v=109"></script>
+<script defer="" src="js/core.js?v=111"></script>
 <div class="chat-compose chat-dock" id="ctaDock">
 <form autocomplete="on" class="chat-form" data-placement="chat">
 <div aria-label="Способ связи" class="dock-modes" role="tablist">
@@ -285,19 +285,9 @@ html.is-loading body > :not(#appLoader){opacity:0;pointer-events:none}
 <span class="field__label">Город/район</span>
 <input name="city" placeholder="Например: Москва, СВАО" type="text"/>
 </label>
-<label class="field">
-<span class="field__label">Цель</span>
-<select name="goal">
-<option selected="" value="">—</option>
-<option>Больше звонков/заявок</option>
-<option>Убрать негатив и поднять доверие</option>
-<option>Поднять конверсию карточки</option>
-<option>Запустить/прибрать рекламу</option>
-</select>
-</label>
-<label class="field">
-<span class="field__label">Ниша (необязательно)</span>
-<input name="topic" placeholder="Например: стоматология / автосервис" type="text"/>
+<label class="field field--wide">
+<span class="field__label">Коротко о задаче (необязательно)</span>
+<textarea name="comment" placeholder="Например: хотим больше звонков; рейтинг 4.1; отзывов мало" rows="2"></textarea>
 </label>
 </div>
 <p class="muted">Обещание: чек‑лист + 3–5 точек роста и первый шаг.</p>

@@ -69,7 +69,7 @@ html.is-loading body > :not(#appLoader){opacity:0;pointer-events:none}
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 
-<link href="css/styles.css?v=109" rel="stylesheet"/>
+<link href="css/styles.css?v=111" rel="stylesheet"/>
 <link href="sitemap.xml" rel="sitemap" type="application/xml"/>
 <link href="https://mc.yandex.ru" rel="preconnect"/>
 <link href="//mc.yandex.ru" rel="dns-prefetch"/>
@@ -248,17 +248,35 @@ html.is-loading body > :not(#appLoader){opacity:0;pointer-events:none}
 <div class="hero-head">
 <h1>Увеличу звонки и записи из Яндекс.Карт и 2ГИС</h1>
 <p class="hero-kicker">Бесплатно: 3–5 точек роста по вашей карточке — за 24 часа. Нужна только ссылка.</p>
-<p class="lead">Соберу карточку как «мини‑лендинг», выстрою отзывы по регламенту и подключу георекламу только когда она окупается. В ответ — приоритеты правок и план 30/60/90.</p>
+<p class="lead">Сделаю карточку понятной за 10 секунд: витрина услуг/цен, фото по структуре и отзывы по регламенту. Георекламу подключаю только когда она окупается. В ответ — 3–5 правок и план 30/60/90.</p>
 <form class="hero-form" data-form="hero">
   <div class="hero-form__row">
     <input autocomplete="url" enterkeyhint="next" inputmode="url" name="card" placeholder="Ссылка на Яндекс/2ГИС/Google или “Название, адрес”" required type="text"/>
-    <input autocomplete="tel" enterkeyhint="done" inputmode="text" name="contact" placeholder="Контакт (опционально)" type="text"/>
-    <button class="btn btn-primary" data-placement="hero" data-track="tg_submit_hero" type="submit">Получить 3–5 точек роста</button>
-    <a class="btn btn-outline" data-track="cta_pricing_hero" href="#pricing">Форматы и цены</a>
+    <button class="btn btn-primary" data-placement="hero" data-track="tg_submit_hero" type="submit">Получить разбор (3–5 правок)</button>
   </div>
+
+  <div class="hero-form__subactions" aria-label="Дополнительные действия">
+    <a data-track="cta_pricing_hero" href="#pricing">Посмотреть форматы и цены →</a>
+    <small>Без звонков и рассылок. Ответ ≤ 24 часа.</small>
+  </div>
+
+  <div class="hero-form__meta">
+    <label class="check check--compact">
+      <input checked name="allow_tg" type="checkbox"/>
+      <span>Можно ответить в Telegram</span>
+    </label>
+
+    <label class="hero-contact" data-contact-wrap>
+      <span>Телефон или email (обязательно)</span>
+      <input autocomplete="tel" enterkeyhint="done" inputmode="text" name="contact" placeholder="Телефон или email" type="text"/>
+    </label>
+
+    <p class="muted small" data-contact-hint>Ответ — в Telegram. Если Telegram нельзя — снимите галочку и укажите телефон/email.</p>
+  </div>
+
   <div class="form-status" aria-live="polite"></div>
-  <p class="muted small">Не делаю накрутки. Если Telegram нельзя — просто оставьте телефон/email, отвечу туда.</p>
 </form>
+<p class="muted small" style="margin-top:10px;">Схема: <strong>1) ссылка</strong> → <strong>2) 3–5 точек роста</strong> → <strong>3) первый шаг на 7 дней</strong>.</p>
 <ul aria-label="Что получите в ответ" class="hero-bullets">
 <li><strong>3–5 точек роста</strong> по карточке + приоритеты на 7 дней</li>
 <li><strong>План 30/60/90</strong> — что делать первым и что можно отложить</li>
@@ -877,14 +895,15 @@ html.is-loading body > :not(#appLoader){opacity:0;pointer-events:none}
 <span>Ссылка на карточку или название</span>
 <input autocomplete="url" enterkeyhint="next" id="tgCardLite" inputmode="url" name="card" placeholder="Ссылка на Яндекс/2ГИС/Google или “Название, адрес”" required="" type="text"/>
 </label>
-<label>
-<span>Контакт для ответа (если Telegram нельзя)</span>
-<input autocomplete="tel" enterkeyhint="done" id="tgContact" inputmode="text" name="contact" placeholder="Телефон / email / @telegram — если ответ не в Telegram" type="text"/>
-</label>
 <label class="check">
 <input checked="" id="tgAllowTg" name="allow_tg" type="checkbox"/>
 <span>Можно ответить в Telegram (если удобно)</span>
 </label>
+<label data-contact-wrap>
+  <span>Телефон или email (обязательно)</span>
+  <input autocomplete="tel" enterkeyhint="done" id="tgContact" inputmode="text" name="contact" placeholder="Телефон или email" type="text"/>
+</label>
+<p class="form-hint" data-contact-hint>Ответ — в Telegram (если нужно, уточню детали).</p>
 <div class="cta-form__actions">
 <button class="btn btn-primary btn-block" data-placement="cta" data-tg-send="1" data-track="tg_submit_cta" type="submit">Получить 3–5 точек роста</button>
 <button class="btn btn-outline btn-block" data-copy-lead="1" data-placement="cta" data-track="lead_copy_cta" type="button">Скопировать заявку</button>
@@ -910,7 +929,7 @@ html.is-loading body > :not(#appLoader){opacity:0;pointer-events:none}
 </div>
 </div>
 </footer>
-<script defer="" src="js/core.js?v=109"></script>
+<script defer="" src="js/core.js?v=111"></script>
 <script defer="" src="js/home.js?v=109"></script>
 <div class="chat-compose chat-dock" id="ctaDock">
 <form autocomplete="on" class="chat-form" data-placement="chat">
@@ -951,19 +970,9 @@ html.is-loading body > :not(#appLoader){opacity:0;pointer-events:none}
 <span class="field__label">Город/район</span>
 <input name="city" placeholder="Например: Москва, СВАО" type="text"/>
 </label>
-<label class="field">
-<span class="field__label">Цель</span>
-<select name="goal">
-<option selected="" value="">—</option>
-<option>Больше звонков/заявок</option>
-<option>Убрать негатив и поднять доверие</option>
-<option>Поднять конверсию карточки</option>
-<option>Запустить/прибрать рекламу</option>
-</select>
-</label>
-<label class="field">
-<span class="field__label">Ниша (необязательно)</span>
-<input name="topic" placeholder="Например: стоматология / автосервис" type="text"/>
+<label class="field field--wide">
+<span class="field__label">Коротко о задаче (необязательно)</span>
+<textarea name="comment" placeholder="Например: хотим больше звонков; рейтинг 4.1; отзывов мало" rows="2"></textarea>
 </label>
 </div>
 <p class="muted">Обещание: чек‑лист + 3–5 точек роста и первый шаг.</p>

@@ -68,7 +68,7 @@ html.is-loading body > :not(#appLoader){opacity:0;pointer-events:none}
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 
-<link href="css/styles.css?v=109" rel="stylesheet"/>
+<link href="css/styles.css?v=111" rel="stylesheet"/>
 <link href="sitemap.xml" rel="sitemap" type="application/xml"/>
 <link href="https://mc.yandex.ru" rel="preconnect"/>
 <link href="//mc.yandex.ru" rel="dns-prefetch"/>
@@ -263,9 +263,13 @@ html.is-loading body > :not(#appLoader){opacity:0;pointer-events:none}
 <li>31–60: доверие (отзывы, ответы, фото, вопросы).</li>
 <li>61–90: закрепляем ритм и масштабируем (контент‑план, отчётность, гипотезы).</li>
 </ul>
-<div class="page-links"><a class="pill-link" href="#plan">Этапы</a>
-<a class="pill-link" href="#pages">Другие разделы</a>
-<a class="pill-link" href="#cta">Получить 3–5 точек роста</a></div>
+<div class="page-links">
+  <a class="pill-link" href="#d30">0–30</a>
+  <a class="pill-link" href="#d60">31–60</a>
+  <a class="pill-link" href="#d90">61–90</a>
+  <a class="pill-link" href="#pages">Другие разделы</a>
+  <a class="pill-link" href="#cta">Получить 3–5 точек роста</a>
+</div>
 <p class="hero-format">Работаем под ключ или вместе с вашей командой — без накрутки.</p>
 <p class="muted">Для разбора достаточно ссылки на карточку (или «название + адрес»).</p>
 </div><div aria-hidden="true" class="hero-visual">
@@ -275,11 +279,38 @@ html.is-loading body > :not(#appLoader){opacity:0;pointer-events:none}
 </div>
 </div>
 </div>
-</section><section class="section plan" id="plan">
+</section>
+
+<!-- TL;DR: этапы в 30 сек -->
+<section class="section" id="tldr">
+  <div class="container">
+    <div class="card tldr-card">
+      <div class="tldr-top">
+        <div>
+          <p class="tldr-title">Если делать по порядку</p>
+          <p class="tldr-note">Сначала убираем «дыры» и хаос, потом наращиваем доверие, затем закрепляем систему и масштабируем.</p>
+        </div>
+        <div class="tldr-actions" aria-label="Переходы по этапам">
+          <a class="btn btn-primary" data-track="tldr_to_cta" href="#cta">Получить разбор</a>
+          <a class="btn btn-outline" href="#d30">0–30</a>
+          <a class="btn btn-outline" href="#d60">31–60</a>
+          <a class="btn btn-outline" href="#d90">61–90</a>
+        </div>
+      </div>
+      <div class="tldr-grid" role="list">
+        <div class="tldr-item" role="listitem"><strong>0–30</strong><span class="muted">Фундамент и витрина: категории, услуги, цены, первый экран, регламент ответов.</span></div>
+        <div class="tldr-item" role="listitem"><strong>31–60</strong><span class="muted">Доверие: отзывы ровным темпом, фото по структуре, закрытие слабых метрик.</span></div>
+        <div class="tldr-item" role="listitem"><strong>61–90</strong><span class="muted">Система: роли, ритм, контент‑план, отчётность и 3–5 гипотез с замером.</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section plan" id="plan">
 <div class="container">
 <div class="section-head"><h2>План 30/60/90: фундамент → доверие → масштаб без хаоса</h2><p class="muted">Это не «поменяем всё сразу». Идём по этапам и меряем эффект — без обещаний клиентов, с фокусом на выбор вас и конверсию карточки.</p></div>
 <div class="plan-grid">
-<article class="card">
+<article class="card" id="d30">
 <h3>0–30 дней: приводим в порядок</h3>
 <ul class="mini-list plan-highlights"><li>Аудит и «точка А» + приоритеты (2–5 конкурентов)</li><li>Упаковка карточки и витрина услуг/цен</li><li>Регламент ответов + старт отзывов/контента</li></ul>
 <details class="fold-item fold-item--plan">
@@ -297,7 +328,7 @@ html.is-loading body > :not(#appLoader){opacity:0;pointer-events:none}
 </details>
 <p class="result">Итог: карточка понятна за 10 секунд, без «дыр» в данных и хаоса.</p>
 </article>
-<article class="card">
+<article class="card" id="d60">
 <h3>31–60 дней: наращиваем доверие</h3>
 <ul class="mini-list plan-highlights"><li>Отзывы по страхам клиентов (ровный темп)</li><li>Контент/фото по структуре: вход → процесс → результат</li><li>Дорабатываем витрину и закрываем слабые метрики</li></ul>
 <details class="fold-item fold-item--plan">
@@ -315,7 +346,7 @@ html.is-loading body > :not(#appLoader){opacity:0;pointer-events:none}
 </details>
 <p class="result">Итог: доверие растёт, а негатив перестаёт ломать конверсию.</p>
 </article>
-<article class="card">
+<article class="card" id="d90">
 <h3>61–90 дней: закрепляем и масштабируем</h3>
 <ul class="mini-list plan-highlights"><li>Ритм и роли: кто/когда отвечает и обновляет</li><li>Отчётность: что сделали → что изменилось → что дальше</li><li>3–5 гипотез улучшений с замером, без хаоса</li></ul>
 <details class="fold-item fold-item--plan">
@@ -363,6 +394,23 @@ html.is-loading body > :not(#appLoader){opacity:0;pointer-events:none}
 </div>
 </section>
 </main>
+<section class="section" id="pages">
+  <div class="container">
+    <div class="section-head">
+      <h2>Другие разделы</h2>
+      <p class="muted">Чтобы не листать: форматы, результат, честные ограничения и ответы на вопросы.</p>
+    </div>
+    <div class="pages-grid">
+      <a class="card page-card" href="pricing.html"><h3>Форматы и цены</h3><p>Что входит, условия, процесс и усиления.</p></a>
+      <a class="card page-card" href="result.html"><h3>Результат</h3><p>Типовые сценарии, метрики и материалы.</p></a>
+      <a class="card page-card" href="honesty.html"><h3>Честно</h3><p>Ожидания, риски и что реально можно обещать.</p></a>
+      <a class="card page-card" href="faq.html"><h3>FAQ</h3><p>Короткие ответы на частые вопросы клиентов.</p></a>
+      <a class="card page-card" href="losses.html"><h3>Потери</h3><p>Где чаще всего утекают звонки и доверие.</p></a>
+      <a class="card page-card" href="about.html"><h3>Обо мне</h3><p>Кто ведёт проект и как работаем.</p></a>
+    </div>
+  </div>
+</section>
+
 <footer class="site-footer">
 <div class="container">
 <p>© 2026 Николай Панин. NP.Maps — геоперфоманс на картах.</p>
@@ -375,7 +423,7 @@ html.is-loading body > :not(#appLoader){opacity:0;pointer-events:none}
 </div>
 </div>
 </footer>
-<script defer="" src="js/core.js?v=109"></script>
+<script defer="" src="js/core.js?v=111"></script>
 <script defer="" src="js/doc.js?v=109"></script>
 <div class="chat-compose chat-dock" id="ctaDock">
 <form autocomplete="on" class="chat-form" data-placement="chat">
@@ -416,19 +464,9 @@ html.is-loading body > :not(#appLoader){opacity:0;pointer-events:none}
 <span class="field__label">Город/район</span>
 <input name="city" placeholder="Например: Москва, СВАО" type="text"/>
 </label>
-<label class="field">
-<span class="field__label">Цель</span>
-<select name="goal">
-<option selected="" value="">—</option>
-<option>Больше звонков/заявок</option>
-<option>Убрать негатив и поднять доверие</option>
-<option>Поднять конверсию карточки</option>
-<option>Запустить/прибрать рекламу</option>
-</select>
-</label>
-<label class="field">
-<span class="field__label">Ниша (необязательно)</span>
-<input name="topic" placeholder="Например: стоматология / автосервис" type="text"/>
+<label class="field field--wide">
+<span class="field__label">Коротко о задаче (необязательно)</span>
+<textarea name="comment" placeholder="Например: хотим больше звонков; рейтинг 4.1; отзывов мало" rows="2"></textarea>
 </label>
 </div>
 <p class="muted">Обещание: чек‑лист + 3–5 точек роста и первый шаг.</p>

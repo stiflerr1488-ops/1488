@@ -68,7 +68,7 @@ html.is-loading body > :not(#appLoader){opacity:0;pointer-events:none}
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 
-<link href="css/styles.css?v=109" rel="stylesheet"/>
+<link href="css/styles.css?v=111" rel="stylesheet"/>
 <link href="sitemap.xml" rel="sitemap" type="application/xml"/>
 <link href="https://mc.yandex.ru" rel="preconnect"/>
 <link href="//mc.yandex.ru" rel="dns-prefetch"/>
@@ -719,6 +719,23 @@ id="faq-report"&gt;
 </div>
 </section>
 </main>
+<section class="section" id="pages">
+  <div class="container">
+    <div class="section-head">
+      <h2>Другие разделы</h2>
+      <p class="muted">Если нужно быстро понять подход и формат работ — вот короткие страницы без воды.</p>
+    </div>
+    <div class="pages-grid">
+      <a class="card page-card" href="index.html"><h3>Главная</h3><p>Оффер и бесплатный разбор.</p></a>
+      <a class="card page-card" href="pricing.html"><h3>Форматы и цены</h3><p>Что входит, условия, процесс и усиления.</p></a>
+      <a class="card page-card" href="result.html"><h3>Результат</h3><p>Сценарии, метрики и материалы.</p></a>
+      <a class="card page-card" href="plan.html"><h3>План 30/60/90</h3><p>Пошаговый порядок работ на 90 дней.</p></a>
+      <a class="card page-card" href="honesty.html"><h3>Честно</h3><p>Ограничения, риски и ожидания без маркетинга.</p></a>
+      <a class="card page-card" href="about.html"><h3>Обо мне</h3><p>Кто ведёт проект и как взаимодействуем.</p></a>
+    </div>
+  </div>
+</section>
+
 <footer class="site-footer">
 <div class="container">
 <p>© 2026 Николай Панин. NP.Maps — геоперфоманс на картах.</p>
@@ -731,7 +748,7 @@ id="faq-report"&gt;
 </div>
 </div>
 </footer>
-<script defer="" src="js/core.js?v=109"></script>
+<script defer="" src="js/core.js?v=111"></script>
 <script defer="" src="js/doc.js?v=109"></script>
 <div class="chat-compose chat-dock" id="ctaDock">
 <form autocomplete="on" class="chat-form" data-placement="chat">
@@ -772,19 +789,9 @@ id="faq-report"&gt;
 <span class="field__label">Город/район</span>
 <input name="city" placeholder="Например: Москва, СВАО" type="text"/>
 </label>
-<label class="field">
-<span class="field__label">Цель</span>
-<select name="goal">
-<option selected="" value="">—</option>
-<option>Больше звонков/заявок</option>
-<option>Убрать негатив и поднять доверие</option>
-<option>Поднять конверсию карточки</option>
-<option>Запустить/прибрать рекламу</option>
-</select>
-</label>
-<label class="field">
-<span class="field__label">Ниша (необязательно)</span>
-<input name="topic" placeholder="Например: стоматология / автосервис" type="text"/>
+<label class="field field--wide">
+<span class="field__label">Коротко о задаче (необязательно)</span>
+<textarea name="comment" placeholder="Например: хотим больше звонков; рейтинг 4.1; отзывов мало" rows="2"></textarea>
 </label>
 </div>
 <p class="muted">Обещание: чек‑лист + 3–5 точек роста и первый шаг.</p>

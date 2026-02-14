@@ -68,7 +68,7 @@ html.is-loading body > :not(#appLoader){opacity:0;pointer-events:none}
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 
-<link href="css/styles.css?v=109" rel="stylesheet"/>
+<link href="css/styles.css?v=111" rel="stylesheet"/>
 <link href="sitemap.xml" rel="sitemap" type="application/xml"/>
 <link href="https://mc.yandex.ru" rel="preconnect"/>
 <link href="//mc.yandex.ru" rel="dns-prefetch"/>
@@ -194,7 +194,33 @@ html.is-loading body > :not(#appLoader){opacity:0;pointer-events:none}
 </div>
 </div>
 </div>
-</section><section class="section" id="numbers">
+</section>
+
+<!-- TL;DR: быстрый просмотр результата -->
+<section class="section" id="tldr">
+  <div class="container">
+    <div class="card tldr-card">
+      <div class="tldr-top">
+        <div>
+          <p class="tldr-title">Если читать 30 секунд</p>
+          <p class="tldr-note">Не рисую «магические цифры». Показываю логику: какие правки дают рост доверия и действий и как это видно в метриках карточки.</p>
+        </div>
+        <div class="tldr-actions" aria-label="Быстрые действия">
+          <a class="btn btn-primary" data-track="tldr_free" href="index.html#cta">Получить разбор</a>
+          <a class="btn btn-outline" data-track="tldr_cases" href="#cases">Сценарии</a>
+          <a class="btn btn-outline" data-track="tldr_report" href="#report">Пример отчёта</a>
+        </div>
+      </div>
+      <div class="tldr-grid" role="list">
+        <div class="tldr-item" role="listitem"><strong>Что правим</strong><span class="muted">Карточку (оффер/витрина/фото), отзывы и ответы, при необходимости — георекламу.</span></div>
+        <div class="tldr-item" role="listitem"><strong>Что измеряем</strong><span class="muted">Показы → открытия → действия: звонки, маршруты, записи (и конверсию по неделям).</span></div>
+        <div class="tldr-item" role="listitem"><strong>Артефакты</strong><span class="muted">Отчёт 1 страница + чек‑лист + регламент ответов (скачать в «Материалах»).</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="numbers">
 <div class="container">
 <div class="section-head">
 <h2>Ожидаемый эффект и структура результата</h2>
@@ -247,7 +273,7 @@ html.is-loading body > :not(#appLoader){opacity:0;pointer-events:none}
 </ul>
 </article>
 </div>
-<details class="fold-item case-more" style="margin-top:14px;">
+<details class="fold-item case-more" id="proof" style="margin-top:14px;">
 <summary class="fold-summary">Показать примеры (скрин отчёта и чек‑лист)</summary>
 <div class="fold-content">
 <div class="case-proof">
@@ -289,7 +315,7 @@ html.is-loading body > :not(#appLoader){opacity:0;pointer-events:none}
 <h2>Типовые сценарии работ (что делаем и что меряем)</h2>
 <p class="muted">Коротко: исходник → действия → что измеряем. Если метрик нет — сначала настроим сбор.</p>
 </div>
-<article class="card case-card">
+<article class="card case-card" id="reviews">
 <div class="case-meta">
 <div>
 <h3>пример 1 — Упаковка карточки (конверсия «просмотр → действие»)</h3>
@@ -587,14 +613,15 @@ html.is-loading body > :not(#appLoader){opacity:0;pointer-events:none}
 <span>Ссылка на карточку или название</span>
 <input autocomplete="url" enterkeyhint="next" id="tgCardLite" inputmode="url" name="card" placeholder="Ссылка на Яндекс/2ГИС/Google или “Название, адрес”" required="" type="text"/>
 </label>
-<label>
-<span>Контакт для ответа (если Telegram нельзя)</span>
-<input autocomplete="tel" enterkeyhint="done" id="tgContact" inputmode="text" name="contact" placeholder="Телефон / email / @telegram — если ответ не в Telegram" type="text"/>
-</label>
 <label class="check">
 <input checked="" id="tgAllowTg" name="allow_tg" type="checkbox"/>
 <span>Можно ответить в Telegram (если удобно)</span>
 </label>
+<label data-contact-wrap>
+  <span>Телефон или email (обязательно)</span>
+  <input autocomplete="tel" enterkeyhint="done" id="tgContact" inputmode="text" name="contact" placeholder="Телефон или email" type="text"/>
+</label>
+<p class="form-hint" data-contact-hint>Ответ — в Telegram (если нужно, уточню детали).</p>
 <div class="cta-form__actions">
 <button class="btn btn-primary btn-block" data-placement="cta" data-tg-send="1" data-track="tg_submit_cta" type="submit">Получить 3–5 точек роста</button>
 <button class="btn btn-outline btn-block" data-copy-lead="1" data-placement="cta" data-track="lead_copy_cta" type="button">Скопировать заявку</button>
@@ -620,7 +647,7 @@ html.is-loading body > :not(#appLoader){opacity:0;pointer-events:none}
 </div>
 </div>
 </footer>
-<script defer="" src="js/core.js?v=109"></script>
+<script defer="" src="js/core.js?v=111"></script>
 <script defer="" src="js/doc.js?v=109"></script>
 <div class="chat-compose chat-dock" id="ctaDock">
 <form autocomplete="on" class="chat-form" data-placement="chat">
@@ -661,19 +688,9 @@ html.is-loading body > :not(#appLoader){opacity:0;pointer-events:none}
 <span class="field__label">Город/район</span>
 <input name="city" placeholder="Например: Москва, СВАО" type="text"/>
 </label>
-<label class="field">
-<span class="field__label">Цель</span>
-<select name="goal">
-<option selected="" value="">—</option>
-<option>Больше звонков/заявок</option>
-<option>Убрать негатив и поднять доверие</option>
-<option>Поднять конверсию карточки</option>
-<option>Запустить/прибрать рекламу</option>
-</select>
-</label>
-<label class="field">
-<span class="field__label">Ниша (необязательно)</span>
-<input name="topic" placeholder="Например: стоматология / автосервис" type="text"/>
+<label class="field field--wide">
+<span class="field__label">Коротко о задаче (необязательно)</span>
+<textarea name="comment" placeholder="Например: хотим больше звонков; рейтинг 4.1; отзывов мало" rows="2"></textarea>
 </label>
 </div>
 <p class="muted">Обещание: чек‑лист + 3–5 точек роста и первый шаг.</p>
