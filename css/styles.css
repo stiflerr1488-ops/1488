@@ -405,8 +405,12 @@ details.mini-accordion > summary::-webkit-details-marker{display:none}
 }
 .cta-form .check input{width:18px;height:18px}
 .cta-form__actions{display:flex; gap:10px; flex-wrap:wrap}
+.cta-alt{margin-top:10px;}
+.cta-alt > summary{cursor:pointer; color:var(--muted); font-size:13px;}
+.cta-alt__body{display:grid; gap:8px; margin-top:8px;}
 .form-hint{color:var(--muted); font-size:13px}
 .form-status{font-weight:800; font-size:14px}
+.form-fallback-link{margin-top:10px;}
 
 
 /* Mini CTA form (secondary pages) */
@@ -2040,6 +2044,7 @@ ul:not(.mini-list) li::before{ content:none !important; } /* kill global custom 
 }
 
 .chat-dock .dock-check input{ width:16px; height:16px; }
+.chat-dock .dock-more__actions{display:grid; gap:8px; margin-top:6px;}
 
 .chat-compose__hint{
   display:flex;
@@ -3520,8 +3525,7 @@ body::before{
 /* Keep all site UI above the background layer */
 body > header,
 body > main,
-body > footer,
-body > .chat-dock{
+body > footer{
   position:relative;
   z-index:1;
 }
