@@ -17,6 +17,11 @@ return [
   'tg_bot_token' => '', // e.g. 123456:ABC-DEF...
   'tg_chat_id' => '',   // e.g. 123456789 or -1001234567890 (channels)
 
+
+  // Optional security: comma-separated allowed origins for browser POSTs
+  // Example: 'https://np-maps.ru,https://www.np-maps.ru'
+  'allowed_origins' => '',
+
   // Common
   'subject' => 'NP.Maps — новая заявка (сайт)',
 

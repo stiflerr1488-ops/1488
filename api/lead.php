@@ -36,6 +36,49 @@ function cfg($key, $default = '') {
   return $default;
 }
 
+function getAllowedOrigins() {
+  $raw = trim((string)cfg('allowed_origins', ''));
+  $out = [];
+
+  if ($raw !== '') {
+    foreach (explode(',', $raw) as $item) {
+      $origin = trim((string)$item);
+      if ($origin !== '') $out[] = $origin;
+    }
+  }
+
+  // Safe defaults for production + local QA
+  if (isset($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST'] !== '') {
+    $host = strtolower(trim((string)$_SERVER['HTTP_HOST']));
+    if ($host !== '') {
+      $out[] = 'https://' . $host;
+      $out[] = 'http://' . $host;
+    }
+  }
+
+  $out[] = 'https://np-maps.ru';
+  $out[] = 'http://localhost';
+  $out[] = 'http://127.0.0.1';
+
+  return array_values(array_unique($out));
+}
+
+function isAllowedOrigin($origin, $allowedOrigins) {
+  $origin = trim((string)$origin);
+  if ($origin === '') return true; // some old clients may not send Origin
+
+  foreach ($allowedOrigins as $allowed) {
+    $allowed = trim((string)$allowed);
+    if ($allowed === '') continue;
+    if ($origin === $allowed) return true;
+    // allow explicit port for localhost-style origins
+    if (strpos($allowed, 'http://localhost') === 0 && strpos($origin, 'http://localhost:') === 0) return true;
+    if (strpos($allowed, 'http://127.0.0.1') === 0 && strpos($origin, 'http://127.0.0.1:') === 0) return true;
+  }
+
+  return false;
+}
+
 $TO = trim((string)cfg('to_email', ''));
 $SUBJECT = trim((string)cfg('subject', 'NP.Maps — новая заявка (сайт)'));
 $LOG_FILE = (string)cfg('log_file', __DIR__ . '/leads.jsonl');
@@ -57,6 +100,29 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
   http_response_code(405);
   echo json_encode(["ok" => false, "error" => "method_not_allowed"]);
   exit;
+}
+
+$allowedOrigins = getAllowedOrigins();
+$origin = isset($_SERVER['HTTP_ORIGIN']) ? trim((string)$_SERVER['HTTP_ORIGIN']) : '';
+$referer = isset($_SERVER['HTTP_REFERER']) ? trim((string)$_SERVER['HTTP_REFERER']) : '';
+
+if (!isAllowedOrigin($origin, $allowedOrigins)) {
+  http_response_code(403);
+  echo json_encode(["ok" => false, "error" => "origin_not_allowed"]);
+  exit;
+}
+
+if ($origin === '' && $referer !== '') {
+  $refererHost = parse_url($referer, PHP_URL_HOST);
+  if ($refererHost) {
+    $refererOriginHttps = 'https://' . $refererHost;
+    $refererOriginHttp = 'http://' . $refererHost;
+    if (!isAllowedOrigin($refererOriginHttps, $allowedOrigins) && !isAllowedOrigin($refererOriginHttp, $allowedOrigins)) {
+      http_response_code(403);
+      echo json_encode(["ok" => false, "error" => "referer_not_allowed"]);
+      exit;
+    }
+  }
 }
 
 $raw = file_get_contents('php://input');
