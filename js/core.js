@@ -1,7 +1,7 @@
 (() => {
   "use strict";
 
-  const ASSET_VER = "106";
+  const ASSET_VER = "111";
   const ASSET_Q = "?v=" + ASSET_VER;
 
   // =========================
@@ -74,6 +74,49 @@
   window.NP.track = track;
 
   // =========================
+  // Hero CTA A/B (copy test)
+  // =========================
+  (() => {
+    const page = (location.pathname || "").split("/").filter(Boolean).pop() || "index.html";
+    if (page !== "index.html") return;
+
+    const btn = document.querySelector('#hero .hero-form button[type="submit"][data-cta-a][data-cta-b]');
+    if (!btn) return;
+
+    const key = "np_hero_cta_variant";
+    let variant = "A";
+    let source = "default";
+    try {
+      const sp = new URLSearchParams(location.search || "");
+      const forced = (sp.get("ab_hero") || "").trim().toLowerCase();
+      if (forced === "a" || forced === "b") {
+        variant = forced.toUpperCase();
+        source = "query";
+        localStorage.setItem(key, variant);
+      } else {
+        const saved = localStorage.getItem(key);
+        if (saved === "A" || saved === "B") {
+          variant = saved;
+          source = "storage";
+        } else {
+          variant = Math.random() < 0.5 ? "A" : "B";
+          source = "random";
+          localStorage.setItem(key, variant);
+        }
+      }
+    } catch (_) {}
+
+    const label = (variant === "B" ? (btn.getAttribute("data-cta-b") || "") : (btn.getAttribute("data-cta-a") || "")).trim();
+    if (label) btn.textContent = label;
+
+    const baseTrack = (btn.dataset && btn.dataset.track) ? String(btn.dataset.track) : "tg_submit_hero";
+    btn.dataset.track = `${baseTrack}_${variant.toLowerCase()}`;
+
+    window.NP.heroCtaVariant = variant;
+    track("hero_cta_variant", { variant, source });
+  })();
+
+  // =========================
   // Helpers
   // =========================
   const qs = (sel, root=document) => root.querySelector(sel);
@@ -98,6 +141,20 @@
         || (location.pathname ? String(location.pathname).replace(/^\//, "") : "");
     } catch (_) {
       return "";
+    }
+  };
+
+  const formPlacement = (form) => {
+    try {
+      return (form && form.dataset && form.dataset.placement)
+        || (form && form.getAttribute && form.getAttribute("data-placement"))
+        || (form && form.getAttribute && form.getAttribute("data-form"))
+        || (form && form.id === "tgForm" ? "cta" : "")
+        || (form && form.classList && form.classList.contains("hero-form") ? "hero" : "")
+        || (form && form.classList && form.classList.contains("chat-form") ? "chat" : "")
+        || "site";
+    } catch (_) {
+      return "site";
     }
   };
 
@@ -140,6 +197,10 @@
     data.from = pageLabel();
     data.ts = new Date().toISOString();
     data.utm = getUTM();
+    try {
+      const v = (window.NP && window.NP.heroCtaVariant) ? String(window.NP.heroCtaVariant).toUpperCase() : "";
+      if (v === "A" || v === "B") data.ab_hero = v;
+    } catch (_) {}
 
     // apply extras (e.g., mode)
     Object.assign(data, extra || {});
@@ -158,6 +219,7 @@
     if (lead.comment) lines.push("Комментарий: " + lead.comment);
     if (lead.name) lines.push("Имя: " + lead.name);
     if (lead.contact) lines.push("Контакт: " + lead.contact);
+    if (lead.ab_hero) lines.push("Вариант hero CTA: " + lead.ab_hero);
     return lines.join("\n");
   };
 
@@ -199,6 +261,37 @@
     let data = null;
     try { data = await res.json(); } catch (_) {}
     return { ok: res.ok && data && data.ok, status: res.status, data };
+  };
+
+  const ensureTgFallback = (form, lead) => {
+    if (!form || !lead) return null;
+    let link = qs('[data-fallback-tg]', form);
+    if (!link) {
+      link = document.createElement('a');
+      link.className = 'btn btn-outline btn-block form-fallback-link';
+      link.setAttribute('data-fallback-tg', '1');
+      link.setAttribute('data-track', 'lead_fallback_tg');
+      link.setAttribute('target', '_blank');
+      link.setAttribute('rel', 'noopener noreferrer');
+      link.textContent = 'Открыть Telegram с заявкой';
+      const status = qs('.form-status', form);
+      if (status && status.parentElement) status.insertAdjacentElement('afterend', link);
+      else form.appendChild(link);
+      link.addEventListener('click', () => {
+        track('lead_fallback_click', { placement: formPlacement(form), page: location.pathname || '' });
+      });
+    }
+    try {
+      link.href = 'https://t.me/np_maps?text=' + encodeURIComponent(leadToText(lead));
+      link.hidden = false;
+    } catch (_) {}
+    return link;
+  };
+
+  const hideTgFallback = (form) => {
+    const link = qs('[data-fallback-tg]', form);
+    if (!link) return;
+    try { link.hidden = true; } catch (_) {}
   };
 
   // =========================
@@ -255,14 +348,14 @@
       const hint = qs('[data-contact-hint]', form);
       if (hint) {
         hint.textContent = tgOk
-          ? "Ответ — в Telegram (если нужно, уточню детали)."
-          : "Оставьте телефон или email — пришлю разбор туда.";
+          ? "По умолчанию отвечаю в Telegram."
+          : "Telegram отключён — укажите телефон или email для ответа.";
       }
 
       // Update label text if it exists
       const labelText = wrap.querySelector('span');
       if (labelText) {
-        labelText.textContent = tgOk ? "Контакт для ответа" : "Телефон или email (обязательно)";
+        labelText.textContent = tgOk ? "Телефон или email (если без Telegram)" : "Телефон или email (обязательно без Telegram)";
       }
     };
 
@@ -345,7 +438,7 @@
   });
 
   // =========================
-  // Dock modes (tg/call/copy)
+  // Dock behavior
   // =========================
   (() => {
     const dock = qs("#ctaDock");
@@ -357,6 +450,8 @@
     const btnCall = qs('[data-dock-action="call"]', dock);
     const btnCopy = qs('[data-dock-action="copy"]', dock);
     const input = qs('input[name="card"]', dock);
+    const hasModeSwitch = modes.length > 0 && (btnCall || btnCopy);
+    let currentMode = "";
 
     const setMode = (mode) => {
       modes.forEach(b => b.classList.toggle("is-active", b.dataset.dockMode === mode));
@@ -364,7 +459,10 @@
       if (btnCall) btnCall.hidden = mode !== "call";
       if (btnCopy) btnCopy.hidden = mode !== "copy";
       try { dock.setAttribute("data-mode", mode); } catch (_) {}
-      track("dock_mode", { mode });
+      if (hasModeSwitch && currentMode !== mode) {
+        currentMode = mode;
+        track("dock_mode", { mode });
+      }
     };
 
     modes.forEach((b) => {
@@ -400,8 +498,11 @@
       } catch (_) {}
     };
 
-    // default mode
-    setMode("tg");
+    if (hasModeSwitch) setMode("tg");
+    else {
+      if (btnSend) btnSend.hidden = false;
+      try { dock.setAttribute("data-mode", "tg"); } catch (_) {}
+    }
   })();
 
   // =========================
@@ -509,9 +610,33 @@
       track(btn.dataset.track || "lead_copy", { ok: ok ? 1 : 0 });
     });
 
+    const formStarted = new WeakSet();
+    const formStartAt = new WeakMap();
+
+    document.addEventListener("click", (e) => {
+      const btn = e.target.closest('button[type="submit"], input[type="submit"]');
+      if (!btn) return;
+      const form = btn.form || btn.closest("form");
+      if (!form) return;
+      if (!forms.includes(form)) return;
+      track("lead_submit_click", {
+        placement: formPlacement(form),
+        page: location.pathname || "",
+        track: (btn.dataset && btn.dataset.track) || ""
+      });
+    });
+
     forms.forEach((form) => {
       // Reduce visible fields: hide contact unless Telegram is NOT ok
       try { wireConditionalContact(form); } catch (_) {}
+
+      form.addEventListener("focusin", () => {
+        if (formStarted.has(form)) return;
+        formStarted.add(form);
+        const ts = Date.now();
+        formStartAt.set(form, ts);
+        track("lead_form_start", { placement: formPlacement(form), page: location.pathname || "" });
+      }, { once: true });
 
       form.addEventListener("submit", async (e) => {
         e.preventDefault();
@@ -527,13 +652,20 @@
         // Let native constraint validation handle conditional required fields
         try {
           if (!form.checkValidity()) {
+            const firstInvalid = form.querySelector(':invalid');
+            if (firstInvalid) {
+              const key = firstInvalid.getAttribute('name') || firstInvalid.getAttribute('id') || firstInvalid.tagName.toLowerCase();
+              track("lead_field_error", { placement: formPlacement(form), page: location.pathname || "", field: key });
+            }
             form.reportValidity();
             showStatus(form, "Проверьте поля формы.", false);
+            track("lead_invalid", { placement: formPlacement(form), page: location.pathname || "" });
             return;
           }
         } catch (_) {}
 
         showStatus(form, "Отправляю…", true);
+        hideTgFallback(form);
 
         const lead = serializeLead(form, { mode: "send" });
 
@@ -547,18 +679,26 @@
           const out = await postLead(lead);
           if (out.ok) {
             showStatus(form, "Готово. Открываю страницу подтверждения…", true);
-            track("lead_sent", { placement: lead.placement || "", page: lead.page || "" });
+            const startedAt = formStartAt.get(form) || 0;
+            const duration = startedAt ? Math.max(0, Date.now() - startedAt) : 0;
+            track("lead_sent", { placement: lead.placement || "", page: lead.page || "", duration_ms: duration });
             setTimeout(() => {
               try { window.location.href = "thanks.html?sent=1"; } catch (_) {}
             }, 250);
           } else {
             const err = (out.data && out.data.error) ? String(out.data.error) : "send_failed";
-            showStatus(form, "Не отправилось. Попробуйте ещё раз или напишите в Telegram.", false);
+            const copied = await copyText(leadToText(lead));
+            ensureTgFallback(form, lead);
+            showStatus(form, copied ? "Не отправилось. Заявка скопирована — откройте Telegram кнопкой ниже." : "Не отправилось. Откройте Telegram кнопкой ниже и отправьте заявку.", false);
             track("lead_error", { error: err, status: out.status || 0 });
+            track("lead_fallback_ready", { placement: formPlacement(form), page: location.pathname || "", copied: copied ? 1 : 0 });
           }
         } catch (err) {
-          showStatus(form, "Не отправилось (сеть). Попробуйте ещё раз или напишите в Telegram.", false);
+          const copied = await copyText(leadToText(lead));
+          ensureTgFallback(form, lead);
+          showStatus(form, copied ? "Не отправилось (сеть). Заявка скопирована — откройте Telegram кнопкой ниже." : "Не отправилось (сеть). Откройте Telegram кнопкой ниже и отправьте заявку.", false);
           track("lead_error", { error: "network" });
+          track("lead_fallback_ready", { placement: formPlacement(form), page: location.pathname || "", copied: copied ? 1 : 0 });
         }
       });
     });
